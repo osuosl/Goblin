@@ -1,0 +1,61 @@
+{% if large_emails %}
+	<div style="margin:10px;float:none;position:relative;">
+<b>Large emails have been detected:</b>
+Google has a limit on the maximum per message size.  The limit is 25MB and includes the sum of all attachments
+and the message itself.  A listing of email Subject lines for email beyond the maximum size has been created below.  The listed email will not be
+transferred to Google.  Please save any important attachments by visiting each identified message with your
+PSU email client.  Please visit our <a href="http://oit.pdx.edu/google">guide</a> for assistance.
+	</div>
+	<script>
+		$("form").submit( function() {
+			alert('Are you sure you want to proceed?');
+			return false;
+		});
+	</script>
+{% endif %}
+
+{% if long_folders %}
+	<div style="margin:10px;float:none;position:relative;">
+<b>Long email folder paths have been detected:</b>
+One key difference between traditional Webmail and Google Mail is that Google does
+ not use traditional email folders, instead it uses labels to organize email. 
+ From our experience, it offers a more flexible sorting and filtering system, 
+ as a message may have more than one label applied to it, including the option to 
+ have nested labels. We plan on migrating nested folders to the nested labeling system. 
+ Labels are displayed as folders in a mail client, and there is a Mail Lab to display nested 
+ folders arranged in a hierarchy within the Gmail web client.  
+ Please visit our <a href="http://oit.pdx.edu/google">guide</a> for assistance.
+	</div>
+	<script>
+		$("form").submit( function() {
+			alert('Are you sure you want to proceed?');
+			return false;
+		});
+	</script>
+{% endif %}
+
+<div style="margin:10px;position:relative;float:none;">
+
+{% if large_emails %}
+<div style="margin:10px;float:left;text-align:center;">
+<h3>Email too large to transfer</h3>
+<SELECT NAME="Large Email" SIZE="7" MULTIPLE >
+	{% for entry in large_emails %}
+		<OPTION>{{ entry }}
+	{% endfor %}
+</SELECT>
+</div>
+{% endif %}
+
+{% if long_folders %}
+<div style="margin:10px;float:left;text-align:center;">
+<h3>Email folders too long for Gmail</h3>
+<SELECT NAME="Long Folders" SIZE="7" MULTIPLE >
+	{% for entry in long_folders %}
+		<OPTION>{{ entry }}
+	{% endfor %}
+</SELECT>
+</div>
+{% endif %}
+
+</div>

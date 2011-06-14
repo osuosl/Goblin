@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Select{% endblock %}
+
+{% block content %}
+<script src="/opt-in/js/jquery.js"></script>
+<div id="boxes">
+ 
+     
+    <!-- #customize your modal window here -->
+ 
+    <div id="dialog" class="window">
+        <p style="margin:10px;text-align:center;">
+        <b style="margin:10px;text-align:center;">
+        Proceed with email conversion?</b> 
+        </p>
+        <p style="margin:10px;float:right;text-align:center;">
+        Email with large attachments summing to greater than 25MB will be left behind
+        and long email folders may not be easily usable within Gmail.
+        </p>
+        <p>
+        <!-- close button is defined as close class -->
+        <div style="margin:10px;float:left;text-align:center;">
+        	<a href="#" class="continue">Continue</a>
+        </div>
+        <div style="margin:10px;float:right;text-align:center;">
+        	<a href="#" class="close">Cancel</a>
+ 		</div>
+    </div>
+ 
+     
+    <!-- Do not remove div#mask, because you'll need it to fill the whole screen --> 
+    <div id="mask"></div>
+</div>
+<style>
+ 
+/* Z-index of #mask must lower than #boxes .window */
+#mask {
+  position:absolute;
+  z-index:9000;
+  background-color:#000;
+  display:none;
+}
+   
+#boxes .window {
+  position:absolute;
+  width:440px;
+  height:200px;
+  display:none;
+  z-index:9999;
+  padding:20px;
+}
+ 
+ 
+/* Customize your modal window here, you can add background image too */
+#boxes #dialog {
+  width:375px;
+  height:203px;
+  background-color:#77B
+}
+</style>
+
+{% include "ghoul/outstanding.html" %}
+
+<div style="margin:20px;clear:both;text-align:center;">
+<p>Clicking the <i>Opt-in</i> button below will initiate the PSU to Google email conversion process.  
+Your existing PSU email will 
+be copied to Google and all future email sent to you will be delivered to your Google mail account. </p>
+<br>
+		<form method="put" action="/opt-in/status/">
+			<input type="submit" value="Opt-in" />
+			<input type="hidden" value="login" />
+		</form>
+</div>
+
+<script>
+ 
+$(document).ready(function() { 
+ 
+    //select all the a tag with name equal to modal
+		$("form").submit( function(e) {
+        //Cancel the link behavior
+        e.preventDefault();
+        //Get the A tag
+        //var id = $(this).attr('href');
+        var id = '#dialog'
+     
+        //Get the screen height and width
+        var maskHeight = $(document).height();
+        //var maskHeight = $(window).height();
+        //var maskWidth = $(window).width();
+        //var maskWidth = $(document).width();
+        var maskWidth = 880;
+     
+        //Set height and width to mask to fill up the whole screen
+        $('#mask').css({'width':maskWidth,'height':maskHeight});
+         
+        //transition effect    
+        $('#mask').fadeIn(1000);   
+        $('#mask').fadeTo("slow",0.8); 
+     
+        //Get the window height and width
+        var winH = $(window).height();
+        var winW = $(window).width();
+               
+        //Set the popup window to center
+        $(id).css('top',  winH/2-$(id).height()/2);
+        $(id).css('left', winW/2-$(id).width()/2);
+     
+        //transition effect
+        $(id).fadeIn(2000);
+     
+    });
+     
+    //if close button is clicked
+    $('.window .close').click(function (e) {
+        //Cancel the link behavior
+        e.preventDefault();
+        $('#mask, .window').hide();
+    });    
+    //if close button is clicked
+    $('.window .continue').click(function (e) {
+        //Cancel the link behavior
+        e.preventDefault();
+        var form = document.createElement("form");
+        form.setAttribute("method", "get");
+        form.setAttribute("action", "/opt-in/status/");
+        document.body.appendChild(form);
+        form.submit();
+        //$('#mask, .window').hide();
+        //$(#form).trigger('submit');
+    });    
+     
+    //if mask is clicked
+    $('#mask').click(function () {
+        $(this).hide();
+        $('.window').hide();
+    });        
+     
+});
+ 
+</script>
+{% comment %}
+<div style="margin:20px;clear:both;text-align:center;">
+<p>Clicking the <i>Opt-in</i> button below will initiate the PSU to Google email conversion process.  
+Your existing PSU email will 
+be copied to Google and all future email sent to you will be delivered to your Google mail account. </p>
+<br>
+		<form method="put" action="/opt-in/status/">
+			<input type="submit" value="Opt-in" />
+			<input type="hidden" value="login" />
+		</form>
+</div>
+	<script>
+	$("form").submit( function() {
+		alert('Are you sure you want to proceed?');
+		return false;
+	});
+	</script>
+{% endcomment %}
+
+{% endblock %}
+
