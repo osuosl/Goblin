@@ -1,7 +1,7 @@
 import os
 import sys
 
-for path in ['/home/dennis/workspace/goblin/src', '/home/dennis/workspace/goblin/src/goblin']:
+for path in ['/vol/goblin/src', '/vol/goblin/src/goblin']:
 	if path not in sys.path:
 		sys.path.append(path)
 
