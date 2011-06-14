@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+
+{% block title %}Status{% endblock %}
+
+{% block content %}
+<script src="/opt-in/js/jquery.js"></script>
+<script src="/opt-in/js/jquery.progressbar.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$("#copyprogressbar").progressBar();
+		$("#copyprogressbar").fadeIn();
+		var i = setInterval(function() {
+			$.getJSON("/opt-in/copy_progress/", function(data) {
+				if (data == null) {
+					clearInterval(i);
+					location.reload(true);
+					return;
+				}
+				data = parseInt(data)
+				// var percentage = Math.floor(100 * parseInt(data) / 100);
+				var percentage = Math.floor(100 * data / 100);
+				$("#copyprogressbar").progressBar(percentage);
+				if (percentage == 100) {
+					clearInterval(i);
+					window.location = "/opt-in/confirm/"
+					//location.reload(true);
+					return;
+				}
+			});
+		}, 500);
+	});
+</script>
+<p style="margin:10px;">
+Google Mail and PSU’s Webmail systems both offer the same basic functionality to send and receive email, save drafts, sorting, filtering, spam filtering, and vacation response. Of course, the websites for accessing PSU Webmail and Google Mail have a very different “look and feel,” as anyone who has a personal Gmail account can attest.
+
+However, the biggest difference between Google Apps Mail and PSU Webmail is the integration between the various Google Apps - the ability to collaboratively interact with calendars and documents directly from the Gmail App (e.g. Discussions). This integration of services is what sets Google Apps apart from the other offerings we have at PSU. 
+<p>
+<table style="margin:10px;">
+	<tr><td>Email Copy Progress</td><td><span class="progressBar" id="copyprogressbar">10%</span></td></tr>
+</table>
+
+{% endblock %}
