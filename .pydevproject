@@ -16,5 +16,6 @@
 <pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
 <path>/usr/local/lib/python2.6/dist-packages</path>
 <path>/usr/local/lib/python2.6/dist-packages/django</path>
+<path>/vol/d2l/ragve/lib/python</path>
 </pydev_pathproperty>
 </pydev_project>
