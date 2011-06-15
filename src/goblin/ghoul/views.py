@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.core.cache import cache
 from tasks import copy_email_task
 from celery.task import task
-from psuproperties import Property
+#from psuproperties import Property
 
 def select(request):
 	#query = request.GET['q']
