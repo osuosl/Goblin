@@ -14,14 +14,14 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    (r'^opt-in/media(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/dennis/workspace/xi/media'}),
-	(r'^opt-in/js(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/dennis/workspace/xi/media/js'}),
-	(r'^opt-in/status/js(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/dennis/workspace/xi/media/js'}),
-	(r'^opt-in/images(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/dennis/workspace/xi/media/images'}),
-	(r'^opt-in/status/images(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/dennis/workspace/xi/media/images'}),
-	(r'^opt-in/copy_progress', 'goblin.ghoul.views.copy_progress'),
-	(r'^opt-in/status', 'goblin.ghoul.views.status'),
-	(r'^opt-in/confirm', 'goblin.ghoul.views.confirm'),
-	(r'^opt-in/', 'goblin.ghoul.views.select'),
+    (r'^/media(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/dennis/workspace/xi/media'}),
+	(r'^js(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/dennis/workspace/xi/media/js'}),
+	(r'^status/js(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/dennis/workspace/xi/media/js'}),
+	(r'^images(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/dennis/workspace/xi/media/images'}),
+	(r'^status/images(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/dennis/workspace/xi/media/images'}),
+	(r'^copy_progress', 'goblin.ghoul.views.copy_progress'),
+	(r'^status', 'goblin.ghoul.views.status'),
+	(r'^confirm', 'goblin.ghoul.views.confirm'),
+	(r'^', 'goblin.ghoul.views.select'),
 
 )
