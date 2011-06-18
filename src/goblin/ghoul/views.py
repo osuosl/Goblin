@@ -7,17 +7,20 @@ from django.core.cache import cache
 from tasks import copy_email_task
 from celery.task import task
 #from psuproperties import Property
+from psusys import PSUSys
 
 def select(request):
 	#query = request.GET['q']
 	login = request.GET.get('login', '')
 	if not login:
 		login = 'dennis'
-	long_folders = ['Advertisements/Electronics/TimeDomainReflectometry'] 
-	large_emails = ["Platinum Group Metal Compounds and Salts", 'Filter design', 'Webdav Issues']
+	
+	psu_sys = PSUSys()
+	large_emails = psu_sys.large_emails(login)
+			
 	return render_to_response('ghoul/select.html', 
 		{ 'login': login,
-		  'long_folders': long_folders,
+		  #'long_folders': long_folders,
 		  'large_emails': large_emails,
 		  })
 	
