@@ -1,7 +1,7 @@
 import os
 import sys
 
-for path in ['/vol/goblin/src', '/vol/goblin/src/goblin', '/vol/d2l/ragve/lib/python', '/vol/google-imap']:
+for path in ['/vol/goblin/src', '/vol/goblin/src/goblin', '/vol/ragve/lib/python', '/vol/google-imap', '/vol/crypt', '/vol/goblin/etc']:
 	if path not in sys.path:
 		sys.path.append(path)
 
