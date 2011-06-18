@@ -6,12 +6,73 @@ and the message itself.  A listing of email Subject lines for email beyond the m
 transferred to Google.  Please save any important attachments by visiting each identified message with your
 PSU email client.  Please visit our <a href="http://oit.pdx.edu/google">guide</a> for assistance.
 	</div>
-	<script>
-		$("form").submit( function() {
-			alert('Are you sure you want to proceed?');
-			return false;
-		});
-	</script>
+<script>
+ 
+$(document).ready(function() { 
+ 
+    //select all the a tag with name equal to modal
+		$("form").submit( function(e) {
+        //Cancel the link behavior
+        e.preventDefault();
+        //Get the A tag
+        //var id = $(this).attr('href');
+        var id = '#dialog'
+     
+        //Get the screen height and width
+        var maskHeight = $(document).height();
+        //var maskHeight = $(window).height();
+        //var maskWidth = $(window).width();
+        //var maskWidth = $(document).width();
+        var maskWidth = 880;
+     
+        //Set height and width to mask to fill up the whole screen
+        $('#mask').css({'width':maskWidth,'height':maskHeight});
+         
+        //transition effect    
+        $('#mask').fadeIn(1000);   
+        $('#mask').fadeTo("slow",0.8); 
+     
+        //Get the window height and width
+        var winH = $(window).height();
+        var winW = $(window).width();
+               
+        //Set the popup window to center
+        $(id).css('top',  winH/2-$(id).height()/2);
+        $(id).css('left', winW/2-$(id).width()/2);
+     
+        //transition effect
+        $(id).fadeIn(2000);
+     
+    });
+     
+    //if close button is clicked
+    $('.window .close').click(function (e) {
+        //Cancel the link behavior
+        e.preventDefault();
+        $('#mask, .window').hide();
+    });    
+    //if close button is clicked
+    $('.window .continue').click(function (e) {
+        //Cancel the link behavior
+        e.preventDefault();
+        var form = document.createElement("form");
+        form.setAttribute("method", "get");
+        form.setAttribute("action", "/opt-in/status/");
+        document.body.appendChild(form);
+        form.submit();
+        //$('#mask, .window').hide();
+        //$(#form).trigger('submit');
+    });    
+     
+    //if mask is clicked
+    $('#mask').click(function () {
+        $(this).hide();
+        $('.window').hide();
+    });        
+     
+});
+ 
+</script>
 {% endif %}
 
 {% if long_folders %}
