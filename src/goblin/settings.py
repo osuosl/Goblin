@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Dennis Gilbert', 'dennis@pdx.edu'),
 )
 
 MANAGERS = ADMINS
@@ -130,18 +130,57 @@ INSTALLED_APPS = (
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+		'dateTime': {
+			'format': '%(asctime)s %(levelname)-8s %(name)-15s %(message)s'
+		}
+	},
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
+		'mail_admins': {
+			'level': 'ERROR',
+			'class': 'django.utils.log.AdminEmailHandler'
+		},
+		'rotating_log': {
+			'level': 'DEBUG',
+			'class': 'logging.handlers.RotatingFileHandler',
+			'formatter': 'dateTime',
+			'filename': '/vol/goblin/var/goblin.log',
+			'maxBytes':	4000000,
+			'backupCount': 5,
+		},
+		'console': {
+			'class': 'logging.StreamHandler',
+			'formatter': 'dateTime',
+			'level': 'INFO',
+			'stream': 'ext://sys.stdout',
+		},
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
+		'django.request': {
+			'handlers': ['mail_admins'],
+			'level': 'ERROR',
+			'propagate': True,
+		},
+		'ghoul': {
+			'handlers': ['mail_admins'],
+			'level': 'ERROR',
+			'propagate': True,
+		},
+		'ghoul.views': {
+			'handlers': ['rotating_log'],
+			'level': 'INFO',
+			'propagate': True,
+		},
+		'goblin': {
+			'handlers': ['mail_admins'],
+			'level': 'ERROR',
+			'propagate': True,
+		},
+		'goblin.psusys': {
+			'handlers': ['rotating_log'],
+			'level': 'INFO',
+			'propagate': True,
+		},
     }
 }
 
