@@ -31,3 +31,25 @@ class PSUSys:
 	def opt_in_complete(self, login):
 		print 'boo'
 		# ldapsearch -x -h ldap.oit.pdx.edu -b 'dc=pdx, dc=edu' uid=dennis mailhost
+		
+	def copy_progress(self, login):	
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		import simplejson
+		import memcache	
+		memcache_url = prop.getProperty('memcache.url')
+		mc = memcache.Client([memcache_url], debug=0)
+
+		#cache_key = "copy_progress_%s" % (request.GET['login', 'default'])
+		key = 'email_copy_progress.' + login
+		cached_data = mc.get(key)
+
+		self.log.info('PSUSys.copy_progress() called')
+
+		if (cached_data == None):
+			cached_data = 0
+		#data = simplejson.dumps(cached_data)
+		data = simplejson.dumps(cached_data)
+
+		return data
+		#return HttpResponse(simplejson.dumps(27))
+		
