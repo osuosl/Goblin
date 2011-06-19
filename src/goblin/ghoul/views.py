@@ -30,23 +30,12 @@ def select(request):
 		  })
 	
 def copy_progress(request):
-	import simplejson
-	import memcache	
-	mc = memcache.Client(['localhost:11211'], debug=0)
+	psu_sys = PSUSys()
+	login = request.GET.get('login', '')
+	if not login:
+		login = 'weekse'
 
-	#cache_key = "copy_progress_%s" % (request.GET['login', 'default'])
-	key = 'email_copy_progress.' + 'dennis'
-	cached_data = mc.get(key)
-
-	log.info('views.copy_progress() called')
-
-	if (cached_data == None):
-		cached_data = 0
-	#data = simplejson.dumps(cached_data)
-	data = simplejson.dumps(cached_data)
-	#data = [42]
-	return HttpResponse(data)
-	#return HttpResponse(simplejson.dumps(27))
+	return HttpResponse(psu_sys.copy_progress(login))
 
 
 def status(request):
