@@ -1,8 +1,8 @@
-BROKER_HOST = "localhost"
+BROKER_HOST = 'imapsync-mq.oit.pdx.edu'
 BROKER_PORT = 5672
-BROKER_USER = "myuser"
-BROKER_PASSWORD = "mypassword"
-BROKER_VHOST = "myvhost"
+BROKER_USER = 'optin'
+BROKER_PASSWORD = 'CbXVtHJHFmwgE'
+BROKER_VHOST = 'optin'
 CELERY_RESULT_BACKEND = "amqp"
 CELERY_IMPORTS = ("tasks", )
 CELERYD_LOG_FILE = '/vol/goblin/var/celery.log'
