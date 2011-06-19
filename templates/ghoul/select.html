@@ -69,9 +69,10 @@
 Your existing PSU email will 
 be copied to Google and all future email sent to you will be delivered to your Google mail account. </p>
 <br>
-		<form method="put" action="/opt-in/status/">
+		<form method="post" action="/opt-in/status/">
+		{% csrf_token %}
 			<input type="submit" value="Opt-in" />
-			<input type="hidden" value="login" />
+			<input type="hidden" name="login" value="{{ login }}" />
 		</form>
 </div>
 
@@ -81,9 +82,10 @@ be copied to Google and all future email sent to you will be delivered to your G
 Your existing PSU email will 
 be copied to Google and all future email sent to you will be delivered to your Google mail account. </p>
 <br>
-		<form method="put" action="/opt-in/status/">
+		<form method="post" action="/opt-in/status/">
+		{% csrf_token %}
 			<input type="submit" value="Opt-in" />
-			<input type="hidden" value="login" />
+			<input type="hidden" name="login" value="{{ login }}" />
 		</form>
 </div>
 	<script>
