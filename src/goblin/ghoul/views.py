@@ -86,7 +86,8 @@ def confirm(request):
 		{ 'login': login,
 		  'large_emails': large_emails,
 		  },
-		context_instance=RequestContext(request))
+		)
+		#context_instance=RequestContext(request))
 
 		
 	
