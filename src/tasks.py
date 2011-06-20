@@ -17,7 +17,7 @@ def copy_email_task(login):
 	key = 'email_copy_progress.' + login
 	while (timer <= 100):
 		mc.set(key, timer)
-		log.info('tasks.copy_email_task(), setting key: ' + key + ' to value: ' + timer + " on: " + memcache_url)
+		log.info('tasks.copy_email_task(), setting key: ' + key + ' to value: ' + str(timer) + " on: " + memcache_url)
 		timer = timer + 1
 		sleep(1)
 		
