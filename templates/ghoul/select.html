@@ -69,6 +69,7 @@ be copied to Google and all future email sent to you will be delivered to your G
 		<form method="post" action="/opt-in/status/">
 		{% csrf_token %}
 			<input type="submit" value="Opt-in" />
+			<input type="hidden" name="login" value="{{ login }}" />
 		</form>
 </div>
 
