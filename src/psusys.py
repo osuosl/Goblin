@@ -72,6 +72,36 @@ class PSUSys:
 		
 		dn = 'uid=' + login + ',ou=people,dc=pdx,dc=edu'
 		ldap.mod_attribute(dn, 'mailHost', 'cyrus.psumail.pdx.edu')		
+
+	def get_user(self, meta):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		memcache_url = prop.getProperty('memcache.url')
+		mc = memcache.Client([memcache_url], debug=0)
+		
+		login = None
+		if 'MOD_AUTH_CAS' in meta:
+			key = meta['MOD_AUTH_CAS']
+			login = mc.get(key)
+		else:
+			self.log.info('psusys.PSUSys.get_user(), failed to find MOD_AUTH_CAS in META')
+		
+		if login == None:
+			login = 'dennis'
+			self.log.info('psusys.PSUSys.get_user(), defaulting to user ' + login )
+		else:
+			self.log.info('psusys.PSUSys.get_user(), found user ' + login + ' in memcache')
+
+	def set_user(self, login, meta):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		memcache_url = prop.getProperty('memcache.url')
+		mc = memcache.Client([memcache_url], debug=0)
+		
+		if 'MOD_AUTH_CAS' in meta:
+			key = meta['MOD_AUTH_CAS']
+			mc.set(key, login)
+			self.log.info('psusys.PSUSys.set_user(), set user ' + login + ' in memcache')
+		else:
+			self.log.info('psusys.PSUSys.set_user(), failed to find MOD_AUTH_CAS in META')
 		
 	def copy_progress(self, login):	
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')

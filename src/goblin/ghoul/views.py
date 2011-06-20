@@ -4,7 +4,6 @@ from django.template import RequestContext
 from tasks import copy_email_task
 from psusys import PSUSys
 import logging
-
 log = logging.getLogger('ghoul.views')
 
 def select(request):
@@ -18,6 +17,7 @@ def select(request):
 	log.info('views.select() using login: ' + login)
 	
 	psu_sys = PSUSys()
+	psu_sys.set_user(login, request.META)
 	large_emails = psu_sys.large_emails(login)
 			
 	return render_to_response('ghoul/select.html', 
@@ -81,6 +81,8 @@ def confirm(request):
 	log.info('views.confirm(), META = ' + str(request.META))
 
 	psu_sys = PSUSys()
+	login = psu_sys.get_user(request.META)
+	
 	large_emails = psu_sys.large_emails(login)
 	
 	return render_to_response('ghoul/confirm.html', 
