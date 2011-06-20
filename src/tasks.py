@@ -8,13 +8,13 @@ from psuproperties import Property
 @task
 def copy_email_task(login):
 	prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+	log = logging.getLogger()
 	memcache_url = prop.getProperty('memcache.url')
 	mc = memcache.Client([memcache_url], debug=0)
+
 	timer = 90;
-	logging.info('test')
-	log = logging.getLogger()
-	#key = 'email_copy_progress.' + login
 	key = 'email_copy_progress.' + login
+
 	while (timer <= 100):
 		mc.set(key, timer)
 		log.info('tasks.copy_email_task(), setting key: ' + key + ' to value: ' + str(timer) + " on: " + memcache_url)
