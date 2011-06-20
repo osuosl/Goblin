@@ -26,7 +26,20 @@
 				$("#copyprogressbar").progressBar(percentage);
 				if (percentage == 100) {
 					clearInterval(i);
-					window.location = "/opt-in/confirm/"
+
+					var form = document.createElement("form");
+			        form.setAttribute("method", "POST");
+			        form.setAttribute("action", "/opt-in/confirm/");
+
+			        var hiddenField = document.createElement("input");
+			        hiddenField.setAttribute("type", "hidden");
+			        hiddenField.setAttribute("name", "login");
+			        hiddenField.setAttribute("value", "{{ login }}");
+			        form.appendChild(hiddenField);
+			        document.body.appendChild(form);
+			        form.submit();
+
+			        //window.location = "/opt-in/confirm/"
 					//location.reload(true);
 					return;
 				}
