@@ -42,9 +42,14 @@ def copy_progress(request):
 def status(request):
 	if 'REMOTE_USER' in request.META:
 		login = request.META['REMOTE_USER'] 
+		log.info('views.status() login found in META: ' + login )
 	else:
-		login = 'dennis'
-		log.info('views.status() login not found, defaulting to : ' + login)		
+		if 'login' in request.POST:
+			login = request.POST['login']
+			log.info('views.status() login found in POST: ' + login )
+		else: 
+			login = 'dennis'
+			log.info('views.status() login not found, defaulting to : ' + login)		
 		
 	log.info('views.status() META: ' + str(request.META) )
 	

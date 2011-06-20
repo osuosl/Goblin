@@ -58,6 +58,11 @@ $(document).ready(function() {
         var form = document.createElement("form");
         form.setAttribute("method", "get");
         form.setAttribute("action", "/opt-in/status/");
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", "login");
+        hiddenField.setAttribute("value", "{{ login }}");
+        form.appendChild(hiddenField);
         document.body.appendChild(form);
         form.submit();
         //$('#mask, .window').hide();
