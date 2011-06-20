@@ -8,8 +8,9 @@ from psuldap import psuldap
 class PSUSys:
 	def __init__(self):
 		self.MAX_MAIL_SIZE = pow(2,20) * 25
-		self.log = logging.getLogger('goblin.psusys')
 		self.prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		self.log = logging.getLogger('goblin.psusys')
+
 		
 	def large_emails(self, login):
 		imap_host = self.prop.getProperty('imap.host')
@@ -32,16 +33,18 @@ class PSUSys:
 
 	def opt_in_already(self, login):
 		ldap = psuldap('/vol/certs')
-		ldap.connect()
-		print 'boo'
 		# ldapsearch -x -h ldap.oit.pdx.edu -b 'dc=pdx, dc=edu' uid=dennis mailhost
 		ldap_host = self.prop.getProperty('ldap.host')
 		ldap_login = self.prop.getProperty('ldap.login')
 		ldap_password = self.prop.getProperty('ldap.password')
+		#self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
+		print('opt_in_alread(): connecting to LDAP: ' + ldap_host)
 		
 		ldap.connect( ldap_host, ldap_login, ldap_password)
 		res = ldap.search( searchfilter = 'uid=dennis', attrlist = ['mailHost'])
 		mail_host = res[0][1]['mailHost'][0]
+		#self.log.info('opt_in_alread() user: ' + login + ' is set to: ' + mail_host)
+		print('opt_in_alread() user: ' + login + ' is set to: ' + mail_host)
 		local_mail_host = self.prop.getProperty('local.mail.host')
 		if mail_host == local_mail_host:
 			return False
