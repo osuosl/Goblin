@@ -21,6 +21,7 @@ def select(request):
 	if not login:
 		login = 'weekse'
 
+	log.info('views.select() META: ' + request.META )
 	log.info('views.select() called with login: ' + login)
 	
 	psu_sys = PSUSys()
@@ -54,7 +55,8 @@ def status(request):
 	login = login.encode('latin-1')
 
 	log.info('views.status() called with user: ' + login)
-	
+	log.info('views.status() META: ' + request.META )
+
 	#key = 'email_copy_progress.' + login
 	#if ( cache.get(key) == None ):
 	#	log.info('views.status() cache.get(key): None')
@@ -74,6 +76,7 @@ def confirm(request):
 		login = 'dennis'
 
 	log.info('views.confirm() called with user: ' + login)
+	log.info('views.confirm() META: ' + request.META )
 
 	long_folders = ['Advertisements/Electronics/TimeDomainReflectometry'] 
 	large_emails = ["Platinum Group Metal Compounds and Salts", 'Filter design', 'Webdav Issues']
