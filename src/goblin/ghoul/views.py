@@ -78,6 +78,7 @@ def confirm(request):
 		else: 
 			login = 'dennis'
 			log.info('views.confirm() login not found, defaulting to : ' + login)		
+	log.info('views.confirm(), META = ' + str(request.META))
 
 	psu_sys = PSUSys()
 	large_emails = psu_sys.large_emails(login)

@@ -26,7 +26,7 @@
 				$("#copyprogressbar").progressBar(percentage);
 				if (percentage == 100) {
 					clearInterval(i);
-
+					/*
 					var form = document.createElement("form");
 			        form.setAttribute("method", "POST");
 			        form.setAttribute("action", "/opt-in/confirm/");
@@ -38,8 +38,8 @@
 			        form.appendChild(hiddenField);
 			        document.body.appendChild(form);
 			        form.submit();
-
-			        //window.location = "/opt-in/confirm/"
+					*/
+			        window.location = "/opt-in/confirm/"
 					//location.reload(true);
 					return;
 				}
