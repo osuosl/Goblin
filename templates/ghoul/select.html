@@ -15,8 +15,7 @@
         Proceed with email conversion?</b> 
         </p>
         <p style="margin:10px;float:right;text-align:center;">
-        Email with large attachments summing to greater than 25MB will be left behind
-        and long email folders may not be easily usable within Gmail.
+        Emails with large attachments summing to greater than 25MB per message will be left behind.
         </p>
         <p>
         <!-- close button is defined as close class -->
@@ -56,7 +55,7 @@
 #boxes #dialog {
   width:375px;
   height:203px;
-  background-color:#77B
+  background-color:#AAF
 }
 </style>
 
@@ -73,26 +72,6 @@ be copied to Google and all future email sent to you will be delivered to your G
 			<input type="hidden" name="login" value="{{ login }}" />
 		</form>
 </div>
-
-{% comment %}
-<div style="margin:20px;clear:both;text-align:center;">
-<p>Clicking the <i>Opt-in</i> button below will initiate the PSU to Google email conversion process.  
-Your existing PSU email will 
-be copied to Google and all future email sent to you will be delivered to your Google mail account. </p>
-<br>
-		<form method="post" action="/opt-in/status/">
-		{% csrf_token %}
-			<input type="submit" value="Opt-in" />
-			<input type="hidden" name="login" value="{{ login }}" />
-		</form>
-</div>
-	<script>
-	$("form").submit( function() {
-		alert('Are you sure you want to proceed?');
-		return false;
-	});
-	</script>
-{% endcomment %}
 
 {% endblock %}
 
