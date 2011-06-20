@@ -8,13 +8,14 @@ import logging
 log = logging.getLogger('ghoul.views')
 
 def select(request):
-	#query = request.GET['q']
-	login = request.META['REMOTE_USER'] 
-	if not login:
+	if 'REMOTE_USER' in request.META:
+		login = request.META['REMOTE_USER'] 
+		log.info('views.select() META: ' + str(request.META) )
+	else:
 		login = 'dennis'
+		log.info('views.select() login not found, defaulting to : ' + login)
 
-	log.info('views.select() META: ' + str(request.META) )
-	log.info('views.select() called with login: ' + login)
+	log.info('views.select() using login: ' + login)
 	
 	psu_sys = PSUSys()
 	large_emails = psu_sys.large_emails(login)
@@ -39,14 +40,14 @@ def copy_progress(request):
 
 
 def status(request):
-	#query = request.GET['q']
-	login = request.META['REMOTE_USER'] 
-	if not login:
+	if 'REMOTE_USER' in request.META:
+		login = request.META['REMOTE_USER'] 
+		log.info('views.status() META: ' + str(request.META) )
+	else:
 		login = 'dennis'
-
-	log.info('views.status() called with user: ' + login)
-	log.info('views.status() META: ' + str(request.META) )
-
+		log.info('views.status() login not found, defaulting to : ' + login)
+	
+	
 	#key = 'email_copy_progress.' + login
 	#if ( cache.get(key) == None ):
 	#	log.info('views.status() cache.get(key): None')
@@ -61,12 +62,12 @@ def status(request):
 	
 def confirm(request):
 	#query = request.GET['q']
-	login = request.META['REMOTE_USER'] 
-	if not login:
+	if 'REMOTE_USER' in request.META:
+		login = request.META['REMOTE_USER'] 
+		log.info('views.confirm() META: ' + str(request.META) )
+	else:
 		login = 'dennis'
-
-	log.info('views.confirm() called with user: ' + login)
-	log.info('views.confirm() META: ' + str(request.META) )
+		log.info('views.confirm() login not found, defaulting to : ' + login)
 
 	psu_sys = PSUSys()
 	large_emails = psu_sys.large_emails(login)
