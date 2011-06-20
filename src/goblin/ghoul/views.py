@@ -42,10 +42,11 @@ def copy_progress(request):
 def status(request):
 	if 'REMOTE_USER' in request.META:
 		login = request.META['REMOTE_USER'] 
-		log.info('views.status() META: ' + str(request.META) )
 	else:
 		login = 'dennis'
-		log.info('views.status() login not found, defaulting to : ' + login)
+		log.info('views.status() login not found, defaulting to : ' + login)		
+		
+	log.info('views.status() META: ' + str(request.META) )
 	
 	
 	#key = 'email_copy_progress.' + login
