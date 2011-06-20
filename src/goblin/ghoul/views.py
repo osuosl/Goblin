@@ -3,8 +3,9 @@
 from django.shortcuts import render_to_response
 #from django.http import HttpResponseRedirect
 from django.http import HttpResponse
+#from django.http import HttpRequest
 from django.template import RequestContext
-from django.core.cache import cache
+#from django.core.cache import cache
 from tasks import copy_email_task
 #from celery.task import task
 #from psuproperties import Property
@@ -16,6 +17,7 @@ log = logging.getLogger('ghoul.views')
 def select(request):
 	#query = request.GET['q']
 	login = request.POST.get('login', '')
+	login = request.META['REMOTE_USER'] 
 	if not login:
 		login = 'weekse'
 
