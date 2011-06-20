@@ -15,7 +15,7 @@ class TestAll(unittest.TestCase):
 		emailen = self.psusys.large_emails('weekse')
 		print emailen
 
-	def ttest_routing(self):
+	def test_routing(self):
 		self.psusys.route_to_google('dennis')
 		self.assertTrue(self.psusys.opt_in_already('dennis'))
 		self.psusys.route_to_psu('dennis')

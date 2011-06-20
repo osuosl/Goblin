@@ -50,8 +50,9 @@ def status(request):
 		else: 
 			login = 'dennis'
 			log.info('views.status() login not found, defaulting to : ' + login)		
-		
+			
 	log.info('views.status() META: ' + str(request.META) )
+	login = login.encode('latin-1')
 	
 	
 	#key = 'email_copy_progress.' + login
