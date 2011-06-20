@@ -37,19 +37,41 @@ class PSUSys:
 		ldap_host = self.prop.getProperty('ldap.host')
 		ldap_login = self.prop.getProperty('ldap.login')
 		ldap_password = self.prop.getProperty('ldap.password')
-		#self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
-		print('opt_in_alread(): connecting to LDAP: ' + ldap_host)
-		
+		self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
+				
 		ldap.connect( ldap_host, ldap_login, ldap_password)
-		res = ldap.search( searchfilter = 'uid=dennis', attrlist = ['mailHost'])
+		res = ldap.search( searchfilter = 'uid=' + login, attrlist = ['mailHost'])
 		mail_host = res[0][1]['mailHost'][0]
-		#self.log.info('opt_in_alread() user: ' + login + ' is set to: ' + mail_host)
-		print('opt_in_alread() user: ' + login + ' is set to: ' + mail_host)
+		self.log.info('opt_in_alread() user: ' + login + ' is set to: ' + mail_host)
 		local_mail_host = self.prop.getProperty('local.mail.host')
 		if mail_host == local_mail_host:
 			return False
 		else:
 			return True 
+
+	def route_to_google(self, login):
+		ldap = psuldap('/vol/certs')
+		# ldapsearch -x -h ldap.oit.pdx.edu -b 'dc=pdx, dc=edu' uid=dennis mailhost
+		ldap_host = self.prop.getProperty('ldap.host')
+		ldap_login = self.prop.getProperty('ldap.login')
+		ldap_password = self.prop.getProperty('ldap.password')
+		#self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
+		ldap.connect( ldap_host, ldap_login, ldap_password)
+		
+		dn = 'uid=' + login + ',ou=people,dc=pdx,dc=edu'
+		ldap.mod_attribute(dn, 'mailHost', 'gmx.pdx.edu')		
+
+	def route_to_psu(self, login):
+		ldap = psuldap('/vol/certs')
+		# ldapsearch -x -h ldap.oit.pdx.edu -b 'dc=pdx, dc=edu' uid=dennis mailhost
+		ldap_host = self.prop.getProperty('ldap.host')
+		ldap_login = self.prop.getProperty('ldap.login')
+		ldap_password = self.prop.getProperty('ldap.password')
+		#self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
+		ldap.connect( ldap_host, ldap_login, ldap_password)
+		
+		dn = 'uid=' + login + ',ou=people,dc=pdx,dc=edu'
+		ldap.mod_attribute(dn, 'mailHost', 'cyrus.psumail.pdx.edu')		
 		
 	def copy_progress(self, login):	
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')

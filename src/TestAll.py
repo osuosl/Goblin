@@ -4,7 +4,7 @@ from psusys import PSUSys
 
 class TestAll(unittest.TestCase):
 	def setUp(self):
-		logging.config.fileConfig('/vol/goblin/etc/logging-unit.conf')
+		#logging.config.fileConfig('/vol/goblin/etc/logging-unit.conf')
 		self.psusys = PSUSys()
 
 
@@ -14,6 +14,12 @@ class TestAll(unittest.TestCase):
 	def test_large_emails(self):
 		emailen = self.psusys.large_emails('weekse')
 		print emailen
+
+	def ttest_routing(self):
+		self.psusys.route_to_google('dennis')
+		self.assertTrue(self.psusys.opt_in_already('dennis'))
+		self.psusys.route_to_psu('dennis')
+		self.assertFalse(self.psusys.opt_in_already('dennis'))
 
 if __name__ == '__main__':
 	unittest.main()		
