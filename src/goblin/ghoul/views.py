@@ -17,7 +17,7 @@ def select(request):
 	#query = request.GET['q']
 	login = request.POST.get('login', '')
 	if not login:
-		login = 'dennis'
+		login = 'weekse'
 
 	log.info('views.select() called with login: ' + login)
 	

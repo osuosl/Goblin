@@ -1,10 +1,10 @@
 {% if large_emails %}
 	<div style="margin:10px;float:none;position:relative;">
 <b>Large emails have been detected:</b>
-Google has a limit on the maximum per message size.  The limit is 25MB and includes the sum of all attachments
+Google has a limit on the maximum per message size.  The per email limit is 25MB and includes the sum of all attachments
 and the message itself.  A listing of email Subject lines for email beyond the maximum size has been created below.  The listed email will not be
 transferred to Google.  Please save any important attachments by visiting each identified message with your
-PSU email client.  Please visit our <a href="http://oit.pdx.edu/google">guide</a> for assistance.
+PSU email client. 
 	</div>
 <script>
  
@@ -19,11 +19,11 @@ $(document).ready(function() {
         var id = '#dialog'
      
         //Get the screen height and width
-        var maskHeight = $(document).height();
-        //var maskHeight = $(window).height();
+        //var maskHeight = $(document).height();
+        var maskHeight = $(window).height();
         //var maskWidth = $(window).width();
         //var maskWidth = $(document).width();
-        var maskWidth = 880;
+        var maskWidth = $(window).width();
      
         //Set height and width to mask to fill up the whole screen
         $('#mask').css({'width':maskWidth,'height':maskHeight});
@@ -58,6 +58,11 @@ $(document).ready(function() {
         var form = document.createElement("form");
         form.setAttribute("method", "get");
         form.setAttribute("action", "/opt-in/status/");
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", "login");
+        hiddenField.setAttribute("value", "{{ login }}");
+        form.appendChild(hiddenField);
         document.body.appendChild(form);
         form.submit();
         //$('#mask, .window').hide();
@@ -80,7 +85,7 @@ $(document).ready(function() {
 {% if large_emails %}
 <div style="margin:10px;float:left;text-align:center;">
 <h3>Email too large to transfer</h3>
-<SELECT NAME="Large Email" SIZE="7" MULTIPLE >
+<SELECT NAME="Large Email" SIZE="7" MULTIPLE style="width:80%" >
 	{% for entry in large_emails %}
 		<OPTION>{{ entry }}
 	{% endfor %}
