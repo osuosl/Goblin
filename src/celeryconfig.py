@@ -1,4 +1,5 @@
-BROKER_HOST = 'imapsync-mq.oit.pdx.edu'
+#BROKER_HOST = 'sync.oit.pdx.edu'
+BROKER_HOST = 'localhost'
 BROKER_PORT = 5672
 BROKER_USER = 'optin'
 BROKER_PASSWORD = 'CbXVtHJHFmwgE'
