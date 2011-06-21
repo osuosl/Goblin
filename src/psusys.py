@@ -5,6 +5,7 @@ import simplejson
 import memcache
 from psuldap import psuldap
 from time import sleep
+import shlex, subprocess
 
 class PSUSys:
 	def __init__(self):
@@ -41,13 +42,13 @@ class PSUSys:
 				
 		ldap.connect( ldap_host, ldap_login, ldap_password)
 		res = ldap.search( searchfilter = 'uid=' + login, attrlist = ['mailHost'])
-		mail_host = res[0][1]['mailHost'][0]
-		self.log.info('opt_in_alread() user: ' + login + ' is set to: ' + mail_host)
-		local_mail_host = self.prop.getProperty('local.mail.host')
-		if mail_host == local_mail_host:
-			return False
-		else:
-			return True 
+		
+		for (dn, result) in res:
+			if result.has_key("mailHost"):
+				if result["mailHost"] == "gmx.pdx.edu":
+					self.log.info('opt_in_alread() user: ' + login + ' has a mailHost entry set to gmx.pdx.edu')
+					return True
+		return False
 
 	def route_to_google_null(self, login):
 		self.log.info('route_to_google(): routing mail to google for user: ' + login)
@@ -137,6 +138,30 @@ class PSUSys:
 
 	def sync_email(self, login):
 		self.log.info('sync_email(): syncing user: ' + login)
+		imapsync_cmd = '/vol/google-imap/imapsync'
+		imap_host = self.prop.getProperty('imap.host')
+		imap_login = self.prop.getProperty('imap.login')
+		cyrus_pf = '/opt-google-imap/cyrus.pf'
+		google_pf = '/opt-google-imap/google-prod.pf'
+		
+		command = imapsync_cmd + " --pidfile /tmp/imapsync-" + login + ".pid --host1 " + imap_host + " --port1 993 --user1 " + login + " --authuser1 " + imap_login + " --passfile1 " + cyrus_pf + " --host2 imap.gmail.com --port2 993 --user2 " + login + "@" + 'pdx.edu' + " --passfile2 " + google_pf + " --ssl1 --ssl2 --maxsize 26214400 --authmech1 PLAIN --authmech2 XOAUTH -sep1 '/' --exclude '^Shared Folders' "
+
+		syncprocess = subprocess.Popen(
+									shlex.split(command)
+									,stdout=subprocess.PIPE
+									,stderr=subprocess.PIPE )
+	# While the process is running, and we're under the time limit
+		while (syncprocess.poll() == None):
+			sleep(30)
+			self.log.info('sync_email(): continuing to sync user: ' + login)
+			
+		if syncprocess.returncode == 0:
+			self.log.info('sync_email(): success syncing user: ' + login)
+			return True
+		else:
+			self.log.info('sync_email(): failed syncing user: ' + login)
+			return False
+			
 
 		# Call sync here
 		
