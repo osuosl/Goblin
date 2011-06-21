@@ -9,7 +9,7 @@ log = logging.getLogger('ghoul.views')
 def select(request):
 	if 'REMOTE_USER' in request.META:
 		login = request.META['REMOTE_USER'] 
-		log.info('views.select() META: ' + str(request.META) )
+		log.info('views.select() found user in META: ' + login )
 	else:
 		login = 'dennis'
 		log.info('views.select() login not found, defaulting to : ' + login)
