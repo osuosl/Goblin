@@ -10,7 +10,7 @@ class PSUSys:
 		self.MAX_MAIL_SIZE = pow(2,20) * 25
 		self.prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 		self.log = logging.getLogger('goblin.psusys')
-
+		self.META_IDENTITY = 'REMOTE_ADDR'
 		
 	def large_emails(self, login):
 		imap_host = self.prop.getProperty('imap.host')
@@ -33,7 +33,6 @@ class PSUSys:
 
 	def opt_in_already(self, login):
 		ldap = psuldap('/vol/certs')
-		# ldapsearch -x -h ldap.oit.pdx.edu -b 'dc=pdx, dc=edu' uid=dennis mailhost
 		ldap_host = self.prop.getProperty('ldap.host')
 		ldap_login = self.prop.getProperty('ldap.login')
 		ldap_password = self.prop.getProperty('ldap.password')
@@ -79,11 +78,11 @@ class PSUSys:
 		mc = memcache.Client([memcache_url], debug=0)
 		
 		login = None
-		if 'MOD_AUTH_CAS' in meta:
-			key = meta['MOD_AUTH_CAS']
+		if self.META_IDENTITY in meta:
+			key = meta[self.META_IDENTITY]
 			login = mc.get(key)
 		else:
-			self.log.info('psusys.PSUSys.get_user(), failed to find MOD_AUTH_CAS in META')
+			self.log.info('psusys.PSUSys.get_user(), failed to find: ' + self.META_IDENTIY + ' in META')
 		
 		if login == None:
 			login = 'dennis'
@@ -96,12 +95,12 @@ class PSUSys:
 		memcache_url = prop.getProperty('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 		
-		if 'MOD_AUTH_CAS' in meta:
-			key = meta['MOD_AUTH_CAS']
+		if self.META_IDENTIY in meta:
+			key = meta[self.META_IDENTITY]
 			mc.set(key, login)
 			self.log.info('psusys.PSUSys.set_user(), set user ' + login + ' in memcache')
 		else:
-			self.log.info('psusys.PSUSys.set_user(), failed to find MOD_AUTH_CAS in META')
+			self.log.info('psusys.PSUSys.set_user(), failed to find: ' + self.META_IDENTITY + ' in META')
 		
 	def copy_progress(self, login):	
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
