@@ -82,7 +82,7 @@ class PSUSys:
 			key = meta[self.META_IDENTITY]
 			login = mc.get(key)
 		else:
-			self.log.info('psusys.PSUSys.get_user(), failed to find: ' + self.META_IDENTIY + ' in META')
+			self.log.info('psusys.PSUSys.get_user(), failed to find: ' + self.META_IDENTITY + ' in META')
 		
 		if login == None:
 			login = 'dennis'
@@ -95,7 +95,7 @@ class PSUSys:
 		memcache_url = prop.getProperty('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 		
-		if self.META_IDENTIY in meta:
+		if self.META_IDENTITY in meta:
 			key = meta[self.META_IDENTITY]
 			mc.set(key, login)
 			self.log.info('psusys.PSUSys.set_user(), set user ' + login + ' in memcache')
