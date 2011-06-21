@@ -111,32 +111,32 @@ class PSUSys:
 		
 	def send_conversion_email_null(self, login):
 		addr = login + '@pdx.edu'
-		self.log('send_conversion_email(): sending mail to user: ' + addr)
+		self.log.info('send_conversion_email(): sending mail to user: ' + addr)
 		sleep(1)
 		# Send the conversion confirmation email to the user
 		# Launch a Subprocess here to send email
 
 	def send_conversion_email(self, login):
 		addr = login + '@pdx.edu'
-		self.log('send_conversion_email(): sending mail to user: ' + addr)
+		self.log.info('send_conversion_email(): sending mail to user: ' + addr)
 		# Send the conversion confirmation email to the user
 		# Launch a Subprocess here to send email
 
 	def enable_gmail_null(self, login):
-		self.log('enable_gail(): Enabling gmail for user: ' + login)
+		self.log.info('enable_gail(): Enabling gmail for user: ' + login)
 		# Enable gmail here
 		sleep(1)
 		
 	def enable_gmail(self, login):
-		self.log('enable_gail(): Enabling gmail for user: ' + login)
+		self.log.info('enable_gail(): Enabling gmail for user: ' + login)
 		# Enable gmail here
 		
 	def sync_email_null(self, login):
-		self.log('sync_email(): syncing user: ' + login)
+		self.log.info('sync_email(): syncing user: ' + login)
 		sleep(1)
 
 	def sync_email(self, login):
-		self.log('sync_email(): syncing user: ' + login)
+		self.log.info('sync_email(): syncing user: ' + login)
 
 		# Call sync here
 		
