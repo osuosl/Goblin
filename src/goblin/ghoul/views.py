@@ -18,8 +18,15 @@ def select(request):
 	
 	psu_sys = PSUSys()
 	psu_sys.set_user(login, request.META)
+
+	# Go to the confirmation page if the user has already opt'd-in
+	
+	if psu_sys.opt_in_already(login):
+		return render_to_response('ghoul/confirm.html', { 'login': login },
+								context_instance=RequestContext(request),)
+	
 	large_emails = psu_sys.large_emails(login)
-			
+	
 	return render_to_response('ghoul/select.html', 
 		{ 'login': login,
 		  'large_emails': large_emails,

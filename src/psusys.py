@@ -4,6 +4,7 @@ import logging
 import simplejson
 import memcache
 from psuldap import psuldap
+from time import sleep
 
 class PSUSys:
 	def __init__(self):
@@ -48,7 +49,12 @@ class PSUSys:
 		else:
 			return True 
 
+	def route_to_google_null(self, login):
+		self.log.info('route_to_google(): routing mail to google for user: ' + login)
+		sleep(1)
+		
 	def route_to_google(self, login):
+		self.log.info('route_to_google(): routing mail to google for user: ' + login)
 		ldap = psuldap('/vol/certs')
 		# ldapsearch -x -h ldap.oit.pdx.edu -b 'dc=pdx, dc=edu' uid=dennis mailhost
 		ldap_host = self.prop.getProperty('ldap.host')
@@ -102,6 +108,37 @@ class PSUSys:
 			self.log.info('psusys.PSUSys.set_user(), set user ' + login + ' in memcache')
 		else:
 			self.log.info('psusys.PSUSys.set_user(), failed to find: ' + self.META_IDENTITY + ' in META')
+		
+	def send_conversion_email_null(self, login):
+		addr = login + '@pdx.edu'
+		self.log('send_conversion_email(): sending mail to user: ' + addr)
+		sleep(1)
+		# Send the conversion confirmation email to the user
+		# Launch a Subprocess here to send email
+
+	def send_conversion_email(self, login):
+		addr = login + '@pdx.edu'
+		self.log('send_conversion_email(): sending mail to user: ' + addr)
+		# Send the conversion confirmation email to the user
+		# Launch a Subprocess here to send email
+
+	def enable_gmail_null(self, login):
+		self.log('enable_gail(): Enabling gmail for user: ' + login)
+		# Enable gmail here
+		sleep(1)
+		
+	def enable_gmail(self, login):
+		self.log('enable_gail(): Enabling gmail for user: ' + login)
+		# Enable gmail here
+		
+	def sync_email_null(self, login):
+		self.log('sync_email(): syncing user: ' + login)
+		sleep(1)
+
+	def sync_email(self, login):
+		self.log('sync_email(): syncing user: ' + login)
+
+		# Call sync here
 		
 	def copy_progress(self, login):	
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
