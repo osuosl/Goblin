@@ -68,6 +68,7 @@ def status(request):
 		context_instance=RequestContext(request))
 	
 def confirm(request):
+	psu_sys = PSUSys()
 	if 'REMOTE_USER' in request.META:
 		login = request.META['REMOTE_USER'] 
 		log.info('views.confirm() login found in META: ' + login )
@@ -76,12 +77,10 @@ def confirm(request):
 			login = request.POST['login']
 			log.info('views.confirm() login found in POST: ' + login )
 		else: 
-			login = 'dennis'
+			login = psu_sys.get_user(request.META)
 			log.info('views.confirm() login not found, defaulting to : ' + login)		
-	log.info('views.confirm(), META = ' + str(request.META))
-
-	psu_sys = PSUSys()
-	login = psu_sys.get_user(request.META)
+	
+	#log.info('views.confirm(), META = ' + str(request.META))
 	
 	large_emails = psu_sys.large_emails(login)
 	

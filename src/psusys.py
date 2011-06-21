@@ -89,6 +89,7 @@ class PSUSys:
 			self.log.info('psusys.PSUSys.get_user(), defaulting to user ' + login )
 		else:
 			self.log.info('psusys.PSUSys.get_user(), found user ' + login + ' in memcache')
+		return login
 
 	def set_user(self, login, meta):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
