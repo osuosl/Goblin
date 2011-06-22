@@ -44,7 +44,7 @@ def copy_email_task(login):
 		mc.set(key, 10)
 	
 	# Synchronize email to Google (and wait)
-	psu_sys.sync_email_null(login)
+	psu_sys.sync_email(login)
 	mc.set(key, 50)
 
 	# Final email sync
