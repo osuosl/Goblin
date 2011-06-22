@@ -141,8 +141,8 @@ class PSUSys:
 		imapsync_cmd = '/vol/google-imap/imapsync'
 		imap_host = self.prop.getProperty('imap.host')
 		imap_login = self.prop.getProperty('imap.login')
-		cyrus_pf = '/opt-google-imap/cyrus.pf'
-		google_pf = '/opt-google-imap/google-prod.pf'
+		cyrus_pf = '/opt/google-imap/cyrus.pf'
+		google_pf = '/opt/google-imap/google-prod.pf'
 		
 		command = imapsync_cmd + " --pidfile /tmp/imapsync-full-" + login + ".pid --host1 " + imap_host + " --port1 993 --user1 " + login + " --authuser1 " + imap_login + " --passfile1 " + cyrus_pf + " --host2 imap.gmail.com --port2 993 --user2 " + login + "@" + 'pdx.edu' + " --passfile2 " + google_pf + " --ssl1 --ssl2 --maxsize 26214400 --authmech1 PLAIN --authmech2 XOAUTH -sep1 '/' --exclude '^Shared Folders' "
 
@@ -165,6 +165,18 @@ class PSUSys:
 
 		# Call sync here
 		
+	def is_processing(self, login):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		memcache_url = prop.getProperty('memcache.url')
+		mc = memcache.Client([memcache_url], debug=0)
+		key = 'email_copy_progress.' + login
+		cached_data = mc.get(key)
+
+		if (cached_data == None):
+			return False
+		return True
+
+	
 	def copy_progress(self, login):	
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 		memcache_url = prop.getProperty('memcache.url')

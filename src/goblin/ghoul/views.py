@@ -65,10 +65,13 @@ def status(request):
 	#key = 'email_copy_progress.' + login
 	#if ( cache.get(key) == None ):
 	#	log.info('views.status() cache.get(key): None')
-		
-		#copy_email_task.delay(login)
-	log.info('views.status() called celery task')
-	copy_email_task.apply_async(args=[login], queue='optin')
+
+	psu_sys = PSUSys()
+	if psu_sys.is_processing(login):
+		pass
+	else:
+		log.info('views.status() called celery task')
+		copy_email_task.apply_async(args=[login], queue='optin')
 		
 	return render_to_response('ghoul/status.html', 
 		{ 'login': login, },
