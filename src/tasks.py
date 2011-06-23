@@ -41,27 +41,27 @@ def copy_email_task(login):
 		mc.set(key, 100)
 		return(True)
 	else:
-		mc.set(key, 10)
+		mc.set(key, 40)
 	
 	# Synchronize email to Google (and wait)
 	psu_sys.sync_email(login)
 	mc.set(key, 50)
 
 	# Final email sync
-	psu_sys.sync_email_null(login)
+	psu_sys.sync_email(login)
 	mc.set(key, 60)
 	
 	# Send conversion info email to users PSU account
-	psu_sys.send_conversion_email_null(login)
+	psu_sys.send_conversion_email_psu(login)
 	mc.set(key, 70)
 
 	# Switch routing of email to flow to Google
 	
-	psu_sys.route_to_google_null(login)
+	psu_sys.route_to_google(login)
 	mc.set(key, 80)
 	
 	# Send conversion info email to users Google account
-	psu_sys.send_conversion_email_null(login)
+	psu_sys.send_conversion_email_google(login)
 	mc.set(key, 90)
 
 	# Enable Google email for the user
