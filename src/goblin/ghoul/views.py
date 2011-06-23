@@ -9,10 +9,20 @@ log = logging.getLogger('ghoul.views')
 def select(request):
 	if 'REMOTE_USER' in request.META:
 		login = request.META['REMOTE_USER'] 
+		request.session['login'] = login
 		log.info('views.select() found user in META: ' + login )
 	else:
-		login = 'dennis'
-		log.info('views.select() login not found, defaulting to : ' + login)
+		if 'login' in request.POST:
+			login = request.POST['login']
+			request.session['login'] = login
+			log.info('views.select() login found in POST: ' + login )
+		else: 
+			if 'login' in request.session:
+				login = request.session['login']
+				log.info('views.select() login found in session: ' + login )
+			else:
+				login = 'dennis'
+				log.info('views.select() login not found, defaulting to : ' + login)		
 
 	log.info('views.select() using login: ' + login)
 	
@@ -54,9 +64,13 @@ def status(request):
 		if 'login' in request.POST:
 			login = request.POST['login']
 			log.info('views.status() login found in POST: ' + login )
-		else: 
-			login = 'dennis'
-			log.info('views.status() login not found, defaulting to : ' + login)		
+		else:
+			if 'login' in request.session:
+				login = request.session['login']
+				log.info('views.status() login found in session: ' + login )
+			else: 
+				login = 'dennis'
+				log.info('views.status() login not found, defaulting to : ' + login)		
 			
 	log.info('views.status() META: ' + str(request.META) )
 	login = login.encode('latin-1')
@@ -87,8 +101,12 @@ def confirm(request):
 			login = request.POST['login']
 			log.info('views.confirm() login found in POST: ' + login )
 		else: 
-			login = psu_sys.get_user(request.META)
-			log.info('views.confirm() login not found, defaulting to : ' + login)		
+			if 'login' in request.session:
+				login = request.session['login']
+				log.info('views.status() login found in session: ' + login )
+			else:
+				login = psu_sys.get_user(request.META)
+				log.info('views.confirm() login not found, defaulting to : ' + login)		
 	
 	#log.info('views.confirm(), META = ' + str(request.META))
 	
