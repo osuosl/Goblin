@@ -6,6 +6,7 @@ import memcache
 from psuldap import psuldap
 from time import sleep
 import shlex, subprocess
+from memcacheq import MemcacheQueue
 
 class PSUSys:
 	def __init__(self):
@@ -54,7 +55,35 @@ class PSUSys:
 		self.log.info('route_to_google(): routing mail to google for user: ' + login)
 		sleep(1)
 		
+	# Temporary hack till Adrian sorts-out the access issues for modifying LDAP
 	def route_to_google(self, login):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		memcache_url = prop.getProperty('memcache.url')
+		mc = memcache.Client([memcache_url], debug=0)
+		mc.set('gmx_done.' + login, None)
+		mcq = MemcacheQueue('to_google', mc)
+		mcq.add(login)
+		res = mc.get('gmx_done.' + login)
+		while res == None:
+			res = mc.get('gmx_done.' + login)
+			print 'Waiting for ' + login + ' to route to Google' 
+			sleep(10)
+			
+	# Temporary hack till Adrian sorts-out the access issues for modifying LDAP
+	def route_to_psu(self, login):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		memcache_url = prop.getProperty('memcache.url')
+		mc = memcache.Client([memcache_url], debug=0)
+		mc.set('psu_done.' + login, None)
+		mcq = MemcacheQueue('to_psu', mc)
+		mcq.add(login)
+		res = mc.get('psu_done.' + login)
+		while res == None:
+			res = mc.get('psu_done.' + login)
+			print 'Waiting for ' + login + ' to route to PSU' 
+			sleep(10)
+		
+	def route_to_google_future(self, login):
 		self.log.info('route_to_google(): routing mail to google for user: ' + login)
 		ldap = psuldap('/vol/certs')
 		# ldapsearch -x -h ldap.oit.pdx.edu -b 'dc=pdx, dc=edu' uid=dennis mailhost
@@ -67,7 +96,7 @@ class PSUSys:
 		dn = 'uid=' + login + ',ou=people,dc=pdx,dc=edu'
 		ldap.mod_attribute(dn, 'mailHost', 'gmx.pdx.edu')		
 
-	def route_to_psu(self, login):
+	def route_to_psu_future(self, login):
 		ldap = psuldap('/vol/certs')
 		# ldapsearch -x -h ldap.oit.pdx.edu -b 'dc=pdx, dc=edu' uid=dennis mailhost
 		ldap_host = self.prop.getProperty('ldap.host')

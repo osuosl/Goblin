@@ -16,10 +16,10 @@ class TestAll(unittest.TestCase):
 		print emailen
 
 	def test_routing(self):
-		self.psusys.route_to_google('dennis')
-		self.assertTrue(self.psusys.opt_in_already('dennis'))
-		self.psusys.route_to_psu('dennis')
-		self.assertFalse(self.psusys.opt_in_already('dennis'))
+		self.psusys.route_to_google('a2sj')
+		self.assertTrue(self.psusys.opt_in_already('a2sj'))
+		self.psusys.route_to_psu('a2sj')
+		self.assertFalse(self.psusys.opt_in_already('a2sj'))
 
 if __name__ == '__main__':
 	unittest.main()		
