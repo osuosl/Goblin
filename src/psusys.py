@@ -46,8 +46,8 @@ class PSUSys:
 		print res
 		for (dn, result) in res:
 			if result.has_key("mailHost"):
-				print('opt_in_alread() user: ' + login + ' has a mailHost ' + result['mailHost'])
-				if result["mailHost"] == "gmx.pdx.edu":
+				print('opt_in_alread() user: ' + login + ' has a mailHost ' + str(result['mailHost']))
+				if "gmx.pdx.edu" in result["mailHost"]:
 					self.log.info('opt_in_alread() user: ' + login + ' has a mailHost entry set to gmx.pdx.edu')
 					return True
 		return False
