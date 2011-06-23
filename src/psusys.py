@@ -147,11 +147,50 @@ class PSUSys:
 		# Send the conversion confirmation email to the user
 		# Launch a Subprocess here to send email
 
-	def send_conversion_email(self, login):
-		addr = login + '@pdx.edu'
-		self.log.info('send_conversion_email(): sending mail to user: ' + addr)
+	def send_conversion_email_psu(self, login):
+		self.log.info('send_conversion_email_psu(): sending mail to user: ' + login)
 		# Send the conversion confirmation email to the user
 		# Launch a Subprocess here to send email
+		cmd = '/vol/goblin/src/conversion_email_psu ' + login
+		
+		syncprocess = subprocess.Popen(
+									shlex.split(cmd)
+									,stdout=subprocess.PIPE
+									,stderr=subprocess.PIPE )
+
+		while (syncprocess.poll() == None):
+			sleep(3)
+			self.log.info('send_conversion_email_psu(): continuing to send mail for user: ' + login)
+			
+		if syncprocess.returncode == 0:
+			self.log.info('send_conversion_email_psu(): success for user: ' + login)
+			return True
+		else:
+			self.log.info('send_conversion_email_psu(): failed for user: ' + login)
+			return False
+			
+	def send_conversion_email_google(self, login):
+		self.log.info('send_conversion_email_google(): sending mail to user: ' + login)
+		# Send the conversion confirmation email to the user
+		# Launch a Subprocess here to send email
+		cmd = '/vol/goblin/src/conversion_email_google ' + login
+		
+		syncprocess = subprocess.Popen(
+									shlex.split(cmd)
+									,stdout=subprocess.PIPE
+									,stderr=subprocess.PIPE )
+
+		while (syncprocess.poll() == None):
+			sleep(3)
+			self.log.info('send_conversion_email_google(): continuing to send mail for user: ' + login)
+			
+		if syncprocess.returncode == 0:
+			self.log.info('send_conversion_email_google(): success for user: ' + login)
+			return True
+		else:
+			self.log.info('send_conversion_email_google(): failed for user: ' + login)
+			return False
+			
 
 	def enable_gmail_null(self, login):
 		self.log.info('enable_gail(): Enabling gmail for user: ' + login)
