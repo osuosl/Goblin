@@ -56,6 +56,19 @@ class PSUSys:
 		self.log.info('route_to_google(): routing mail to google for user: ' + login)
 		sleep(1)
 		
+	def is_allowed(self, login):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		allow_all = prop.getProperty('allow.all')
+		if allow_all == 'False':
+			allow_users = prop.getProperty('allow.users')
+			if login in allow_users:
+				return True
+		else:
+			return True
+		return False
+			
+		
+
 	# Temporary hack till Adrian sorts-out the access issues for modifying LDAP
 	def route_to_google(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')

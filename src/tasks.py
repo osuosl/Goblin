@@ -50,6 +50,10 @@ def copy_email_task(login):
 	# Final email sync
 	psu_sys.sync_email(login)
 	mc.set(key, 60)
+
+	# Final email sync
+	psu_sys.sync_email(login)
+	mc.set(key, 65)
 	
 	# Send conversion info email to users PSU account
 	psu_sys.send_conversion_email_psu(login)
@@ -70,4 +74,6 @@ def copy_email_task(login):
 	mc.set(key, 100)
 
 	return(True)
+
+
 	
