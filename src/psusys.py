@@ -70,7 +70,7 @@ class PSUSys:
 		
 
 	# Temporary hack till Adrian sorts-out the access issues for modifying LDAP
-	def route_to_google(self, login):
+	def route_to_google_hack(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 		memcache_url = prop.getProperty('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
@@ -82,9 +82,90 @@ class PSUSys:
 			res = mc.get('gmx_done.' + login)
 			print 'Waiting for ' + login + ' to route to Google' 
 			sleep(10)
+
+	def route_to_google(self, login):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+
+		self.log.info('route_to_google(): Routing mail to Google for user: ' + login)
+		imap_host = prop.getProperty('imap.host')
+		imap_login = prop.getProperty('imap.login')
+		imap_password = prop.getProperty('imap.password')
+		
+		cmd = '/usr/bin/ldapmodify -x -h ' + imap_host + ' -D ' + imap_login + " -w " + imap_password
+
+		# Launch a Subprocess here to re-route email
+		input = '''
+dn: uid=%s, ou=people, dc=pdx, dc=edu
+changetype: modify
+delete: mailHost
+mailHost: cyrus.psumail.pdx.edu
+-
+add: mailHost
+mailHost: gmx.pdx.edu
+''' % login
+
+		syncprocess = subprocess.Popen(
+									shlex.split(cmd)
+									,stdin=subprocess.PIPE
+									,stdout=subprocess.PIPE
+									,stderr=subprocess.PIPE )
+
+		syncprocess.communicate(input)
+
+		while (syncprocess.poll() == None):
+			sleep(3)
+			self.log.info('route_to_google(): continuing to route mail to Google for user: ' + login)
+			
+		if syncprocess.returncode == 0:
+			self.log.info('route_to_google(): success for user: ' + login)
+			return True
+		else:
+			self.log.info('route_to_google(): failed for user: ' + login)
+			return False
+			
+
+	def route_to_psu(self, login):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+
+		self.log.info('route_to_psu(): Routing mail to psu for user: ' + login)
+		imap_host = prop.getProperty('imap.host')
+		imap_login = prop.getProperty('imap.login')
+		imap_password = prop.getProperty('imap.password')
+		
+		cmd = '/usr/bin/ldapmodify -x -h ' + imap_host + ' -D ' + imap_login + " -w " + imap_password
+
+		# Launch a Subprocess here to re-route email
+		input = '''
+dn: uid=%s, ou=people, dc=pdx, dc=edu
+changetype: modify
+delete: mailHost
+mailHost: gmx.pdx.edu
+-
+add: mailHost
+mailHost: cyrus.psumail.pdx.edu
+''' % login
+
+		syncprocess = subprocess.Popen(
+									shlex.split(cmd)
+									,stdin=subprocess.PIPE
+									,stdout=subprocess.PIPE
+									,stderr=subprocess.PIPE )
+
+		syncprocess.communicate(input)
+
+		while (syncprocess.poll() == None):
+			sleep(3)
+			self.log.info('route_to_psu(): continuing to route mail to psu for user: ' + login)
+			
+		if syncprocess.returncode == 0:
+			self.log.info('route_to_psu(): success for user: ' + login)
+			return True
+		else:
+			self.log.info('route_to_psu(): failed for user: ' + login)
+			return False
 			
 	# Temporary hack till Adrian sorts-out the access issues for modifying LDAP
-	def route_to_psu(self, login):
+	def route_to_psu_hack(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 		memcache_url = prop.getProperty('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
