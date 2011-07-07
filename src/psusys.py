@@ -392,3 +392,61 @@ mailHost: cyrus.psumail.pdx.edu
 		return data
 		#return HttpResponse(simplejson.dumps(27))
 		
+	def task_migrate(self, login):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		log = logging.getLogger('goblin.tasks')
+		memcache_url = prop.getProperty('memcache.url')
+		mc = memcache.Client([memcache_url], debug=0)
+		psu_sys = PSUSys()
+
+		log.info("copy_email_task(): processing user: " + login)
+		key = 'email_copy_progress.' + login
+
+		# Check for LDAP mail forwarding already (double checking), if
+		# already opt'd-in, then immediately return and mark as complete.
+
+		if (psu_sys.opt_in_already(login)):
+			log.info("copy_email_task(): has already completed opt-in: " + login)
+			mc.set(key, 100)
+			return(True)
+		else:
+			log.info("copy_email_task(): has not already completed opt-in: " + login)
+			mc.set(key, 40)
+	
+		# Synchronize email to Google (and wait)
+		log.info("copy_email_task(): first pass syncing email: " + login)
+		psu_sys.sync_email(login)
+		mc.set(key, 50)
+
+		# Final email sync
+		log.info("copy_email_task(): second pass syncing email: " + login)
+		psu_sys.sync_email(login)
+		mc.set(key, 60)
+
+		# Final email sync
+		#psu_sys.sync_email(login)
+		#mc.set(key, 65)
+	
+		# Send conversion info email to users PSU account
+		log.info("copy_email_task(): sending post conversion email to PSU: " + login)
+		psu_sys.send_conversion_email_psu(login)
+		mc.set(key, 70)
+
+		# Switch routing of email to flow to Google
+	
+		log.info("copy_email_task(): Routing email to Google: " + login)
+		psu_sys.route_to_google(login)
+		mc.set(key, 80)
+	
+		# Send conversion info email to users Google account
+		log.info("copy_email_task(): sending post conversion email to Google: " + login)
+		psu_sys.send_conversion_email_google(login)
+		mc.set(key, 90)
+
+		# Enable Google email for the user
+
+		psu_sys.enable_gmail(login)	
+		mc.set(key, 100)
+
+		return(True)
+
