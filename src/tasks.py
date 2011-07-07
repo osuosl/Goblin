@@ -70,7 +70,7 @@ def copy_email_task(login):
 
 	# Enable Google email for the user
 
-	psu_sys.enable_gmail_null(login)	
+	psu_sys.enable_gmail(login)	
 	mc.set(key, 100)
 
 	return(True)

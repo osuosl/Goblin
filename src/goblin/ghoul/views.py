@@ -4,6 +4,7 @@ from django.template import RequestContext
 from tasks import copy_email_task
 from psusys import PSUSys
 import logging
+#from celery.task import Task
 log = logging.getLogger('ghoul.views')
 
 def select(request):

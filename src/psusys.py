@@ -45,7 +45,7 @@ class PSUSys:
 				
 		ldap.connect( ldap_host, ldap_login, ldap_password)
 		res = ldap.search( searchfilter = 'uid=' + login, attrlist = ['mailHost'])
-		print res
+		
 		for (dn, result) in res:
 			if result.has_key("mailHost"):
 				print('opt_in_alread() user: ' + login + ' has a mailHost ' + str(result['mailHost']))

@@ -13,7 +13,7 @@ class TestAll(unittest.TestCase):
 		
 	def test_large_emails(self):
 		emailen = self.psusys.large_emails('weekse')
-		print emailen
+		self.assertTrue(len(emailen) == 2)
 
 	def test_routing(self):
 		self.psusys.route_to_google('a2sj')
