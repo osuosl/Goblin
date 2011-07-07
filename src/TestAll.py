@@ -21,5 +21,15 @@ class TestAll(unittest.TestCase):
 		self.psusys.route_to_psu('a2sj')
 		self.assertFalse(self.psusys.opt_in_already('a2sj'))
 
+	def test_gmail_enable(self):
+		if self.psusys.is_gmail_enabled('paul'):
+			self.psusys.disable_gmail('paul')
+			self.assertFalse(self.psusys.is_gmail_enabled('paul'))
+		else:
+			self.psusys.enable_gmail('paul')
+			self.assertTrue(self.psusys.is_gmail_enabled('paul'))
+			self.psusys.disable_gmail('paul')
+			self.assertFalse(self.psusys.is_gmail_enabled('paul'))
+		
 if __name__ == '__main__':
 	unittest.main()		

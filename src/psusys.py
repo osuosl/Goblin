@@ -7,6 +7,8 @@ from psuldap import psuldap
 from time import sleep
 import shlex, subprocess
 from memcacheq import MemcacheQueue
+import gdata.apps.organization.service
+
 
 class PSUSys:
 	def __init__(self):
@@ -291,9 +293,41 @@ mailHost: cyrus.psumail.pdx.edu
 		# Enable gmail here
 		sleep(1)
 		
+	def is_gmail_enabled(self, login):
+		self.log.info('is_gmail_enabled(): Checking if gmail is enabled for user: ' + login)
+		email = self.prop.getProperty('google.email')
+		domain = self.prop.getProperty('google.domain')
+		pw = self.prop.getProperty('google.password')
+		
+		client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
+		client.ProgrammaticLogin()
+		customerId = client.RetrieveCustomerId()["customerId"]
+		userEmail = login + '@pdx.edu'
+		return client.RetrieveOrgUser( customerId, userEmail )['orgUnitPath'] == 'people'
+		
 	def enable_gmail(self, login):
-		self.log.info('enable_gail(): Enabling gmail for user: ' + login)
-		# Enable gmail here
+		self.log.info('enable_gmail(): Enabling gmail for user: ' + login)
+		email = self.prop.getProperty('google.email')
+		domain = self.prop.getProperty('google.domain')
+		pw = self.prop.getProperty('google.password')
+		
+		client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
+		client.ProgrammaticLogin()
+		customerId = client.RetrieveCustomerId()["customerId"]
+		userEmail = login + '@pdx.edu'
+		client.UpdateOrgUser( customerId, userEmail, 'people')
+		
+	def disable_gmail(self, login):
+		self.log.info('disable_gmail(): Disabling gmail for user: ' + login)
+		email = self.prop.getProperty('google.email')
+		domain = self.prop.getProperty('google.domain')
+		pw = self.prop.getProperty('google.password')
+		
+		client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
+		client.ProgrammaticLogin()
+		customerId = client.RetrieveCustomerId()["customerId"]
+		userEmail = login + '@pdx.edu'
+		client.UpdateOrgUser( customerId, userEmail, '/')
 		
 	def sync_email_null(self, login):
 		self.log.info('sync_email(): syncing user: ' + login)
