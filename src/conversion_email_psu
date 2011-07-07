@@ -5,9 +5,13 @@ cat << EOS
 REPLY-To: weekse@pdx.edu
 Subject: IMPORTANT: Your PSU email has been converted to Google Mail  
 
-Your PSU email has been converted to use the new Google PSU mail system.
-You will no longer need to check the PSU email system for your incoming email.
-Please visit http://mail.pdx.edu to access your mail in the future.
+You have now migrated to Google Mail. New mail will NOT be delivered to this location. 
+Please discontinue using this mailbox for sending or receiving messages. All messages 
+sent to your @pdx.edu address will now be delivered to your Google Mail inbox at mail.pdx.edu.
+
+Filter rules are not migrated and will need to be recreated.
+
+Due to Google’s message size limitations of 25MB, the emails could not be migrated.
 
 Helpful information can be found at https://sites.google.com/a/pdx.edu/google-apps/email-migration 
 

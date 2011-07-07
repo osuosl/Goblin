@@ -5,11 +5,13 @@ cat << EOS
 REPLY-To: weekse@pdx.edu
 Subject: Your PSU email has been converted to Google Mail  
 
-Your PSU email has been converted to use the new Google PSU mail system.
-You will no longer need to check the PSU email system for your incoming email.
-Please visit http://mail.pdx.edu to access your mail in the future.
-
-Helpful information can be found at https://sites.google.com/a/pdx.edu/google-apps/email-migration 
+Welcome to the new home of PSU Email! Now that you have converted to Google mail, all 
+messages sent to your @pdx.edu mail address or aliases will arrive here and will no 
+longer be delivered to Webmail. Thunderbird, MacMail, or Outlook, although those clients 
+may still be used, they must be reconfigured (click here for instructions).  Take some 
+time to familiarize yourself with the layout, features, interface, and update your bookmarks
+ to point to mail.pdx.edu.  For more information on how to use Google Mail may be
+found at https://sites.google.com/a/pdx.edu/google-apps/email-migration
 
 EOS
 }
