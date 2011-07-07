@@ -38,7 +38,7 @@ class PSUSys:
 
 	def opt_in_already(self, login):
 		ldap = psuldap('/vol/certs')
-		ldap_host = self.prop.getProperty('ldap.host')
+		ldap_host = self.prop.getProperty('ldap.read.host')
 		ldap_login = self.prop.getProperty('ldap.login')
 		ldap_password = self.prop.getProperty('ldap.password')
 		self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
@@ -89,7 +89,7 @@ class PSUSys:
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
 		self.log.info('route_to_google(): Routing mail to Google for user: ' + login)
-		ldap_host = prop.getProperty('ldap.host')
+		ldap_host = prop.getProperty('ldap.write.host')
 		ldap_login = prop.getProperty('ldap.login')
 		ldap_password = prop.getProperty('ldap.password')
 		
@@ -130,7 +130,7 @@ mailHost: gmx.pdx.edu
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
 		self.log.info('route_to_psu(): Routing mail to psu for user: ' + login)
-		ldap_host = prop.getProperty('ldap.host')
+		ldap_host = prop.getProperty('ldap.write.host')
 		ldap_login = prop.getProperty('ldap.login')
 		ldap_password = prop.getProperty('ldap.password')
 		
