@@ -89,11 +89,11 @@ class PSUSys:
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
 		self.log.info('route_to_google(): Routing mail to Google for user: ' + login)
-		imap_host = prop.getProperty('imap.host')
-		imap_login = prop.getProperty('imap.login')
-		imap_password = prop.getProperty('imap.password')
+		ldap_host = prop.getProperty('ldap.host')
+		ldap_login = prop.getProperty('ldap.login')
+		ldap_password = prop.getProperty('ldap.password')
 		
-		cmd = '/usr/bin/ldapmodify -x -h ' + imap_host + ' -D ' + imap_login + " -w " + imap_password
+		cmd = '/usr/bin/ldapmodify -x -h ' + ldap_host + ' -D ' + ldap_login + " -w " + ldap_password
 
 		# Launch a Subprocess here to re-route email
 		input = '''
@@ -130,11 +130,11 @@ mailHost: gmx.pdx.edu
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
 		self.log.info('route_to_psu(): Routing mail to psu for user: ' + login)
-		imap_host = prop.getProperty('imap.host')
-		imap_login = prop.getProperty('imap.login')
-		imap_password = prop.getProperty('imap.password')
+		ldap_host = prop.getProperty('ldap.host')
+		ldap_login = prop.getProperty('ldap.login')
+		ldap_password = prop.getProperty('ldap.password')
 		
-		cmd = '/usr/bin/ldapmodify -x -h ' + imap_host + ' -D ' + imap_login + " -w " + imap_password
+		cmd = '/usr/bin/ldapmodify -x -h ' + ldap_host + ' -D ' + ldap_login + " -w " + ldap_password
 
 		# Launch a Subprocess here to re-route email
 		input = '''
