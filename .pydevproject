@@ -7,6 +7,8 @@
 <pydev_variables_property name="org.python.pydev.PROJECT_VARIABLE_SUBSTITUTION">
 <key>DJANGO_MANAGE_LOCATION</key>
 <value>src/goblin/manage.py</value>
+<key>GDATA</key>
+<value>/home/dennis/workspace/goblin/lib</value>
 <key>DJANGO_SETTINGS_MODULE</key>
 <value>goblin.settings</value>
 </pydev_variables_property>
@@ -20,5 +22,6 @@
 <path>/vol/d2l/ragve/lib/python</path>
 <path>/vol/google-imap</path>
 <path>/home/dennis/etc</path>
+<path>${GDATA}</path>
 </pydev_pathproperty>
 </pydev_project>
