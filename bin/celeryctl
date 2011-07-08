@@ -1,0 +1,30 @@
+#!/bin/sh
+
+host=`hostname -s`
+base=/vol/goblin
+
+start(){
+	. $base/bin/goblin
+	celeryd --autoscale=50,5 --loglevel=INFO -Q optin -n $host &
+	echo celeryd started
+	echo tail -f /vol/goblin/var/celery.log
+}
+
+stop(){
+	pkill -f celeryd -u dennis
+	echo celeryd stopped
+}
+cmd=$1
+if [ "$cmd" = "start" ]; then
+	start
+elif [ "$cmd" = "stop" ]; then
+	stop
+elif [ "$cmd" = "restart" ]; then
+	stop
+	start
+elif [ "$cmd" = "status" ]; then
+	ps -elf | grep celery | grep dennis
+else
+	echo "Error: expecting one of -- start, stop, status, or restart"
+fi
+

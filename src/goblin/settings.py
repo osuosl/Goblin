@@ -181,6 +181,11 @@ LOGGING = {
 			'level': 'INFO',
 			'propagate': True,
 		},
+		'goblin.task': {
+			'handlers': ['rotating_log'],
+			'level': 'INFO',
+			'propagate': True,
+		},
     }
 }
 

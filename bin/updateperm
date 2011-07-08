@@ -1,0 +1,7 @@
+#!/bin/sh
+
+DIR=/vol/goblin
+
+find $DIR/ -name .git -prune -o -type f -exec chmod ugo+rw {} \; -ls
+find $DIR/ -name .git -prune -o -type d -exec chmod ugo+rwx {} \; -ls
+chmod +x $DIR/src/conversion_email_*

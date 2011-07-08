@@ -1,0 +1,5 @@
+PYTHONPATH=/vol/goblin/local:/vol/goblin/src:/vol/goblin/src/goblin:/vol/google-imap:/home/dennis/etc:/vol/goblin/etc:/vol/ragve/lib/python:/opt/google-imap:$PYTHONPATH
+export PYTHONPATH
+PATH=/home/dennis/bin:$PATH
+export PATH
+

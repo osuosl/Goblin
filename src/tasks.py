@@ -26,7 +26,7 @@ def copy_email_task_null(login):
 @task
 def copy_email_task(login):
 	psu_sys = PSUSys()
-	return(psu_sys.task_migrate(login))
+	return(psu_sys.copy_email_task(login))
 
 
 	

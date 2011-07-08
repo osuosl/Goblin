@@ -392,9 +392,9 @@ mailHost: cyrus.psumail.pdx.edu
 		return data
 		#return HttpResponse(simplejson.dumps(27))
 		
-	def task_migrate(self, login):
+	def copy_email_task(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
-		log = logging.getLogger('goblin.tasks')
+		log = logging.getLogger('')		# Logging is occuring within celery worker here
 		memcache_url = prop.getProperty('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 		psu_sys = PSUSys()
