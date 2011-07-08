@@ -16,4 +16,4 @@ found at https://sites.google.com/a/pdx.edu/google-apps/email-migration
 EOS
 }
 
-msg | /usr/lib/sendmail -f weekse@pdx.edu ${1}@pdx.edu
+msg | /usr/lib/sendmail -f weekse@pdx.edu ${1}@gmx.pdx.edu

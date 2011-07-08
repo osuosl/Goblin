@@ -18,4 +18,4 @@ Helpful information can be found at https://sites.google.com/a/pdx.edu/google-ap
 EOS
 }
 
-msg | /usr/lib/sendmail -f weekse@pdx.edu ${1}@pdx.edu
+msg | /usr/lib/sendmail -f weekse@pdx.edu ${1}@cyrus.psumail.pdx.edu

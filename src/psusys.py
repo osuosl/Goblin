@@ -127,9 +127,13 @@ mailHost: gmx.pdx.edu
 			
 
 	def route_to_psu(self, login):
+		self.update_mailHost(login)
+		self.update_mailRoutingAddress(login)
+		
+	def update_mailHost(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
-		self.log.info('route_to_psu(): Routing mail to psu for user: ' + login)
+		self.log.info('update_mailHost(): Routing mail to psu for user: ' + login)
 		ldap_host = prop.getProperty('ldap.write.host')
 		ldap_login = prop.getProperty('ldap.login')
 		ldap_password = prop.getProperty('ldap.password')
@@ -157,13 +161,53 @@ mailHost: cyrus.psumail.pdx.edu
 
 		while (syncprocess.poll() == None):
 			sleep(3)
-			self.log.info('route_to_psu(): continuing to route mail to psu for user: ' + login)
+			self.log.info('update_mailHost(): continuing to route mail to psu for user: ' + login)
 			
 		if syncprocess.returncode == 0:
-			self.log.info('route_to_psu(): success for user: ' + login)
+			self.log.info('update_mailHost(): success for user: ' + login)
 			return True
 		else:
-			self.log.info('route_to_psu(): failed for user: ' + login)
+			self.log.info('update_mailHost(): failed for user: ' + login)
+			return False
+
+	def update_mailRoutingAddress(self, login):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+
+		self.log.info('update_mailRoutingAddress(): Updating mailRoutingAddress for user: ' + login)
+		ldap_host = prop.getProperty('ldap.write.host')
+		ldap_login = prop.getProperty('ldap.login')
+		ldap_password = prop.getProperty('ldap.password')
+		
+		cmd = '/usr/bin/ldapmodify -x -h ' + ldap_host + ' -D ' + ldap_login + " -w " + ldap_password
+
+		# Launch a Subprocess here to re-route email
+		input = '''
+dn: uid=%s, ou=people, dc=pdx, dc=edu
+changetype: modify
+delete: mailRoutingAddress
+mailRoutingAddress: %s@odin.pdx.edu
+-
+add: mailRoutingAddress
+mailRoutingAddress: %s@pdx.edu
+''' % login, login, login
+
+		syncprocess = subprocess.Popen(
+									shlex.split(cmd)
+									,stdin=subprocess.PIPE
+									,stdout=subprocess.PIPE
+									,stderr=subprocess.PIPE )
+
+		syncprocess.communicate(input)
+
+		while (syncprocess.poll() == None):
+			sleep(3)
+			self.log.info('update_mailRoutingAddress(): Continuing to update mailRoutingAddress for user: ' + login)
+			
+		if syncprocess.returncode == 0:
+			self.log.info('update_mailRoutingAddress(): success for user: ' + login)
+			return True
+		else:
+			self.log.info('update_mailRoutingAddress(): failed for user: ' + login)
 			return False
 			
 	# Temporary hack till Adrian sorts-out the access issues for modifying LDAP
@@ -359,6 +403,32 @@ mailHost: cyrus.psumail.pdx.edu
 			self.log.info('sync_email(): failed syncing user: ' + login)
 			return False
 			
+	def sync_email_delete2(self, login):
+		self.log.info('sync_email(): syncing user: ' + login)
+		imapsync_cmd = '/vol/google-imap/imapsync'
+		imap_host = self.prop.getProperty('imap.host')
+		imap_login = self.prop.getProperty('imap.login')
+		cyrus_pf = '/opt/google-imap/cyrus.pf'
+		google_pf = '/opt/google-imap/google-prod.pf'
+		
+		command = imapsync_cmd + " --pidfile /tmp/imapsync-full-" + login + ".pid --host1 " + imap_host + " --port1 993 --user1 " + login + " --authuser1 " + imap_login + " --passfile1 " + cyrus_pf + " --host2 imap.gmail.com --port2 993 --user2 " + login + "@" + 'pdx.edu' + " --passfile2 " + google_pf + " --ssl1 --ssl2 --maxsize 26214400 --delete2 --authmech1 PLAIN --authmech2 XOAUTH -sep1 '/' --exclude '^Shared Folders' "
+
+		syncprocess = subprocess.Popen(
+									shlex.split(command)
+									,stdout=subprocess.PIPE
+									,stderr=subprocess.PIPE )
+	# While the process is running, and we're under the time limit
+		while (syncprocess.poll() == None):
+			sleep(30)
+			self.log.info('sync_email(): continuing to sync user: ' + login)
+			
+		if syncprocess.returncode == 0:
+			self.log.info('sync_email(): success syncing user: ' + login)
+			return True
+		else:
+			self.log.info('sync_email(): failed syncing user: ' + login)
+			return False
+			
 
 		# Call sync here
 		
@@ -415,13 +485,9 @@ mailHost: cyrus.psumail.pdx.edu
 	
 		# Synchronize email to Google (and wait)
 		log.info("copy_email_task(): first pass syncing email: " + login)
-		psu_sys.sync_email(login)
+		psu_sys.sync_email_delete2(login)
 		mc.set(key, 50)
 
-		# Final email sync
-		log.info("copy_email_task(): second pass syncing email: " + login)
-		psu_sys.sync_email(login)
-		mc.set(key, 60)
 
 		# Final email sync
 		#psu_sys.sync_email(login)
@@ -437,6 +503,11 @@ mailHost: cyrus.psumail.pdx.edu
 		log.info("copy_email_task(): Routing email to Google: " + login)
 		psu_sys.route_to_google(login)
 		mc.set(key, 80)
+
+		# Final email sync
+		log.info("copy_email_task(): second pass syncing email: " + login)
+		psu_sys.sync_email(login)
+		mc.set(key, 60)
 	
 		# Send conversion info email to users Google account
 		log.info("copy_email_task(): sending post conversion email to Google: " + login)
