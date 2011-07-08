@@ -5,7 +5,7 @@ from celery.log import logging
 from psuproperties import Property
 from psusys import PSUSys
 
-
+@task
 def copy_email_task_null(login):
 	prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 	log = logging.getLogger()
