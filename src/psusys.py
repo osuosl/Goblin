@@ -189,7 +189,7 @@ mailRoutingAddress: %s@odin.pdx.edu
 -
 add: mailRoutingAddress
 mailRoutingAddress: %s@pdx.edu
-''' % login, login, login
+''' % (login, login, login)
 
 		syncprocess = subprocess.Popen(
 									shlex.split(cmd)
