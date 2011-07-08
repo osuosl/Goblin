@@ -25,8 +25,12 @@ def copy_email_task_null(login):
 
 @task
 def copy_email_task(login):
+	log = logging.getLogger()
+	log.info('copy_email_task(): running copy_email_task(' + login + ')')
 	psu_sys = PSUSys()
-	return(psu_sys.copy_email_task(login))
+	result = psu_sys.copy_email_task(login) 
+	log.info('copy_email_task(): finished running copy_email_task(' + login + ')')
+	return(result)
 
 
 	
