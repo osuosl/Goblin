@@ -42,6 +42,9 @@ def select(request):
 		return render_to_response('ghoul/confirm.html', { 'login': login },
 								context_instance=RequestContext(request),)
 	
+	if psu_sys.is_processing(login):
+		return render_to_response('ghoul/status.html', { 'login': login} )
+	
 	large_emails = psu_sys.large_emails(login)
 	
 	return render_to_response('ghoul/select.html', 
