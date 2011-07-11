@@ -130,11 +130,15 @@ mailHost: gmx.pdx.edu
 			return False
 			
 
-	def route_to_google(self, login):
-		self.update_mailHost(login)
-		self.update_mailRoutingAddress(login)
+	def route_to_psu(self, login):
+		self.update_mailHost(login, 'cyrus.psumail.pdx.edu')
+		self.update_mailRoutingAddress(login, 'odin.pdx.edu')
 		
-	def update_mailHost(self, login):
+	def route_to_google(self, login):
+		self.update_mailHost(login, 'gmx.pdx.edu')
+		self.update_mailRoutingAddress(login, 'pdx.edu')
+		
+	def update_mailHost(self, login, deliveryHost):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
 		self.log.info('update_mailHost(): Routing mail to psu for user: ' + login)
@@ -149,8 +153,8 @@ mailHost: gmx.pdx.edu
 dn: uid=%s, ou=people, dc=pdx, dc=edu
 changetype: modify
 replace: mailHost
-mailHost: gmx.pdx.edu
-''' % login
+mailHost: %s
+''' % (login, deliveryHost)
 
 		syncprocess = subprocess.Popen(
 									shlex.split(cmd)
@@ -171,7 +175,7 @@ mailHost: gmx.pdx.edu
 			self.log.info('update_mailHost(): failed for user: ' + login)
 			return False
 
-	def update_mailRoutingAddress(self, login):
+	def update_mailRoutingAddress(self, login, deliveryAddr):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
 		self.log.info('update_mailRoutingAddress(): Updating mailRoutingAddress for user: ' + login)
@@ -186,8 +190,8 @@ mailHost: gmx.pdx.edu
 dn: uid=%s, ou=people, dc=pdx, dc=edu
 changetype: modify
 replace: mailRoutingAddress
-mailRoutingAddress: %s@pdx.edu
-''' % (login, login)
+mailRoutingAddress: %s@%s
+''' % (login, login, deliveryAddr)
 
 		syncprocess = subprocess.Popen(
 									shlex.split(cmd)
