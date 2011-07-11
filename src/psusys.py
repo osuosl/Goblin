@@ -85,7 +85,11 @@ class PSUSys:
 			print 'Waiting for ' + login + ' to route to Google' 
 			sleep(10)
 
-	def route_to_google(self, login):
+	def route_to_google_needswork(self, login):
+		self.update_mailHost(login, 'gmx.pdx.edu')
+		self.update_mailRoutingAddress(login, )
+		
+	def route_to_google_old(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
 		self.log.info('route_to_google(): Routing mail to Google for user: ' + login)
@@ -126,7 +130,7 @@ mailHost: gmx.pdx.edu
 			return False
 			
 
-	def route_to_psu(self, login):
+	def route_to_google(self, login):
 		self.update_mailHost(login)
 		self.update_mailRoutingAddress(login)
 		
@@ -144,11 +148,8 @@ mailHost: gmx.pdx.edu
 		input = '''
 dn: uid=%s, ou=people, dc=pdx, dc=edu
 changetype: modify
-delete: mailHost
+replace: mailHost
 mailHost: gmx.pdx.edu
--
-add: mailHost
-mailHost: cyrus.psumail.pdx.edu
 ''' % login
 
 		syncprocess = subprocess.Popen(
@@ -184,12 +185,9 @@ mailHost: cyrus.psumail.pdx.edu
 		input = '''
 dn: uid=%s, ou=people, dc=pdx, dc=edu
 changetype: modify
-delete: mailRoutingAddress
-mailRoutingAddress: %s@odin.pdx.edu
--
-add: mailRoutingAddress
+replace: mailRoutingAddress
 mailRoutingAddress: %s@pdx.edu
-''' % (login, login, login)
+''' % (login, login)
 
 		syncprocess = subprocess.Popen(
 									shlex.split(cmd)
