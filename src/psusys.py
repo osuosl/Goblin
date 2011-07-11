@@ -54,6 +54,22 @@ class PSUSys:
 					return True
 		return False
 
+	def get_ldap_attr(self, login, attr):
+		ldap = psuldap('/vol/certs')
+		ldap_host = self.prop.getProperty('ldap.read.host')
+		ldap_login = self.prop.getProperty('ldap.login')
+		ldap_password = self.prop.getProperty('ldap.password')
+		self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
+				
+		ldap.connect( ldap_host, ldap_login, ldap_password)
+		res = ldap.search( searchfilter = 'uid=' + login, attrlist = ['mailHost'])
+		
+		for (dn, result) in res:
+			if result.has_key(attr):
+				return str(result[attr])
+
+		return None
+
 	def route_to_google_null(self, login):
 		self.log.info('route_to_google(): routing mail to google for user: ' + login)
 		sleep(1)
@@ -391,8 +407,10 @@ mailRoutingAddress: %s@%s
 
 		syncprocess = subprocess.Popen(
 									shlex.split(command)
-									,stdout=subprocess.PIPE
-									,stderr=subprocess.PIPE )
+									,bufsize = -1
+									,close_fds = True
+									,stdout=open('/dev/null', 'w')
+									,stderr=None )
 	# While the process is running, and we're under the time limit
 		while (syncprocess.poll() == None):
 			sleep(30)
