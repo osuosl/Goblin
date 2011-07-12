@@ -407,10 +407,7 @@ mailRoutingAddress: %s@%s
 		log_file_name = '/tmp/imapsync-' + login + '.log'
 		syncprocess = subprocess.Popen(
 									shlex.split(command)
-									,bufsize = -1
-									,close_fds = True
-									,stdout=open(log_file_name, 'w')
-									,stderr=None )
+									,stdout=open(log_file_name, 'w') )
 	# While the process is running, and we're under the time limit
 		while (syncprocess.poll() == None):
 			sleep(30)
