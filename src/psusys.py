@@ -404,12 +404,12 @@ mailRoutingAddress: %s@%s
 		google_pf = '/opt/google-imap/google-prod.pf'
 		
 		command = imapsync_cmd + " --pidfile /tmp/imapsync-full-" + login + ".pid --host1 " + imap_host + " --port1 993 --user1 " + login + " --authuser1 " + imap_login + " --passfile1 " + cyrus_pf + " --host2 imap.gmail.com --port2 993 --user2 " + login + "@" + 'pdx.edu' + " --passfile2 " + google_pf + " --ssl1 --ssl2 --maxsize 26214400 --authmech1 PLAIN --authmech2 XOAUTH -sep1 '/' --exclude '^Shared Folders' "
-
+		log_file_name = '/tmp/imapsync-' + login + '.log'
 		syncprocess = subprocess.Popen(
 									shlex.split(command)
 									,bufsize = -1
 									,close_fds = True
-									,stdout=open('/dev/null', 'w')
+									,stdout=open(log_file_name, 'w')
 									,stderr=None )
 	# While the process is running, and we're under the time limit
 		while (syncprocess.poll() == None):
