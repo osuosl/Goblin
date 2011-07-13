@@ -3,7 +3,6 @@
 msg(){
 cat << EOS
 REPLY-To: weekse@pdx.edu
-Subject: Your PSU email has been converted to Google Mail  
 Organization: Portland State University
 MIME-Version: 1.0
 Subject: Congratulations, the Email opt-in process is complete! Read on for the next steps...

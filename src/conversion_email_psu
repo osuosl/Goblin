@@ -15,9 +15,11 @@ This is a multi-part message in MIME format.
 Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Subject: Email Migration Complete! Use Google Mail @  http://mail.pdx.edu
-
 You have successfully migrated to Google Mail!  New mail will NOT be delivered to this location. Please discontinue using this mailbox for sending or receiving messages. All messages sent to your @pdx.edu address will now be delivered to your Google Mail inbox at http://mail.pdx.edu .
+
+There may be a delay between receiving this email and your migration being complete.
+If you are able to login to mail.pdx.edu your migration is finished.  
+If you are unable please allow up to 15 minutes for things to wrap and sync up. Feel free to log out, and close your browser windows. 
 
 Your next steps...
 
