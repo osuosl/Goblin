@@ -1,258 +1,42 @@
 #!/bin/sh
 
+PATH=$PATH:/vol/goblin/bin
+
 msg(){
 cat << EOS
-REPLY-To: weekse@pdx.edu
-Organization: Portland State University
-MIME-Version: 1.0
-Subject: Email Migration Complete! Use Google Mail @  http://mail.pdx.edu
-X-Priority: 1 (Highest)
-Content-Type: multipart/alternative;
- boundary="------------090400030202080000060107"
-
-This is a multi-part message in MIME format.
---------------090400030202080000060107
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
-
-You have successfully migrated to Google Mail!  New mail will NOT be delivered to this location. Please discontinue using this mailbox for sending or receiving messages. All messages sent to your @pdx.edu address will now be delivered to your Google Mail inbox at http://mail.pdx.edu .
-
-There may be a delay between receiving this email and your migration being complete.
-If you are able to login to mail.pdx.edu your migration is finished.  
-If you are unable please allow up to 15 minutes for things to wrap and sync up. Feel free to log out, and close your browser windows. 
+You have successfully migrated to Google Mail!  New mail will NOT be
+delivered to this location. Please discontinue using this mailbox for
+sending or receiving messages. All messages sent to your @pdx.edu address
+will now be delivered to your Google Mail inbox at http://mail.pdx.edu .
 
 Your next steps...
 
-   1. Login to your Google Mail using http://mail.pdx.edu to verify your mail is working properly.
+   1. Login to your Google Mail using http://mail.pdx.edu to verify your
+   mail is working properly.
 
-   2. Mail Clients (ie, Thunderbird, Outlook, iPhone/Android mail apps) will not work correctly and will need to be reconfigured to work with Google Mail. Although we encourage you to give the web interface a try.
+   2. Mail Clients (ie, Thunderbird, Outlook, iPhone/Android mail apps)
+   will not work correctly and will need to be reconfigured to work with
+   Google Mail. Although we encourage you to give the web interface a try.
 
-More information can be found here: http://www.oit.pdx.edu/google-mail-client-settings
+   More information can be found here:
+   http://www.oit.pdx.edu/google-mail-client-settings
 
-   3. Email forwarding configured in OAM has been disabled (if you were using it), and mail filters/rules will need to be created in Gmail.
+   3. Email forwarding configured in OAM has been disabled (if you were
+   using it), and mail filters/rules will need to be created in Gmail.
 
-More information can be found here: http://www.oit.pdx.edu/google-mail-filter-settings
+   More information can be found here:
+   http://www.oit.pdx.edu/google-mail-filter-settings
 
-   4. While the PSU directory is integrated into Google Mail, personal contacts may be imported, as they were not imported as part of the opt-in process.
+   4. While the PSU directory is integrated into Google Mail, personal
+   contacts may be imported, as they were not imported as part of the
+   opt-in process.
 
 More information can be found here: http://oit.pdx.edu/Importing-Contacts-Google
 
 
-For more information please visit the Google Apps project site: googleapps.pdx.edu/opt-in-complete <https://sites.google.com/a/pdx.edu/google-apps/email-migration/opt-in-complete>
-
-
---------------090400030202080000060107
-Content-Type: text/html; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-  <head>
-    <meta content="text/html; charset=ISO-8859-1"
-      http-equiv="Content-Type">
-    <title>Congratulations, the Email opt-in process is complete! Read
-      on for the next steps...</title>
-  </head>
-  <body text="#000000" bgcolor="#ffffff">
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"
-      id="internal-source-marker_0.9448391721778071">Subject: Email
-      Migration Complete! Use Google Mail @ &nbsp;<a class="moz-txt-link-freetext" href="http://mail.pdx.edu">http://mail.pdx.edu</a></span><br>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"></span><br>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;">You have successfully migrated to
-      Google Mail! &nbsp;New mail will NOT be delivered to this location.
-      Please discontinue using this mailbox for sending or receiving
-      messages. All messages sent to your </span><span
-      style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
-      background-color: transparent; font-weight: normal; font-style:
-      normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;">@pdx.edu</span><a href="about:blank"><span
-        style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-        153); background-color: transparent; font-weight: normal;
-        font-style: normal; font-variant: normal; text-decoration:
-        underline; vertical-align: baseline;"></span></a><span
-      style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
-      background-color: transparent; font-weight: normal; font-style:
-      normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"> address will now be delivered to your
-      Google Mail inbox at&nbsp; </span><a href="http://mail.pdx.edu/"><span
-        style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-        153); background-color: transparent; font-weight: normal;
-        font-style: normal; font-variant: normal; text-decoration:
-        underline; vertical-align: baseline;">http://mail.pdx.edu</span></a><span
-      style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
-      background-color: transparent; font-weight: normal; font-style:
-      normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"> .</span><br>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: bold; font-style:
-      normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"></span><br>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;">Your next steps...</span>
-    <ol>
-      <li style="list-style-type: decimal; font-size: 11pt; font-family:
-        Arial; color: rgb(0, 0, 0); background-color: transparent;
-        font-weight: normal; font-style: normal; font-variant: normal;
-        text-decoration: none; vertical-align: baseline;"><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          0); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          none; vertical-align: baseline;">Login to your Google Mail
-          using </span><a href="http://mail.pdx.edu/"><span
-            style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-            153); background-color: transparent; font-weight: normal;
-            font-style: normal; font-variant: normal; text-decoration:
-            underline; vertical-align: baseline;">http://mail.pdx.edu</span></a><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          0); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          none; vertical-align: baseline;"> </span><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          0); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          none; vertical-align: baseline;">to verify your mail is
-          working properly.</span></li>
-    </ol>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"></span>
-    <ol start="2">
-      <li style="list-style-type: decimal; font-size: 11pt; font-family:
-        Arial; color: rgb(0, 0, 0); background-color: transparent;
-        font-weight: normal; font-style: normal; font-variant: normal;
-        text-decoration: none; vertical-align: baseline;"><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          0); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          none; vertical-align: baseline;">Mail Clients (ie,
-          Thunderbird, Outlook, iPhone/Android mail apps) will not work
-          correctly and will need to be reconfigured to work with Google
-          Mail. Although we encourage you to give the web interface a
-          try. </span></li>
-    </ol>
-    <p dir="ltr" style="margin-left: 36pt; margin-top: 0pt;
-      margin-bottom: 0pt;"><span style="font-size: 11pt; font-family:
-        Arial; color: rgb(0, 0, 0); background-color: transparent;
-        font-weight: normal; font-style: normal; font-variant: normal;
-        text-decoration: none; vertical-align: baseline;">More
-        information can be found here: </span><a
-        href="http://www.oit.pdx.edu/google-mail-client-settings"><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          153); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          underline; vertical-align: baseline;">http://www.oit.pdx.edu/google-mail-client-settings</span></a><span
-        style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
-        background-color: transparent; font-weight: normal; font-style:
-        normal; font-variant: normal; text-decoration: none;
-        vertical-align: baseline;"></span></p>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"></span>
-    <ol start="3">
-      <li style="list-style-type: decimal; font-size: 11pt; font-family:
-        Arial; color: rgb(0, 0, 0); background-color: transparent;
-        font-weight: normal; font-style: normal; font-variant: normal;
-        text-decoration: none; vertical-align: baseline;"><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          0); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          none; vertical-align: baseline;">Email forwarding configured
-          in OAM has been disabled (if you were using it), and mail
-          filters/rules will need to be created in Gmail.&nbsp; <br>
-        </span></li>
-    </ol>
-    <p dir="ltr" style="text-indent: 36pt; margin-top: 0pt;
-      margin-bottom: 0pt;"><span style="font-size: 11pt; font-family:
-        Arial; color: rgb(0, 0, 0); background-color: transparent;
-        font-weight: normal; font-style: normal; font-variant: normal;
-        text-decoration: none; vertical-align: baseline;">More
-        information can be found here: </span><a
-        href="http://www.oit.pdx.edu/google-mail-filter-settings"><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          153); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          underline; vertical-align: baseline;">http://www.oit.pdx.edu/google-mail-filter-settings</span></a><span
-        style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
-        background-color: transparent; font-weight: normal; font-style:
-        normal; font-variant: normal; text-decoration: none;
-        vertical-align: baseline;"></span></p>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"></span>
-    <ol start="4">
-      <li style="list-style-type: decimal; font-size: 11pt; font-family:
-        Arial; color: rgb(0, 0, 0); background-color: transparent;
-        font-weight: normal; font-style: normal; font-variant: normal;
-        text-decoration: none; vertical-align: baseline;"><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          0); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          none; vertical-align: baseline;">While the PSU directory is
-          integrated into Google Mail, personal contacts may be
-          imported, as they were not imported as part of the opt-in
-          process. </span></li>
-    </ol>
-    <p dir="ltr" style="margin-left: 36pt; margin-top: 0pt;
-      margin-bottom: 0pt;"><span style="font-size: 11pt; font-family:
-        Arial; color: rgb(0, 0, 0); background-color: transparent;
-        font-weight: normal; font-style: normal; font-variant: normal;
-        text-decoration: none; vertical-align: baseline;">More
-        information can be found here: </span><a
-        href="http://oit.pdx.edu/Importing-Contacts-Google"><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          153); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          underline; vertical-align: baseline;">http://oit.pdx.edu/Importing-Contacts-Google</span></a><span
-        style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
-        background-color: transparent; font-weight: bold; font-style:
-        normal; font-variant: normal; text-decoration: none;
-        vertical-align: baseline;"></span></p>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"></span><br>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;">For more information please visit the
-      Google Apps project site: </span><a
-href="https://sites.google.com/a/pdx.edu/google-apps/email-migration/opt-in-complete"><span
-        style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-        153); background-color: transparent; font-weight: normal;
-        font-style: normal; font-variant: normal; text-decoration:
-        underline; vertical-align: baseline;">googleapps.pdx.edu/opt-in-complete</span></a><span
-      style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
-      background-color: transparent; font-weight: normal; font-style:
-      normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"></span><br>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"></span><br>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"></span>
-  </body>
-</html>
-
---------------090400030202080000060107--
-
+For more information please visit the Google Apps project site:
+https://sites.google.com/a/pdx.edu/google-apps/email-migration/opt-in-complete
 EOS
 }
 
-msg | /usr/lib/sendmail -f weekse@pdx.edu ${1}@pdx.edu
+msg |./sendEmail -q -o reply-to=no-reply@pdx.edu -f no-reply@pdx.edu -u 'Email Migration Complete! Use Google Mail @  http://mail.pdx.edu' -f no-reply@pdx.edu -t ${1}@odin.pdx.edu -s cyrus.psumail.pdx.edu 

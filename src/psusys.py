@@ -503,25 +503,25 @@ mailRoutingAddress: %s@%s
 		psu_sys.sync_email_delete2(login)
 		mc.set(key, 50)
 
-		# Send conversion info email to users PSU account
-		log.info("copy_email_task(): sending post conversion email to PSU: " + login)
-		psu_sys.send_conversion_email_psu(login)
-		mc.set(key, 60)
-
 		# Switch routing of email to flow to Google
 	
 		log.info("copy_email_task(): Routing email to Google: " + login)
 		psu_sys.route_to_google(login)
-		mc.set(key, 70)
+		mc.set(key, 60)
 
 		# Final email sync
 		log.info("copy_email_task(): second pass syncing email: " + login)
 		psu_sys.sync_email(login)
-		mc.set(key, 80)
+		mc.set(key, 70)
 	
 		# Send conversion info email to users Google account
 		log.info("copy_email_task(): sending post conversion email to Google: " + login)
 		psu_sys.send_conversion_email_google(login)
+		mc.set(key, 80)
+
+		# Send conversion info email to users PSU account
+		log.info("copy_email_task(): sending post conversion email to PSU: " + login)
+		psu_sys.send_conversion_email_psu(login)
 		mc.set(key, 90)
 
 		# Enable Google email for the user
