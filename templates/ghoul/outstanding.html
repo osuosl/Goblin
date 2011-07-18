@@ -85,11 +85,14 @@ $(document).ready(function() {
 {% if large_emails %}
 <div style="margin:10px;float:left;text-align:center;">
 <h3>Email too large to transfer</h3>
-<SELECT NAME="Large Email" SIZE="7" MULTIPLE style="width:80%" >
+<div id='emailHeaderList'>
+	<table  id='emailHeaderTable'>
+	<tbody>
 	{% for entry in large_emails %}
-		<OPTION>{{ entry }}
+		<tr><td class='emailHeader'>{{ entry }}</td></tr>
 	{% endfor %}
-</SELECT>
+	</tbody>
+	</table>
 </div>
 {% endif %}
 

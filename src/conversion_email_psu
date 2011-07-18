@@ -39,4 +39,4 @@ https://sites.google.com/a/pdx.edu/google-apps/email-migration/opt-in-complete
 EOS
 }
 
-msg |./sendEmail -q -o reply-to=no-reply@pdx.edu -f no-reply@pdx.edu -u 'Email Migration Complete! Use Google Mail @  http://mail.pdx.edu' -f no-reply@pdx.edu -t ${1}@odin.pdx.edu -s cyrus.psumail.pdx.edu 
+msg | sendEmail -q -o reply-to=no-reply@pdx.edu -f no-reply@pdx.edu -u 'Email Migration Complete! Use Google Mail @  http://mail.pdx.edu' -f no-reply@pdx.edu -t ${1}@odin.pdx.edu -s cyrus.psumail.pdx.edu 
