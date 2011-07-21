@@ -59,15 +59,18 @@ class PSUSys:
 		ldap_host = self.prop.getProperty('ldap.read.host')
 		ldap_login = self.prop.getProperty('ldap.login')
 		ldap_password = self.prop.getProperty('ldap.password')
-		self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
+		self.log.info('is_oamed(): connecting to LDAP: ' + ldap_host)
 				
+		attr = 'eduPersonAffiliation'
 		ldap.connect( ldap_host, ldap_login, ldap_password)
-		res = ldap.search( searchfilter = 'uid=' + login, attrlist = ['eduPersonAffiliation'])
+		res = ldap.search( searchfilter = 'uid=' + login, attrlist = [attr])
 		
 		for (dn, result) in res:
-			if result.has_key("eduPersonAffiliation"):
-				self.log.info('is_oamed() user: ' + login + ' has a eduPersonAffiliation ' + str(result['eduPersonAffiliation']))
-				if str(result['eduPersonAffiliation']) in ['SPONSORED', 'SERVICE']:
+			if result.has_key(attr):
+				#self.log.info('is_oamed() user: ' + login + ' has a ' + attr + ' of ' + str(result[attr]))
+				print('is_oamed() user: ' + login + ' has a ' + attr + ' of ' + str(result[attr]))
+
+				if str(result[attr]) in ['SPONSORED', 'SERVICE']:
 					self.log.info('is_oamed() user: ' + login + ' is not OAMed' )
 					return False
 		return True
