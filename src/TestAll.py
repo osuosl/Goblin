@@ -9,7 +9,8 @@ class TestAll(unittest.TestCase):
 
 
 	def test_opt_in_already(self):
-		self.assertFalse(self.psusys.opt_in_already('dennis'))
+		self.assertTrue(self.psusys.opt_in_already('dennis'))
+		self.assertFalse(self.psusys.opt_in_already('buono'))
 		
 	def test_large_emails(self):
 		emailen = self.psusys.large_emails('weekse')
