@@ -48,7 +48,7 @@ class PSUSys:
 		
 		for (dn, result) in res:
 			if result.has_key("mailHost"):
-				print('opt_in_alread() user: ' + login + ' has a mailHost ' + str(result['mailHost']))
+				self.log.info('opt_in_alread() user: ' + login + ' has a mailHost ' + str(result['mailHost']))
 				if "gmx.pdx.edu" in result["mailHost"]:
 					self.log.info('opt_in_alread() user: ' + login + ' has a mailHost entry set to gmx.pdx.edu')
 					return True
@@ -67,13 +67,13 @@ class PSUSys:
 		
 		for (dn, result) in res:
 			if result.has_key(attr):
-				#self.log.info('is_oamed() user: ' + login + ' has a ' + attr + ' of ' + str(result[attr]))
-				print('is_oamed() user: ' + login + ' has a ' + attr + ' of ' + str(result[attr]))
+				self.log.info('is_oamed() user: ' + login + ' has a ' + attr + ' of ' + str(result[attr]))
+				#print('is_oamed() user: ' + login + ' has a ' + attr + ' of ' + str(result[attr]))
 
 				for affiliation in result[attr]:
 					if affiliation in ['SPONSORED', 'SERVICE']:
-						# self.log.info('is_oamed() user: ' + login + ' is not OAMed' )
-						print('is_oamed() user: ' + login + ' is not OAMed' )
+						self.log.info('is_oamed() user: ' + login + ' is not OAMed' )
+						#print('is_oamed() user: ' + login + ' is not OAMed' )
 						return False
 		return True
 
