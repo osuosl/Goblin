@@ -71,7 +71,8 @@ class PSUSys:
 				print('is_oamed() user: ' + login + ' has a ' + attr + ' of ' + str(result[attr]))
 
 				if str(result[attr]) in ['SPONSORED', 'SERVICE']:
-					self.log.info('is_oamed() user: ' + login + ' is not OAMed' )
+					# self.log.info('is_oamed() user: ' + login + ' is not OAMed' )
+					print('is_oamed() user: ' + login + ' is not OAMed' )
 					return False
 		return True
 
