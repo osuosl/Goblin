@@ -54,6 +54,24 @@ class PSUSys:
 					return True
 		return False
 
+	def is_oamed(self, login):
+		ldap = psuldap('/vol/certs')
+		ldap_host = self.prop.getProperty('ldap.read.host')
+		ldap_login = self.prop.getProperty('ldap.login')
+		ldap_password = self.prop.getProperty('ldap.password')
+		self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
+				
+		ldap.connect( ldap_host, ldap_login, ldap_password)
+		res = ldap.search( searchfilter = 'uid=' + login, attrlist = ['eduPersonAffiliation'])
+		
+		for (dn, result) in res:
+			if result.has_key("eduPersonAffiliation"):
+				self.log.info('is_oamed() user: ' + login + ' has a eduPersonAffiliation ' + str(result['eduPersonAffiliation']))
+				if str(result['eduPersonAffiliation']) in ['SPONSORED', 'SERVICE']:
+					self.log.info('is_oamed() user: ' + login + ' is not OAMed' )
+					return False
+		return True
+
 	def get_ldap_attr(self, login, attr):
 		ldap = psuldap('/vol/certs')
 		ldap_host = self.prop.getProperty('ldap.read.host')
@@ -74,8 +92,20 @@ class PSUSys:
 		self.log.info('route_to_google(): routing mail to google for user: ' + login)
 		sleep(1)
 		
+		
 	def is_allowed(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		
+		# Does this user have an elligible account
+		if not self.is_oamed(login):
+			return False
+
+		# Is this user explicitly denied
+		deny_users = prop.getProperty('deny.users')
+		if login in deny_users:
+			return False
+
+		# Is this user explicitly allowed
 		allow_all = prop.getProperty('allow.all')
 		if allow_all == 'False':
 			allow_users = prop.getProperty('allow.users')
@@ -83,9 +113,9 @@ class PSUSys:
 				return True
 		else:
 			return True
-		return False
-			
 		
+		return False
+
 
 	# Temporary hack till Adrian sorts-out the access issues for modifying LDAP
 	def route_to_google_hack(self, login):
@@ -513,21 +543,21 @@ mailRoutingAddress: %s@%s
 		log.info("copy_email_task(): second pass syncing email: " + login)
 		psu_sys.sync_email(login)
 		mc.set(key, 70)
+
+		# Enable Google email for the user
+		# This is the last item that the user should wait for.
+
+		psu_sys.enable_gmail(login)	
+		mc.set(key, 100)
 	
+		# The folowing items occur without the user waiting.
+		
 		# Send conversion info email to users Google account
 		log.info("copy_email_task(): sending post conversion email to Google: " + login)
 		psu_sys.send_conversion_email_google(login)
-		mc.set(key, 80)
 
 		# Send conversion info email to users PSU account
 		log.info("copy_email_task(): sending post conversion email to PSU: " + login)
 		psu_sys.send_conversion_email_psu(login)
-		mc.set(key, 90)
-
-		# Enable Google email for the user
-
-		psu_sys.enable_gmail(login)	
-		mc.set(key, 100)
 
 		return(True)
-

@@ -30,6 +30,17 @@ class TestAll(unittest.TestCase):
 			self.assertTrue(self.psusys.is_gmail_enabled('paul'))
 			self.psusys.disable_gmail('paul')
 			self.assertFalse(self.psusys.is_gmail_enabled('paul'))
+			
+	def test_is_oamed(self):
+		self.assertFalse(self.psusys.is_oamed('a2sj'))
+		self.assertTrue(self.psusys.is_oamed('staplej'))
+		self.assertFalse(self.psusys.is_oamed('askclas'))
+		self.assertFalse(self.psusys.is_oamed('pdx00800'))
+		self.assertTrue(self.psusys.is_oamed('dennis'))
+		
+	def test_is_allowed(self):
+		self.assertTrue(self.psusys.is_allowed('dennis'))
+		self.assertFalse(self.psusys.is_allowed('pdx00800'))
 		
 if __name__ == '__main__':
 	unittest.main()		
