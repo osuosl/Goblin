@@ -8,6 +8,8 @@ from time import sleep
 import shlex, subprocess
 from memcacheq import MemcacheQueue
 import gdata.apps.organization.service
+from gdata.service import BadAuthentication
+from gdata.service import CaptchaRequired
 
 
 class PSUSys:
@@ -409,10 +411,20 @@ mailRoutingAddress: %s@%s
 		pw = self.prop.getProperty('google.password')
 		
 		client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
-		client.ProgrammaticLogin()
-		customerId = client.RetrieveCustomerId()["customerId"]
-		userEmail = login + '@pdx.edu'
-		client.UpdateOrgUser( customerId, userEmail, 'people')
+		try:
+			client.ProgrammaticLogin()
+			customerId = client.RetrieveCustomerId()["customerId"]
+			userEmail = login + '@pdx.edu'
+			client.UpdateOrgUser( customerId, userEmail, 'people')
+		except( CaptchaRequired ):
+			self.log.error('enable_gmail(): Captcha being requested')
+		except( BadAuthentication ):
+			self.log.error('enable_gmail(): Authentication Error' )
+		except:
+			# Retry if not an obvious non-retryable error
+			sleep(1)
+			self.enable_gmail(login)
+			
 		
 	def disable_gmail(self, login):
 		self.log.info('disable_gmail(): Disabling gmail for user: ' + login)
