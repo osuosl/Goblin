@@ -558,29 +558,30 @@ mailRoutingAddress: %s@%s
 		else:
 			log.info("copy_email_task(): has not already completed opt-in: " + login)
 			mc.set(key, 40)
-	
-		# Synchronize email to Google (and wait)
-		log.info("copy_email_task(): first pass syncing email: " + login)
-		psu_sys.sync_email_delete2(login)
-		mc.set(key, 50)
-
-		# Switch routing of email to flow to Google
-	
-		log.info("copy_email_task(): Routing email to Google: " + login)
-		psu_sys.route_to_google(login)
-		mc.set(key, 60)
-
-		# Final email sync
-		log.info("copy_email_task(): second pass syncing email: " + login)
-		psu_sys.sync_email(login)
-		mc.set(key, 70)
 
 		# Enable Google email for the user
 		# This is the last item that the user should wait for.
 
 		psu_sys.enable_gmail(login)	
-		mc.set(key, 100)
+		mc.set(key, 50)
 	
+	
+		# Synchronize email to Google (and wait)
+		log.info("copy_email_task(): first pass syncing email: " + login)
+		psu_sys.sync_email_delete2(login)
+		mc.set(key, 60)
+
+		# Switch routing of email to flow to Google
+	
+		log.info("copy_email_task(): Routing email to Google: " + login)
+		psu_sys.route_to_google(login)
+		mc.set(key, 70)
+
+		# Final email sync
+		log.info("copy_email_task(): second pass syncing email: " + login)
+		psu_sys.sync_email(login)
+		mc.set(key, 80)
+
 		# The folowing items occur without the user waiting.
 		
 		# Send conversion info email to users Google account
@@ -590,5 +591,7 @@ mailRoutingAddress: %s@%s
 		# Send conversion info email to users PSU account
 		log.info("copy_email_task(): sending post conversion email to PSU: " + login)
 		psu_sys.send_conversion_email_psu(login)
+
+		mc.set(key, 100)
 
 		return(True)
