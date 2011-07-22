@@ -12,6 +12,13 @@ start(){
 
 stop(){
 	pkill -f celeryd -u dennis
+	echo -n "Stopping celeryd .."
+	if status; then
+		while status; do
+			sleep 1
+			echo -n .
+		done
+	fi
 	echo celeryd stopped
 }
 
