@@ -442,16 +442,27 @@ mailRoutingAddress: %s@%s
 		self.log.info('sync_email(): syncing user: ' + login)
 		sleep(1)
 
-	def sync_email(self, login):
+	def sync_email(self, login, extra_opts = ''):
 		self.log.info('sync_email(): syncing user: ' + login)
-		imapsync_cmd = '/vol/google-imap/imapsync'
 		imap_host = self.prop.getProperty('imap.host')
 		imap_login = self.prop.getProperty('imap.login')
-		cyrus_pf = '/opt/google-imap/cyrus.pf'
-		google_pf = '/opt/google-imap/google-prod.pf'
+				
+		imapsync_dir = "/vol/google-imap/"
+		imapsync_cmd = imapsync_dir + "imapsync"
+		cyrus_pf = imapsync_dir + "cyrus.pf"
+		google_pf = imapsync_dir + "google-prod.pf"
 		
-		command = imapsync_cmd + " --pidfile /tmp/imapsync-full-" + login + ".pid --host1 " + imap_host + " --port1 993 --user1 " + login + " --authuser1 " + imap_login + " --passfile1 " + cyrus_pf + " --host2 imap.gmail.com --port2 993 --user2 " + login + "@" + 'pdx.edu' + " --passfile2 " + google_pf + " --ssl1 --ssl2 --maxsize 26214400 --authmech1 PLAIN --authmech2 XOAUTH -sep1 '/' --exclude '^Shared Folders' "
-		log_file_name = '/tmp/imapsync-' + login + '.log'
+		exclude_list = "'^Shared Folders|^mail/|^Junk$|^junk$|^JUNK$|^Spam$|^spam$|^SPAM$'"
+		whitespace_cleanup = " --regextrans2 's/[ ]+/ /g' --regextrans2 's/\s+$//g' --regextrans2 's/\s+(?=\/)//g' --regextrans2 's/^\s+//g' --regextrans2 's/(?=\/)\s+//g'"
+		folder_cases = " --regextrans2 's/^drafts$/[Gmail]\/Drafts/i' --regextrans2 's/^trash$/[Gmail]\/Trash/i' --regextrans2 's/^(sent|sent-mail)$/[Gmail]\/Sent Mail/i'"
+
+		command = imapsync_cmd + " --pidfile /tmp/imapsync-" + login + ".pid --host1 " + imap_host + " --port1 993 --user1 " +  + " --authuser1 " + imap_login + " --passfile1 " + cyrus_pf + " --host2 imap.gmail.com --port2 993 --user2 " + login + "@" + 'pdx.edu' + " --passfile2 " + google_pf + " --ssl1 --ssl2 --maxsize 26214400 --authmech1 PLAIN --authmech2 XOAUTH -sep1 '/' --exclude " + exclude_list + folder_cases + whitespace_cleanup + extra_opts
+
+		if extra_opts == '':
+			log_file_name = '/tmp/imapsync-' + login + '.log'
+		else:
+			log_file_name = '/tmp/imapsync-' + login + '-delete.log'
+			
 		syncprocess = subprocess.Popen(
 									shlex.split(command)
 									,stdout=open(log_file_name, 'w') )
@@ -466,8 +477,11 @@ mailRoutingAddress: %s@%s
 		else:
 			self.log.info('sync_email(): failed syncing user: ' + login)
 			return False
-			
+
 	def sync_email_delete2(self, login):
+		self.sync_email(login, extra_opts = ' --delete2 --delete2folders --fast ')		
+
+	def sync_email_delete2_obs(self, login):
 		self.log.info('sync_email(): syncing user: ' + login)
 		imapsync_cmd = '/vol/google-imap/imapsync'
 		imap_host = self.prop.getProperty('imap.host')
