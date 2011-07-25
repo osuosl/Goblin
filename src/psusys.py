@@ -20,6 +20,9 @@ class PSUSys:
 		self.log = logging.getLogger('goblin.psusys')
 		self.META_IDENTITY = 'REMOTE_ADDR'
 		
+	def setLogger(self, logger):
+		self.log = logger
+		
 	def large_emails(self, login):
 		imap_host = self.prop.getProperty('imap.host')
 		imap_login = self.prop.getProperty('imap.login')

@@ -6,7 +6,9 @@ class TestAll(unittest.TestCase):
 	def setUp(self):
 		#logging.config.fileConfig('/vol/goblin/etc/logging-unit.conf')
 		self.psusys = PSUSys()
-
+		logging.config.fileConfig('logging.conf')
+		log = logging.getLogger('goblin.psusys')
+		self.psusys.setLogger(log)
 
 	def test_opt_in_already(self):
 		self.assertTrue(self.psusys.opt_in_already('dennis'))
