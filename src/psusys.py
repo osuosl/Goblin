@@ -15,6 +15,7 @@ from gdata.service import CaptchaRequired
 class PSUSys:
 	def __init__(self):
 		self.MAX_MAIL_SIZE = pow(2,20) * 25
+		self.MAX_RETRY_COUNT = 5
 		self.prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 		self.log = logging.getLogger('goblin.psusys')
 		self.META_IDENTITY = 'REMOTE_ADDR'
@@ -568,7 +569,12 @@ mailRoutingAddress: %s@%s
 	
 		# Synchronize email to Google (and wait)
 		log.info("copy_email_task(): first pass syncing email: " + login)
-		psu_sys.sync_email_delete2(login)
+		status = psu_sys.sync_email_delete2(login)
+		retry_count = 0
+		if (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			status = psu_sys.sync_email_delete2(login)
+			sleep(4 ** retry_count)
+			
 		mc.set(key, 60)
 
 		# Switch routing of email to flow to Google
@@ -579,7 +585,86 @@ mailRoutingAddress: %s@%s
 
 		# Final email sync
 		log.info("copy_email_task(): second pass syncing email: " + login)
-		psu_sys.sync_email(login)
+		status = psu_sys.sync_email(login)
+		retry_count = 0
+		if (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			status = psu_sys.sync_email(login)
+			sleep(4 ** retry_count)
+		
+		mc.set(key, 80)
+
+		# The folowing items occur without the user waiting.
+		
+		# Send conversion info email to users Google account
+		log.info("copy_email_task(): sending post conversion email to Google: " + login)
+		psu_sys.send_conversion_email_google(login)
+
+		# Send conversion info email to users PSU account
+		log.info("copy_email_task(): sending post conversion email to PSU: " + login)
+		psu_sys.send_conversion_email_psu(login)
+
+		mc.set(key, 100)
+
+		return(True)
+
+	
+	def recover_copy_email_task(self, login):
+		'''
+		Recover from case where celery task has died unexpectantly. .. Don't do delete2
+		phase.
+		'''
+		
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		log = logging.getLogger('')		# Logging is occuring within celery worker here
+		memcache_url = prop.getProperty('memcache.url')
+		mc = memcache.Client([memcache_url], debug=0)
+		psu_sys = PSUSys()
+
+		log.info("copy_email_task(): processing user: " + login)
+		key = 'email_copy_progress.' + login
+
+		# Check for LDAP mail forwarding already (double checking), if
+		# already opt'd-in, then immediately return and mark as complete.
+
+		if (psu_sys.opt_in_already(login)):
+			log.info("copy_email_task(): has already completed opt-in: " + login)
+			mc.set(key, 100)
+			return(True)
+		else:
+			log.info("copy_email_task(): has not already completed opt-in: " + login)
+			mc.set(key, 40)
+
+		# Enable Google email for the user
+		# This is the last item that the user should wait for.
+
+		psu_sys.enable_gmail(login)	
+		mc.set(key, 50)
+	
+		'''
+		# Synchronize email to Google (and wait)
+		log.info("copy_email_task(): first pass syncing email: " + login)
+		status = psu_sys.sync_email_delete2(login)
+		retry_count = 0
+		if (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			status = psu_sys.sync_email_delete2(login)
+			sleep(4 ** retry_count)
+		'''	
+		mc.set(key, 60)
+
+		# Switch routing of email to flow to Google
+	
+		log.info("copy_email_task(): Routing email to Google: " + login)
+		psu_sys.route_to_google(login)
+		mc.set(key, 70)
+
+		# Final email sync
+		log.info("copy_email_task(): second pass syncing email: " + login)
+		status = psu_sys.sync_email(login)
+		retry_count = 0
+		if (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			status = psu_sys.sync_email(login)
+			sleep(4 ** retry_count)
+		
 		mc.set(key, 80)
 
 		# The folowing items occur without the user waiting.

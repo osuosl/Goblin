@@ -5,9 +5,9 @@ base=/vol/goblin
 
 start(){
 	. $base/bin/goblin
+	echo -n Starting celeryd ..
 	celeryd --autoscale=50,5 --loglevel=INFO -Q optin -n $host &
-	echo celeryd started
-	echo tail -f /vol/goblin/var/celery.log
+	echo done
 }
 
 stop(){
@@ -24,13 +24,7 @@ stop(){
 
 status(){
 	ps -elf | grep -v grep | grep dennis | grep -q celeryd
-	if [ $? == 0 ]; then
-		echo celeryd is running
-		return 0
-	else:  
-		echo celeryd is not running
-		return 1
-	fi
+	return $?
 }
 
 restart(){
@@ -53,7 +47,11 @@ elif [ "$cmd" = "stop" ]; then
 elif [ "$cmd" = "restart" ]; then
 	restart
 elif [ "$cmd" = "status" ]; then
-	status
+	if status; then
+		echo celeryd is running
+	else
+		echo celeryd is not running
+	fi
 else
 	echo "Error: expecting one of -- start, stop, status, or restart"
 fi
