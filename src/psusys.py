@@ -574,7 +574,8 @@ mailRoutingAddress: %s@%s
 		log.info("copy_email_task(): first pass syncing email: " + login)
 		status = psu_sys.sync_email_delete2(login)
 		retry_count = 0
-		if (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			log.info("copy_email_task(): Retry of first pass syncing email: " + login)
 			status = psu_sys.sync_email_delete2(login)
 			sleep(4 ** retry_count)
 			
@@ -590,7 +591,8 @@ mailRoutingAddress: %s@%s
 		log.info("copy_email_task(): second pass syncing email: " + login)
 		status = psu_sys.sync_email(login)
 		retry_count = 0
-		if (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			log.info("copy_email_task(): Retry of second pass syncing email: " + login)
 			status = psu_sys.sync_email(login)
 			sleep(4 ** retry_count)
 		
