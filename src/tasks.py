@@ -23,7 +23,7 @@ def copy_email_task_null(login):
 		
 	return(True)
 
-@task
+@task(ignore_result = True)
 def copy_email_task(login):
 	log = logging.getLogger()
 	log.info('copy_email_task(): running copy_email_task(' + login + ')')
@@ -32,7 +32,7 @@ def copy_email_task(login):
 	log.info('copy_email_task(): finished running copy_email_task(' + login + ')')
 	return(result)
 
-@task
+@task(ignore_result = True)
 def recover_copy_email_task(login):
 	log = logging.getLogger()
 	log.info('copy_email_task(): running recover_copy_email_task(' + login + ')')
@@ -41,7 +41,7 @@ def recover_copy_email_task(login):
 	log.info('copy_email_task(): finished running recover_copy_email_task(' + login + ')')
 	return(result)
 
-@task
+@task(ignore_result = True)
 def sync_email_task(login):
 	log = logging.getLogger()
 	log.info('sync_email_task(): running sync_email_task(' + login + ')')
@@ -50,7 +50,7 @@ def sync_email_task(login):
 	log.info('sync_email_task(): finished running sync_email_task(' + login + ')')
 	return(result)
 
-@task
+@task(ignore_result = True)
 def sync_email_delete2_task(login):
 	log = logging.getLogger()
 	log.info('sync_email_delete2_task(): running sync_email_delete2_task(' + login + ')')

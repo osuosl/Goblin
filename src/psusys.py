@@ -199,9 +199,20 @@ mailHost: gmx.pdx.edu
 		self.update_mailRoutingAddress(login, 'odin.pdx.edu')
 		
 	def route_to_google(self, login):
-		self.update_mailHost(login, 'gmx.pdx.edu')
-		self.update_mailRoutingAddress(login, 'pdx.edu')
-		
+		status = self.update_mailHost(login, 'gmx.pdx.edu')
+		retry_count = 0
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			self.log.error("route_to_google(): mailHost: Retrying LDAP update")
+			status = self.update_mailHost(login, 'gmx.pdx.edu')
+			retry_count = retry_count + 1
+			
+		status = self.update_mailRoutingAddress(login, 'pdx.edu')
+		retry_count = 0
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			self.log.error("route_to_google(): mailRoutingAddress: Retrying LDAP update")
+			status = self.update_mailRoutingAddress(login, 'pdx.edu')
+			retry_count = retry_count + 1
+			
 	def update_mailHost(self, login, deliveryHost):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
@@ -504,6 +515,7 @@ mailRoutingAddress: %s@%s
 		log_file_name = '/tmp/imapsync-' + login + '-delete.log'
 		syncprocess = subprocess.Popen(	shlex.split(command), stdout = open(log_file_name, 'w') )
 									
+		self.log.info('sync_email(): command: ' + command )
 	# While the process is running, and we're under the time limit
 		while (syncprocess.poll() == None):
 			sleep(30)
@@ -585,6 +597,7 @@ mailRoutingAddress: %s@%s
 			log.info("copy_email_task(): Retry of first pass syncing email: " + login)
 			status = psu_sys.sync_email_delete2(login)
 			sleep(4 ** retry_count)
+			retry_count = retry_count + 1
 			
 		mc.set(key, 60)
 
@@ -602,6 +615,7 @@ mailRoutingAddress: %s@%s
 			log.info("copy_email_task(): Retry of second pass syncing email: " + login)
 			status = psu_sys.sync_email(login)
 			sleep(4 ** retry_count)
+			retry_count = retry_count + 1
 		
 		mc.set(key, 80)
 
@@ -677,6 +691,7 @@ mailRoutingAddress: %s@%s
 		if (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			status = psu_sys.sync_email(login)
 			sleep(4 ** retry_count)
+			retry_count = retry_count + 1
 		
 		mc.set(key, 80)
 
