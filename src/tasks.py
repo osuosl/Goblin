@@ -33,6 +33,15 @@ def copy_email_task(login):
 	return(result)
 
 @task
+def recover_copy_email_task(login):
+	log = logging.getLogger()
+	log.info('copy_email_task(): running recover_copy_email_task(' + login + ')')
+	psu_sys = PSUSys()
+	result = psu_sys.recover_copy_email_task(login) 
+	log.info('copy_email_task(): finished running recover_copy_email_task(' + login + ')')
+	return(result)
+
+@task
 def sync_email_task(login):
 	log = logging.getLogger()
 	log.info('sync_email_task(): running sync_email_task(' + login + ')')

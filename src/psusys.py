@@ -640,8 +640,9 @@ mailRoutingAddress: %s@%s
 
 		if (psu_sys.opt_in_already(login)):
 			log.info("copy_email_task(): has already completed opt-in: " + login)
-			mc.set(key, 100)
-			return(True)
+			# mc.set(key, 100)
+			#return(True)
+			mc.set(key, 40)
 		else:
 			log.info("copy_email_task(): has not already completed opt-in: " + login)
 			mc.set(key, 40)
