@@ -18,7 +18,7 @@ class PSUSys:
 		self.MAX_RETRY_COUNT = 5
 		self.prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 		self.log = logging.getLogger('goblin.psusys')
-		print "Logging default handlers: " + self.log.handlers
+		print "Logging default handlers: " + str(self.log.handlers)
 		if len(self.log.handlers) == 0:
 			# No handlers for this logger, assume logging is not initialized..
 			logging.config.fileConfig('/vol/goblin/etc/logging.conf')
