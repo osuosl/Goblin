@@ -490,7 +490,7 @@ mailRoutingAddress: %s@%s
 			return False
 
 	def sync_email_delete2(self, login):
-		self.sync_email(login, extra_opts = ' --delete2 --delete2folders --fast ')		
+		return self.sync_email(login, extra_opts = ' --delete2 --delete2folders --fast ')		
 
 	def sync_email_delete2_obs(self, login):
 		self.log.info('sync_email(): syncing user: ' + login)
