@@ -5,7 +5,7 @@ cat << EOS
 REPLY-To: no-reply@pdx.edu
 Organization: Portland State University
 MIME-Version: 1.0
-Subject: Congratulations, the Email opt-in process is complete! Read on for the next steps...
+Subject: Congratulations, you have successfully migrated to PSU Google Mail!
 Content-Type: text/html; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
 
