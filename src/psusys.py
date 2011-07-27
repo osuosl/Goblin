@@ -174,11 +174,7 @@ add: mailHost
 mailHost: gmx.pdx.edu
 ''' % login
 
-		syncprocess = subprocess.Popen(
-									shlex.split(cmd)
-									,stdin=subprocess.PIPE
-									,stdout=subprocess.PIPE
-									,stderr=subprocess.PIPE )
+		syncprocess = subprocess.Popen(	shlex.split(cmd) ,stdin=subprocess.PIPE )
 
 		syncprocess.communicate(input)
 
@@ -231,11 +227,7 @@ replace: mailHost
 mailHost: %s
 ''' % (login, deliveryHost)
 
-		syncprocess = subprocess.Popen(
-									shlex.split(cmd)
-									,stdin=subprocess.PIPE
-									,stdout=subprocess.PIPE
-									,stderr=subprocess.PIPE )
+		syncprocess = subprocess.Popen(	shlex.split(cmd), stdin=subprocess.PIPE )
 
 		syncprocess.communicate(input)
 
@@ -268,11 +260,7 @@ replace: mailRoutingAddress
 mailRoutingAddress: %s@%s
 ''' % (login, login, deliveryAddr)
 
-		syncprocess = subprocess.Popen(
-									shlex.split(cmd)
-									,stdin=subprocess.PIPE
-									,stdout=subprocess.PIPE
-									,stderr=subprocess.PIPE )
+		syncprocess = subprocess.Popen(	shlex.split(cmd) ,stdin=subprocess.PIPE )
 
 		syncprocess.communicate(input)
 
@@ -370,10 +358,7 @@ mailRoutingAddress: %s@%s
 		# Launch a Subprocess here to send email
 		cmd = '/vol/goblin/src/conversion_email_in_progress ' + login
 		
-		syncprocess = subprocess.Popen(
-									shlex.split(cmd)
-									,stdout=subprocess.PIPE
-									,stderr=subprocess.PIPE )
+		syncprocess = subprocess.Popen(	shlex.split(cmd) )
 
 		while (syncprocess.poll() == None):
 			sleep(3)
@@ -393,10 +378,7 @@ mailRoutingAddress: %s@%s
 		# Launch a Subprocess here to send email
 		cmd = '/vol/goblin/src/conversion_email_psu ' + login
 		
-		syncprocess = subprocess.Popen(
-									shlex.split(cmd)
-									,stdout=subprocess.PIPE
-									,stderr=subprocess.PIPE )
+		syncprocess = subprocess.Popen(	shlex.split(cmd) )
 
 		while (syncprocess.poll() == None):
 			sleep(3)
@@ -415,10 +397,7 @@ mailRoutingAddress: %s@%s
 		# Launch a Subprocess here to send email
 		cmd = '/vol/goblin/src/conversion_email_google ' + login
 		
-		syncprocess = subprocess.Popen(
-									shlex.split(cmd)
-									,stdout=subprocess.PIPE
-									,stderr=subprocess.PIPE )
+		syncprocess = subprocess.Popen(	shlex.split(cmd) )
 
 		while (syncprocess.poll() == None):
 			sleep(3)
@@ -456,20 +435,22 @@ mailRoutingAddress: %s@%s
 		pw = self.prop.getProperty('google.password')
 		
 		client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
-		try:
-			client.ProgrammaticLogin()
-			customerId = client.RetrieveCustomerId()["customerId"]
-			userEmail = login + '@pdx.edu'
-			client.UpdateOrgUser( customerId, userEmail, 'people')
-		except( CaptchaRequired ):
-			self.log.error('enable_gmail(): Captcha being requested')
-		except( BadAuthentication ):
-			self.log.error('enable_gmail(): Authentication Error' )
-		except:
-			# Retry if not an obvious non-retryable error
-			sleep(1)
-			self.enable_gmail(login)
-			
+		retry_count = 0; status = False
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			try:
+				client.ProgrammaticLogin()
+				customerId = client.RetrieveCustomerId()["customerId"]
+				userEmail = login + '@pdx.edu'
+				client.UpdateOrgUser( customerId, userEmail, 'people')
+				status = True
+			except( CaptchaRequired ):
+				self.log.error('enable_gmail(): Captcha being requested')
+			except( BadAuthentication ):
+				self.log.error('enable_gmail(): Authentication Error' )
+			except:
+				# Retry if not an obvious non-retryable error
+				sleep(1)
+			retry_count = retry_count + 1
 		
 	def disable_gmail(self, login):
 		self.log.info('disable_gmail(): Disabling gmail for user: ' + login)
