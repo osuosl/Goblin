@@ -2,7 +2,7 @@
 
 msg(){
 cat << EOS
-REPLY-To: weekse@pdx.edu
+REPLY-To: no-reply@pdx.edu
 Organization: Portland State University
 MIME-Version: 1.0
 Subject: Congratulations, the Email opt-in process is complete! Read on for the next steps...
@@ -12,9 +12,9 @@ Content-Transfer-Encoding: 7bit
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <meta content="text/html; charset=ISO-8859-1"
-      http-equiv="Content-Type">
-    <title>Congratulations, the Email opt-in process is complete! Read
+
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <title>Congratulations, the email opt-in process is complete! Read
       on for the next steps...</title>
   </head>
   <body text="#000000" bgcolor="#ffffff">
@@ -22,38 +22,37 @@ Content-Transfer-Encoding: 7bit
       0); background-color: transparent; font-weight: normal;
       font-style: normal; font-variant: normal; text-decoration: none;
       vertical-align: baseline;"
-      id="internal-source-marker_0.9448391721778071"></span><br>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;">Welcome to the new home for your PSU
-      Email! Now that you have converted to Google mail, all messages
-      sent to your @pdx.edu mail address or aliases will arrive here and
-      will no longer be delivered to Webmail. Mail clients such as
-      Thunderbird, Mac Mail, or Outlook may still be used, but they must
-      be reconfigured (see below). Take some time to familiarize
-      yourself with the new layout, features, interface, and update your
-      bookmarks to point to </span><a href="http://mail.pdx.edu"><span
-        style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-        153); background-color: transparent; font-weight: normal;
-        font-style: normal; font-variant: normal; text-decoration:
-        underline; vertical-align: baseline;">http://mail.pdx.edu</span></a><span
+      id="internal-source-marker_0.5967943486046409">Welcome to the new
+      home for your PSU Email! Now that you have converted to Google
+      Mail, all messages sent to your @pdx.edu mail address or aliases
+      will arrive here and will no longer be delivered to Webmail.
+      &nbsp;Mail clients such as Thunderbird, Mac Mail, or Outlook may
+      still be used, but they must be reconfigured (see below). Take
+      some time to familiarize yourself with the new layout, features,
+      interface, and update your bookmarks to point to </span><a
+      href="http://mail.pdx.edu"><span style="font-size: 11pt;
+        font-family: Arial; color: rgb(0, 0, 153); background-color:
+        transparent; font-weight: normal; font-style: normal;
+        font-variant: normal; text-decoration: underline;
+        vertical-align: baseline;">http://mail.pdx.edu</span></a><span
       style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
       background-color: transparent; font-weight: normal; font-style:
       normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"> &nbsp;For more information on how to use
-      Google Mail, visit the </span><a
-href="https://sites.google.com/a/googleapps.com/google-apps-learning-center/gmail"><span
-        style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
-        background-color: transparent; font-weight: normal; font-style:
-        normal; font-variant: normal; text-decoration: underline;
-        vertical-align: baseline;">google learning center</span></a>.<br>
-    <a
+      vertical-align: baseline;"> &nbsp;For more information on how to
+      use Google Mail, visit the </span><a
 href="https://sites.google.com/a/googleapps.com/google-apps-learning-center/gmail"><span
         style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
         153); background-color: transparent; font-weight: normal;
         font-style: normal; font-variant: normal; text-decoration:
-        underline; vertical-align: baseline;"></span></a><br>
+        underline; vertical-align: baseline;">google learning center</span></a><span
+      style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
+      background-color: transparent; font-weight: normal; font-style:
+      normal; font-variant: normal; text-decoration: none;
+      vertical-align: baseline;">.</span><br>
+    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
+      0); background-color: transparent; font-weight: normal;
+      font-style: normal; font-variant: normal; text-decoration: none;
+      vertical-align: baseline;"></span><br>
     <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
       0); background-color: transparent; font-weight: normal;
       font-style: normal; font-variant: normal; text-decoration: none;
@@ -66,41 +65,33 @@ href="https://sites.google.com/a/googleapps.com/google-apps-learning-center/gmai
           style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
           0); background-color: transparent; font-weight: normal;
           font-style: normal; font-variant: normal; text-decoration:
-          none; vertical-align: baseline;">Mail Clients (ie,
-          Thunderbird, Outlook, iPhone/Android mail apps) will not work
-          correctly and will need to be reconfigured to work with Google
-          Mail. Although we encourage you to give the built in mail
-          client a try, after all you are already here.</span><br>
-        <br>
-        <span style="font-size: 11pt; font-family: Arial; color: rgb(0,
-          0, 0); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          none; vertical-align: baseline;">More information can be found
-          here: </span>
-        <a href="http://www.oit.pdx.edu/google-mail-client-settings"><span
-            style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-            153); background-color: transparent; font-weight: normal;
-            font-style: normal; font-variant: normal; text-decoration:
-            underline; vertical-align: baseline;">http://www.oit.pdx.edu/google-mail-client-settings</span></a><a
-          href="http://www.oit.pdx.edu/google-mail-client-settings"><span
-            style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-            153); background-color: transparent; font-weight: normal;
-            font-style: normal; font-variant: normal; text-decoration:
-            underline; vertical-align: baseline;"></span></a><a
-          href="http://www.oit.pdx.edu/google-mail-client-settings"><span
-            style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-            153); background-color: transparent; font-weight: normal;
-            font-style: normal; font-variant: normal; text-decoration:
-            underline; vertical-align: baseline;"></span></a><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          0); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          none; vertical-align: baseline;"></span><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          0); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          none; vertical-align: baseline;"></span></li>
+          none; vertical-align: baseline;">Mail Clients (i.e.
+          Thunderbird, Outlook, and iPhone/Android mail apps) will not
+          work correctly and will need to be reconfigured to work with
+          Google Mail. &nbsp;Before setting up Outlook or Thunderbird we
+          encourage you to give the web interface a try, after all you
+          are already here. </span></li>
     </ol>
+    <br>
+    <p dir="ltr" style="margin-left: 36pt; margin-top: 0pt;
+      margin-bottom: 0pt;"><span style="font-size: 11pt; font-family:
+        Arial; color: rgb(0, 0, 0); background-color: transparent;
+        font-weight: normal; font-style: normal; font-variant: normal;
+        text-decoration: none; vertical-align: baseline;">More
+        information can be found here: </span><a
+        href="http://www.oit.pdx.edu/google-mail-client-settings"><span
+          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
+          153); background-color: transparent; font-weight: normal;
+          font-style: normal; font-variant: normal; text-decoration:
+          underline; vertical-align: baseline;">http://www.oit.pdx.edu/google-mail-client-settings</span></a><span
+        style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
+        background-color: transparent; font-weight: normal; font-style:
+        normal; font-variant: normal; text-decoration: none;
+        vertical-align: baseline;"></span></p>
+    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
+      0); background-color: transparent; font-weight: normal;
+      font-style: normal; font-variant: normal; text-decoration: none;
+      vertical-align: baseline;"></span>
     <ol start="2">
       <li style="list-style-type: decimal; font-size: 11pt; font-family:
         Arial; color: rgb(0, 0, 0); background-color: transparent;
@@ -109,10 +100,11 @@ href="https://sites.google.com/a/googleapps.com/google-apps-learning-center/gmai
           style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
           0); background-color: transparent; font-weight: normal;
           font-style: normal; font-variant: normal; text-decoration:
-          none; vertical-align: baseline;">OAM Forwarding has been
-          disabled (if you were using it), and mail filters/rules will
-          need to be created in Gmail. </span></li>
+          none; vertical-align: baseline;">Email forwarding configured
+          via OAM or Webmail has been disabled (if you were using it),
+          and mail filters/rules will need to be created in Gmail. </span></li>
     </ol>
+    <br>
     <p dir="ltr" style="margin-left: 36pt; margin-top: 0pt;
       margin-bottom: 0pt;"><span style="font-size: 11pt; font-family:
         Arial; color: rgb(0, 0, 0); background-color: transparent;
@@ -145,21 +137,75 @@ href="https://sites.google.com/a/googleapps.com/google-apps-learning-center/gmai
           imported, as they were not imported as part of the opt-in
           process. </span></li>
     </ol>
+    <br>
     <p dir="ltr" style="margin-left: 36pt; margin-top: 0pt;
       margin-bottom: 0pt;"><span style="font-size: 11pt; font-family:
         Arial; color: rgb(0, 0, 0); background-color: transparent;
         font-weight: normal; font-style: normal; font-variant: normal;
         text-decoration: none; vertical-align: baseline;">More
         information can be found here: </span><a
-        href="http://oit.pdx.edu/Importing-Contacts-Google"><span
-          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-          153); background-color: transparent; font-weight: normal;
-          font-style: normal; font-variant: normal; text-decoration:
-          underline; vertical-align: baseline;">http://oit.pdx.edu/Importing-Contacts-Google</span></a><span
+        href="http://oit.pdx.edu/Contacts-Google"><span
+          style="font-size: 10pt; font-family: Arial; color: rgb(0, 0,
+          204); background-color: rgb(255, 255, 255); font-weight:
+          normal; font-style: normal; font-variant: normal;
+          text-decoration: underline; vertical-align: baseline;">http://oit.pdx.edu/Contacts-Google</span></a><span
         style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
-        background-color: transparent; font-weight: bold; font-style:
+        background-color: transparent; font-weight: normal; font-style:
         normal; font-variant: normal; text-decoration: none;
         vertical-align: baseline;"></span></p>
+    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
+      0); background-color: transparent; font-weight: normal;
+      font-style: normal; font-variant: normal; text-decoration: none;
+      vertical-align: baseline;"></span>
+    <ol start="4">
+      <li style="list-style-type: decimal; font-size: 11pt; font-family:
+        Arial; color: rgb(0, 0, 0); background-color: transparent;
+        font-weight: normal; font-style: normal; font-variant: normal;
+        text-decoration: none; vertical-align: baseline;"><span
+          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
+          0); background-color: transparent; font-weight: normal;
+          font-style: normal; font-variant: normal; text-decoration:
+          none; vertical-align: baseline;">Turning off or adjusting Web
+          Clips: </span><a
+          href="http://oit.pdx.edu/adujst-webclip-settings"><span
+            style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
+            153); background-color: transparent; font-weight: normal;
+            font-style: normal; font-variant: normal; text-decoration:
+            underline; vertical-align: baseline;">http://oit.pdx.edu/adujst-webclip-settings</span></a><span
+          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
+          0); background-color: transparent; font-weight: normal;
+          font-style: normal; font-variant: normal; text-decoration:
+          none; vertical-align: baseline;"></span></li>
+    </ol>
+    <br>
+    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
+      0); background-color: transparent; font-weight: normal;
+      font-style: normal; font-variant: normal; text-decoration: none;
+      vertical-align: baseline;"></span>
+    <ol start="5">
+      <li style="list-style-type: decimal; font-size: 11pt; font-family:
+        Arial; color: rgb(0, 0, 0); background-color: transparent;
+        font-weight: normal; font-style: normal; font-variant: normal;
+        text-decoration: none; vertical-align: baseline;"><span
+          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
+          0); background-color: transparent; font-weight: normal;
+          font-style: normal; font-variant: normal; text-decoration:
+          none; vertical-align: baseline;">Google Mail defaults to a
+          threaded conversation view, grouping messages together by
+          their subject line. If you would like more information, or how
+          to disable it:<br class="kix-line-break">
+        </span><a
+href="https://mail.google.com/support/bin/answer.py?hl=en&amp;answer=5900"><span
+            style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
+            153); background-color: transparent; font-weight: normal;
+            font-style: normal; font-variant: normal; text-decoration:
+            underline; vertical-align: baseline;">https://mail.google.com/support/bin/answer.py?hl=en&amp;answer=5900</span></a><span
+          style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
+          0); background-color: transparent; font-weight: normal;
+          font-style: normal; font-variant: normal; text-decoration:
+          none; vertical-align: baseline;"></span></li>
+    </ol>
+    <br>
     <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
       0); background-color: transparent; font-weight: normal;
       font-style: normal; font-variant: normal; text-decoration: none;
@@ -169,26 +215,19 @@ href="https://sites.google.com/a/googleapps.com/google-apps-learning-center/gmai
       font-style: normal; font-variant: normal; text-decoration: none;
       vertical-align: baseline;">For more information please visit the
       Google Apps project site: </span><br>
-    <span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
-      0); background-color: transparent; font-weight: normal;
-      font-style: normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"></span><br>
     <a
 href="https://sites.google.com/a/pdx.edu/google-apps/email-migration/opt-in-complete"><span
         style="font-size: 11pt; font-family: Arial; color: rgb(0, 0,
         153); background-color: transparent; font-weight: normal;
         font-style: normal; font-variant: normal; text-decoration:
-        underline; vertical-align: baseline;">https://sites.google.com/a/pdx.edu/google-apps/email-migration/opt-in-complete</span></a><span
+        underline; vertical-align: baseline;">googleapps.pdx.edu/opt-in-complete</span></a><span
       style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0);
       background-color: transparent; font-weight: normal; font-style:
       normal; font-variant: normal; text-decoration: none;
-      vertical-align: baseline;"><br>
-      <br>
-    </span>
+      vertical-align: baseline;"></span>
   </body>
-
 </html>
 EOS
 }
 
-msg | /usr/lib/sendmail -f weekse@pdx.edu ${1}@pdx.edu
+msg | /usr/lib/sendmail -f no-reply@pdx.edu ${1}@pdx.edu

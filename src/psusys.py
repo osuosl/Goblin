@@ -364,6 +364,29 @@ mailRoutingAddress: %s@%s
 		# Send the conversion confirmation email to the user
 		# Launch a Subprocess here to send email
 
+	def send_conversion_email_in_progress(self, login):
+		self.log.info('send_conversion_email_in_progress(): sending mail to user: ' + login)
+		# Send the conversion confirmation email to the user
+		# Launch a Subprocess here to send email
+		cmd = '/vol/goblin/src/conversion_email_in_progress ' + login
+		
+		syncprocess = subprocess.Popen(
+									shlex.split(cmd)
+									,stdout=subprocess.PIPE
+									,stderr=subprocess.PIPE )
+
+		while (syncprocess.poll() == None):
+			sleep(3)
+			self.log.info('send_conversion_email_in_progress(): continuing to send mail for user: ' + login)
+			
+		if syncprocess.returncode == 0:
+			self.log.info('send_conversion_email_in_progress(): success for user: ' + login)
+			return True
+		else:
+			self.log.info('send_conversion_email_in_progress(): failed for user: ' + login)
+			return False
+			
+
 	def send_conversion_email_psu(self, login):
 		self.log.info('send_conversion_email_psu(): sending mail to user: ' + login)
 		# Send the conversion confirmation email to the user
@@ -581,6 +604,10 @@ mailRoutingAddress: %s@%s
 		else:
 			log.info("copy_email_task(): has not already completed opt-in: " + login)
 			mc.set(key, 40)
+
+		# Send conversion info email to users Google account
+		log.info("copy_email_task(): conversion in progress email: " + login)
+		psu_sys.send_conversion_email_in_progress(login)
 
 		# Enable Google email for the user
 		# This is the last item that the user should wait for.
