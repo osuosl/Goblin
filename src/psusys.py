@@ -546,6 +546,15 @@ mailRoutingAddress: %s@%s
 			return False
 		return True
 
+	def is_web_suspended(self, login):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		web_suspended = prop.getProperty('web.suspended')
+		if isinstance(web_suspended, bool):
+			if web_suspended:
+				self.log.info('is_web_suspended(): user: ' + login + " wisited while the opt-in web site was suspended")
+			return web_suspended
+
+		return False
 	
 	def copy_progress(self, login):	
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
