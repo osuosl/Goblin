@@ -4,7 +4,7 @@ PATH=$PATH:/vol/goblin/bin
 
 msgSendmail(){
 cat << ESO
-REPLY-To: no-reply@pdx.edu
+REPLY-To: PSU Google Project Team <no-reply@pdx.edu>
 Organization: Portland State University
 MIME-Version: 1.0
 Subject: Migration to PSU Google Mail in Progress

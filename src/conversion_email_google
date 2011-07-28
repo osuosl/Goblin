@@ -2,7 +2,7 @@
 
 msg(){
 cat << EOS
-REPLY-To: no-reply@pdx.edu
+REPLY-To: PSU Google Project Team <no-reply@pdx.edu>
 Organization: Portland State University
 MIME-Version: 1.0
 Subject: Congratulations, you have successfully migrated to PSU Google Mail!
