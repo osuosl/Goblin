@@ -31,11 +31,6 @@ def select(request):
 	psu_sys = PSUSys()
 	psu_sys.set_user(login, request.META)
 
-	# Go to suspended page if site is not available
-	
-	if psu_sys.is_web_suspended():
-		return render_to_response('ghoul/suspended.html', { 'login': login },
-								context_instance=RequestContext(request),)
 
 	# Go to informational page for folks who are not yet allowed-in
 	if not psu_sys.is_allowed(login):
@@ -50,6 +45,12 @@ def select(request):
 	
 	if psu_sys.is_processing(login):
 		return render_to_response('ghoul/status.html', { 'login': login} )
+
+	# Go to suspended page if site is not available
+	
+	if psu_sys.is_web_suspended():
+		return render_to_response('ghoul/suspended.html', { 'login': login },
+								context_instance=RequestContext(request),)
 	
 	large_emails = psu_sys.large_emails(login)
 	
