@@ -6,7 +6,7 @@ base=/vol/goblin
 start(){
 	. $base/bin/goblin
 	echo -n Starting celeryd ..
-	celeryd --autoscale=50,5 --loglevel=INFO -Q optin -n $host &
+	celeryd --loglevel=INFO -Q optin -n $host &
 	echo done
 }
 
