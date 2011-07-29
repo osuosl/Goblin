@@ -8,3 +8,4 @@ chmod +x $DIR/src/conversion_email_*
 chmod +x $DIR/bin/celeryctl
 chmod +x $DIR/bin/updateperm
 chmod +x $DIR/bin/sendEmail
+chmod +x $DIR/bin/celeryd

@@ -1,4 +1,3 @@
-#!/bin/sh
 #!/bin/sh -e
 # ============================================
 #  celeryd - Starts the Celery worker daemon.

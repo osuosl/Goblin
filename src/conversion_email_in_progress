@@ -7,7 +7,7 @@ cat << ESO
 REPLY-To: PSU Google Project Team <no-reply@pdx.edu>
 Organization: Portland State University
 MIME-Version: 1.0
-Subject: Migration to PSU Google Mail in Progress
+Subject: Account Migration to PSU Google Mail in Progress
 
 ESO
 msg
@@ -48,4 +48,4 @@ EOS
 }
 
 msgSendmail | /usr/lib/sendmail -f no-reply@pdx.edu ${1}@pdx.edu
-msg | sendEmail -q -o reply-to=no-reply@pdx.edu -f no-reply@pdx.edu -u 'Migration to PSU Google Mail in Progress' -f no-reply@pdx.edu -t ${1}@odin.pdx.edu -s cyrus.psumail.pdx.edu 
+msg | sendEmail -q -o reply-to=no-reply@pdx.edu -f no-reply@pdx.edu -u 'Your PSU email is about to be migrated to Google Mail' -f no-reply@pdx.edu -t ${1}@odin.pdx.edu -s cyrus.psumail.pdx.edu 
