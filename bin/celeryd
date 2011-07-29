@@ -1,3 +1,4 @@
+#!/bin/sh
 #!/bin/sh -e
 # ============================================
 #  celeryd - Starts the Celery worker daemon.
@@ -110,16 +111,17 @@ DEFAULT_NODES="celery"
 
 
 ### PSU Google Migration Specific Settings ###
-CELERYD_PID_FILE=/vol/goblin/var/celeryd@%n.pid"
+CELERYD_PID_FILE="/vol/goblin/var/celeryd@%n.pid"
 CELERYD_LOG_FILE="/vol/goblin/var/celeryd@%n.log"
-CELERYD="celeryd"
+#CELERYD="/usr/bin/celeryd"
 CELERYD_LOG_LEVEL="INFO"
-CELERY_NODES="celery"
-CELERYD_CHDIR="/vol/goblin"
+CELERYD_NODES="celery"
+#CELERYD_CHDIR="/vol/goblin"
 ###
 
 # Pull in the PYTHONPATH and any other config options 
-if test -f /vol/goblin/bin/goblin; then
+
+if test -f /vol/goblin/bin/goblin ; then
     . /vol/goblin/bin/goblin
 fi
 
@@ -170,7 +172,6 @@ start_workers () {
                          --pidfile="$CELERYD_PID_FILE"      \
                          --logfile="$CELERYD_LOG_FILE"      \
                          --loglevel="$CELERYD_LOG_LEVEL"    \
-                         --cmd="$CELERYD"                   \
                          $CELERYD_OPTS
 }
 
@@ -180,7 +181,6 @@ restart_workers () {
                            --pidfile="$CELERYD_PID_FILE"    \
                            --logfile="$CELERYD_LOG_FILE"    \
                            --loglevel="$CELERYD_LOG_LEVEL"  \
-                           --cmd="$CELERYD"                 \
                            $CELERYD_OPTS
 }
 
