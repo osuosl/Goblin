@@ -8,8 +8,10 @@ from time import sleep
 import shlex, subprocess
 from memcacheq import MemcacheQueue
 import gdata.apps.organization.service
+import gdata.apps.service
 from gdata.service import BadAuthentication
 from gdata.service import CaptchaRequired
+from gdata.apps.service import AppsForYourDomainException
 
 
 class PSUSys:
@@ -428,6 +430,70 @@ mailRoutingAddress: %s@%s
 		userEmail = login + '@pdx.edu'
 		return client.RetrieveOrgUser( customerId, userEmail )['orgUnitPath'] == 'people'
 		
+	def enable_google_account(self, login):
+		self.log.info('enable_google_account(): Enabling account for user: ' + login)
+		email = self.prop.getProperty('google.email')
+		domain = self.prop.getProperty('google.domain')
+		pw = self.prop.getProperty('google.password')
+
+		client = gdata.apps.service.AppsService(email=email, domain=domain, password=pw)
+		retry_count = 0; status = False
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			try:
+				client.ProgrammaticLogin()
+				userDisabled = client.RestoreUser(login).login.suspended
+				if userDisabled == 'false':
+					status = True
+
+			except AppsForYourDomainException, e:
+				if e.error_code == 1301:
+					self.log.error('enable_google_account(): User %s does not exist' % login)
+					status = True
+
+			except( CaptchaRequired ):
+				self.log.error('enable_google_account(): Captcha being requested')
+
+			except( BadAuthentication ):
+				self.log.error('enable_google_account(): Authentication Error' )
+
+			except:
+				# Retry if not an obvious non-retryable error
+				sleep(1)
+
+			retry_count = retry_count + 1
+
+	def disable_google_account(self, login):
+		self.log.info('disable_google_account(): Enabling account for user: ' + login)
+		email = self.prop.getProperty('google.email')
+		domain = self.prop.getProperty('google.domain')
+		pw = self.prop.getProperty('google.password')
+
+		client = gdata.apps.service.AppsService(email=email, domain=domain, password=pw)
+		retry_count = 0; status = False
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			try:
+				client.ProgrammaticLogin()
+				userDisabled = client.SuspendUser(login).login.suspended
+				if userDisabled == 'true':
+					status = True
+
+			except AppsForYourDomainException, e:
+				if e.error_code == 1301:
+					self.log.error('disable_google_account(): User %s does not exist' % login)
+					status = True
+
+			except( CaptchaRequired ):
+				self.log.error('disable_google_account(): Captcha being requested')
+
+			except( BadAuthentication ):
+				self.log.error('disable_google_account(): Authentication Error' )
+
+			except:
+				# Retry if not an obvious non-retryable error
+				sleep(1)
+
+			retry_count = retry_count + 1
+
 	def enable_gmail(self, login):
 		self.log.info('enable_gmail(): Enabling gmail for user: ' + login)
 		email = self.prop.getProperty('google.email')
