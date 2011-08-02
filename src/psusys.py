@@ -423,12 +423,39 @@ mailRoutingAddress: %s@%s
 		pw = self.prop.getProperty('google.password')
 		
 		client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
-		client.ProgrammaticLogin()
-		customerId = client.RetrieveCustomerId()["customerId"]
-		userEmail = login + '@pdx.edu'
-		return client.RetrieveOrgUser( customerId, userEmail )['orgUnitPath'] == 'people'
-		
+		retry_count = 0; status = False; result = False
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			try:
+				client.ProgrammaticLogin()
+				customerId = client.RetrieveCustomerId()["customerId"]
+				userEmail = login + '@pdx.edu'
+				result = (client.RetrieveOrgUser( customerId, userEmail )['orgUnitPath'] == 'people')
+				status = True
+			except CaptchaRequired :
+				self.log.error('is_gmail_enabled(): Captcha being requested')
+				sleep(1)
+			except BadAuthentication :
+				self.log.error('is_gmail_enabled(): Authentication Error' )
+				sleep(1)
+			except Exception, e :
+				self.log.error('is_gmail_enabled(): Exception occured: ' + str(e))
+				sleep(1)
+				# Retry if not an obvious non-retryable error
+			retry_count = retry_count + 1
+
+		return result
+
 	def enable_gmail(self, login):
+		retry_count = 0; status = False
+		
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			self.gmail_set_active(login)
+			if self.is_gmail_enabled(login):
+				status = True
+			retry_count = retry_count + 1
+		
+		
+	def gmail_set_active(self, login):
 		self.log.info('enable_gmail(): Enabling gmail for user: ' + login)
 		email = self.prop.getProperty('google.email')
 		domain = self.prop.getProperty('google.domain')
@@ -443,14 +470,18 @@ mailRoutingAddress: %s@%s
 				userEmail = login + '@pdx.edu'
 				client.UpdateOrgUser( customerId, userEmail, 'people')
 				status = True
-			except( CaptchaRequired ):
-				self.log.error('enable_gmail(): Captcha being requested')
-			except( BadAuthentication ):
-				self.log.error('enable_gmail(): Authentication Error' )
-			except:
-				# Retry if not an obvious non-retryable error
+			except CaptchaRequired :
+				self.log.error('gmail_set_active(): Captcha being requested')
 				sleep(1)
+			except BadAuthentication :
+				self.log.error('gmail_set_active(): Authentication Error' )
+				sleep(1)
+			except Exception, e :
+				self.log.error('gmail_set_active(): Exception occured: ' + str(e))
+				sleep(1)
+				# Retry if not an obvious non-retryable error
 			retry_count = retry_count + 1
+		return status
 		
 	def disable_gmail(self, login):
 		self.log.info('disable_gmail(): Disabling gmail for user: ' + login)

@@ -24,14 +24,14 @@ class TestAll(unittest.TestCase):
 		self.assertFalse(self.psusys.opt_in_already('a2sj'))
 
 	def test_gmail_enable(self):
-		if self.psusys.is_gmail_enabled('paul'):
-			self.psusys.disable_gmail('paul')
-			self.assertFalse(self.psusys.is_gmail_enabled('paul'))
+		if self.psusys.is_gmail_enabled('pdx00800'):
+			self.psusys.disable_gmail('pdx00800')
+			self.assertFalse(self.psusys.is_gmail_enabled('pdx00800'))
 		else:
-			self.psusys.enable_gmail('paul')
-			self.assertTrue(self.psusys.is_gmail_enabled('paul'))
-			self.psusys.disable_gmail('paul')
-			self.assertFalse(self.psusys.is_gmail_enabled('paul'))
+			self.psusys.enable_gmail('pdx00800')
+			self.assertTrue(self.psusys.is_gmail_enabled('pdx00800'))
+			self.psusys.disable_gmail('pdx00800')
+			self.assertFalse(self.psusys.is_gmail_enabled('pdx00800'))
 			
 	def test_is_oamed(self):
 		self.assertFalse(self.psusys.is_oamed('a2sj'))
