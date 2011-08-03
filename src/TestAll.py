@@ -33,6 +33,39 @@ class TestAll(unittest.TestCase):
 			self.psusys.disable_gmail('pdx00800')
 			self.assertFalse(self.psusys.is_gmail_enabled('pdx00800'))
 			
+	def test_google_account_status(self):
+		self.assertEqual(
+			self.psusys.google_account_status('dennis')
+			,{"enabled": True, "exists": True}
+		)
+		self.assertEqual(
+			self.psusys.google_account_status('pdx00800')
+			,{"enabled": False, "exists": True}
+		)
+		self.assertEqual(
+			self.psusys.google_account_status('pdx008')
+			,{"enabled": False, "exists": False}
+		)
+
+	def test_enable_google_account(self):
+		if self.psusys.google_account_status('pdx00800') == {"enabled": True, "exists": True}:
+			self.psusys.disable_google_account('pdx00800')
+			self.assertEqual(
+				self.psusys.google_account_status('pdx00800')
+				,{"enabled": False, "exists": True}
+			)
+		else:
+			self.psusys.enable_google_account('pdx00800')
+			self.assertEqual(
+				self.psusys.google_account_status('pdx00800')
+				,{"enabled": True, "exists": True}
+			)
+			self.psusys.disable_google_account('pdx00800')
+			self.assertEqual(
+				self.psusys.google_account_status('pdx00800')
+				,{"enabled": False, "exists": True}
+			)
+
 	def test_is_oamed(self):
 		self.assertFalse(self.psusys.is_oamed('a2sj'))
 		self.assertTrue(self.psusys.is_oamed('staplej'))

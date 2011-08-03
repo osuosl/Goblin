@@ -8,8 +8,10 @@ from time import sleep
 import shlex, subprocess
 from memcacheq import MemcacheQueue
 import gdata.apps.organization.service
+import gdata.apps.service
 from gdata.service import BadAuthentication
 from gdata.service import CaptchaRequired
+from gdata.apps.service import AppsForYourDomainException
 
 
 class PSUSys:
@@ -444,6 +446,104 @@ mailRoutingAddress: %s@%s
 			retry_count = retry_count + 1
 
 		return result
+		
+	def google_account_status(self, login):
+		self.log.info('google_account_status(): Querying account status for user: ' + login)
+		email = self.prop.getProperty('google.email')
+		domain = self.prop.getProperty('google.domain')
+		pw = self.prop.getProperty('google.password')
+
+		client = gdata.apps.service.AppsService(email=email, domain=domain, password=pw)
+		retry_count = 0; status = False
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			try:
+				client.ProgrammaticLogin()
+				userDisabled = client.RetrieveUser(login).login.suspended
+				if userDisabled == 'false':
+					return {"exists": True, "enabled": True}
+				elif userDisabled == 'true':
+					return {"exists": True, "enabled": False}
+
+			except AppsForYourDomainException, e:
+				if e.error_code == 1301:
+					self.log.error('enable_google_account(): User %s does not exist' % login)
+					return {"exists": False, "enabled": False}
+
+			except( CaptchaRequired ):
+				self.log.error('enable_google_account(): Captcha being requested')
+
+			except( BadAuthentication ):
+				self.log.error('enable_google_account(): Authentication Error' )
+
+			except:
+				# Retry if not an obvious non-retryable error
+				sleep(1)
+
+			retry_count = retry_count + 1
+
+	def enable_google_account(self, login):
+		self.log.info('enable_google_account(): Enabling account for user: ' + login)
+		email = self.prop.getProperty('google.email')
+		domain = self.prop.getProperty('google.domain')
+		pw = self.prop.getProperty('google.password')
+
+		client = gdata.apps.service.AppsService(email=email, domain=domain, password=pw)
+		retry_count = 0; status = False
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			try:
+				client.ProgrammaticLogin()
+				userDisabled = client.RestoreUser(login).login.suspended
+				if userDisabled == 'false':
+					status = True
+
+			except AppsForYourDomainException, e:
+				if e.error_code == 1301:
+					self.log.error('enable_google_account(): User %s does not exist' % login)
+					status = True
+
+			except( CaptchaRequired ):
+				self.log.error('enable_google_account(): Captcha being requested')
+
+			except( BadAuthentication ):
+				self.log.error('enable_google_account(): Authentication Error' )
+
+			except:
+				# Retry if not an obvious non-retryable error
+				sleep(1)
+
+			retry_count = retry_count + 1
+
+	def disable_google_account(self, login):
+		self.log.info('disable_google_account(): Enabling account for user: ' + login)
+		email = self.prop.getProperty('google.email')
+		domain = self.prop.getProperty('google.domain')
+		pw = self.prop.getProperty('google.password')
+
+		client = gdata.apps.service.AppsService(email=email, domain=domain, password=pw)
+		retry_count = 0; status = False
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			try:
+				client.ProgrammaticLogin()
+				userDisabled = client.SuspendUser(login).login.suspended
+				if userDisabled == 'true':
+					status = True
+
+			except AppsForYourDomainException, e:
+				if e.error_code == 1301:
+					self.log.error('disable_google_account(): User %s does not exist' % login)
+					status = True
+
+			except( CaptchaRequired ):
+				self.log.error('disable_google_account(): Captcha being requested')
+
+			except( BadAuthentication ):
+				self.log.error('disable_google_account(): Authentication Error' )
+
+			except:
+				# Retry if not an obvious non-retryable error
+				sleep(1)
+
+			retry_count = retry_count + 1
 
 	def enable_gmail(self, login):
 		retry_count = 0; status = False
@@ -453,8 +553,7 @@ mailRoutingAddress: %s@%s
 			if self.is_gmail_enabled(login):
 				status = True
 			retry_count = retry_count + 1
-		
-		
+
 	def gmail_set_active(self, login):
 		self.log.info('enable_gmail(): Enabling gmail for user: ' + login)
 		email = self.prop.getProperty('google.email')
@@ -681,6 +780,67 @@ mailRoutingAddress: %s@%s
 
 		return(True)
 
+	def presync_email_task(self, login):
+		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
+		log = logging.getLogger('')		# Logging is occuring within celery worker here
+		memcache_url = prop.getProperty('memcache.url')
+		mc = memcache.Client([memcache_url], debug=0)
+		psu_sys = PSUSys()
+
+		log.info("presync_email_task(): processing user: " + login)
+		key = 'email_presync_progress.' + login
+
+		# Check for LDAP mail forwarding already (double checking), if
+		# already opt'd-in, then immediately return and mark as complete.
+
+		if (psu_sys.opt_in_already(login)):
+			log.info("presync_email_task(): has already completed opt-in: " + login)
+			mc.set(key, 100)
+			return(True)
+		else:
+			log.info("presync_email_task(): has not already completed opt-in: " + login)
+			mc.set(key, 40)
+
+		account_status = psu_sys.google_account_status(login)
+
+		if account_status["exists"] == False:
+			log.info("presync_email_task(): user does not exist in Google: " + login)
+			return(True)
+
+		if account_status["enabled"] == False:
+			log.info("presync_email_task(): temporarily enabling account: " + login)
+			psu_sys.enable_google_account(login)	# Enable account if previously disabled
+			mc.set(key, 50)
+
+		# Enable Google email for the user
+		log.info("presync_email_task(): temporarily enabling Google mail: " + login)
+		psu_sys.enable_gmail(login)
+		mc.set(key, 60)
+
+		# Synchronize email to Google (and wait)
+		log.info("presync_email_task(): syncing email: " + login)
+		status = psu_sys.sync_email_delete2(login)
+		retry_count = 0
+		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
+			log.info("presync_email_task(): Retry syncing email: " + login)
+			status = psu_sys.sync_email_delete2(login)
+			sleep(4 ** retry_count)
+			retry_count = retry_count + 1
+
+		# Synchronization complete
+		mc.set(key, 80)
+
+		if account_status["enabled"] == False:
+			log.info("presync_email_task(): disabling account: " + login)
+			psu_sys.disable_google_account(login)	# Enable account if previously disabled
+			mc.set(key, 90)
+
+		# Disable Google email
+		log.info("presync_email_task(): disabling Google mail: " + login)
+		psu_sys.enable_gmail(login)
+		mc.set(key, 100)
+
+		return(True)
 	
 	def recover_copy_email_task(self, login):
 		'''
