@@ -48,21 +48,21 @@ class TestAll(unittest.TestCase):
 		)
 
 	def test_enable_google_account(self):
-		if self.psusys.google_account_status('paul') == {"enabled": True, "exists": True}:
-			self.psusys.disable_google_account('paul')
+		if self.psusys.google_account_status('pdx00800') == {"enabled": True, "exists": True}:
+			self.psusys.disable_google_account('pdx00800')
 			self.assertEqual(
-				self.psusys.google_account_status('paul')
+				self.psusys.google_account_status('pdx00800')
 				,{"enabled": False, "exists": True}
 			)
 		else:
-			self.psusys.enable_google_account('paul')
+			self.psusys.enable_google_account('pdx00800')
 			self.assertEqual(
-				self.psusys.google_account_status('paul')
+				self.psusys.google_account_status('pdx00800')
 				,{"enabled": True, "exists": True}
 			)
-			self.psusys.disable_google_account('paul')
+			self.psusys.disable_google_account('pdx00800')
 			self.assertEqual(
-				self.psusys.google_account_status('paul')
+				self.psusys.google_account_status('pdx00800')
 				,{"enabled": False, "exists": True}
 			)
 
