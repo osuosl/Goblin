@@ -44,5 +44,8 @@ class TestAll(unittest.TestCase):
 		self.assertTrue(self.psusys.is_allowed('dennis'))
 		self.assertFalse(self.psusys.is_allowed('pdx00800'))
 		
+	def test_is_web_suspended(self):
+		self.assertFalse(self.psusys.is_web_suspended('pdx00800'))
+		
 if __name__ == '__main__':
 	unittest.main()		

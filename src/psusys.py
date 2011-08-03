@@ -582,7 +582,7 @@ mailRoutingAddress: %s@%s
 		web_suspended = prop.getProperty('web.suspended')
 		if isinstance(web_suspended, bool):
 			if web_suspended:
-				self.log.info('is_web_suspended(): user: ' + login + " wisited while the opt-in web site was suspended")
+				self.log.info('is_web_suspended(): user: ' + login + " visited while the opt-in web site was suspended")
 			return web_suspended
 
 		return False
