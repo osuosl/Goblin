@@ -49,7 +49,7 @@ def select(request):
 
 	# Go to suspended page if site is not available
 	
-	if psu_sys.is_web_suspended():
+	if psu_sys.is_web_suspended(login):
 		return render_to_response('ghoul/suspended.html', { 'login': login },
 								context_instance=RequestContext(request),)
 	
