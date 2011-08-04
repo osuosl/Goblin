@@ -514,7 +514,7 @@ mailRoutingAddress: %s@%s
 			retry_count = retry_count + 1
 
 	def disable_google_account(self, login):
-		self.log.info('disable_google_account(): Enabling account for user: ' + login)
+		self.log.info('disable_google_account(): Disabling account for user: ' + login)
 		email = self.prop.getProperty('google.email')
 		domain = self.prop.getProperty('google.domain')
 		pw = self.prop.getProperty('google.password')
