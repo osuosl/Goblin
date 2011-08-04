@@ -828,6 +828,11 @@ mailRoutingAddress: %s@%s
 			retry_count = retry_count + 1
 
 		# Synchronization complete
+		mc.set(key, 70)
+
+		# Disable Google email
+		log.info("presync_email_task(): disabling Google mail: " + login)
+		psu_sys.disable_gmail(login)
 		mc.set(key, 80)
 
 		if account_status["enabled"] == False:
@@ -835,9 +840,7 @@ mailRoutingAddress: %s@%s
 			psu_sys.disable_google_account(login)	# Enable account if previously disabled
 			mc.set(key, 90)
 
-		# Disable Google email
-		log.info("presync_email_task(): disabling Google mail: " + login)
-		psu_sys.disable_gmail(login)
+		# Call it good.
 		mc.set(key, 100)
 
 		return(True)
