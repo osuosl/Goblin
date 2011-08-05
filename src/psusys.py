@@ -714,6 +714,13 @@ mailRoutingAddress: %s@%s
 		log.info("copy_email_task(): processing user: " + login)
 		key = 'email_copy_progress.' + login
 
+		account_status = psu_sys.google_account_status(login)
+
+		# Check to make sure the user has a Google account
+		if account_status["exists"] == False:
+			log.info("presync_email_task(): user does not exist in Google: " + login)
+			return(True)
+
 		# Check for LDAP mail forwarding already (double checking), if
 		# already opt'd-in, then immediately return and mark as complete.
 
@@ -790,6 +797,13 @@ mailRoutingAddress: %s@%s
 		log.info("presync_email_task(): processing user: " + login)
 		key = 'email_presync_progress.' + login
 
+		account_status = psu_sys.google_account_status(login)
+
+		# Check to make sure the user has a Google account
+		if account_status["exists"] == False:
+			log.info("presync_email_task(): user does not exist in Google: " + login)
+			return(True)
+
 		# Check for LDAP mail forwarding already (double checking), if
 		# already opt'd-in, then immediately return and mark as complete.
 
@@ -801,12 +815,7 @@ mailRoutingAddress: %s@%s
 			log.info("presync_email_task(): has not already completed opt-in: " + login)
 			mc.set(key, 40)
 
-		account_status = psu_sys.google_account_status(login)
-
-		if account_status["exists"] == False:
-			log.info("presync_email_task(): user does not exist in Google: " + login)
-			return(True)
-
+		# We temporarily enable suspended accounts for the purposes of synchronization
 		if account_status["enabled"] == False:
 			log.info("presync_email_task(): temporarily enabling account: " + login)
 			psu_sys.enable_google_account(login)	# Enable account if previously disabled
