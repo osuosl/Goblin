@@ -611,7 +611,7 @@ mailRoutingAddress: %s@%s
 		exclude_list = "'^Shared Folders|^mail/|^Junk$|^junk$|^JUNK$|^Spam$|^spam$|^SPAM$'"
 		whitespace_cleanup = " --regextrans2 's/[ ]+/ /g' --regextrans2 's/\s+$//g' --regextrans2 's/\s+(?=\/)//g' --regextrans2 's/^\s+//g' --regextrans2 's/(?=\/)\s+//g'"
 		#folder_cases = " --regextrans2 's/^drafts$/[Gmail]\/Drafts/i' --regextrans2 's/^trash$/[Gmail]\/Trash/i' --regextrans2 's/^(sent|sent-mail)$/[Gmail]\/Sent Mail/i'"
-		folder_cases = " --regextrans2 's/^drafts$/[Gmail]\/Drafts/i' --regextrans2 's/^trash$/[Gmail]\/Trash/i' --regextrans2 's/^(sent|sent-mail)$/[Gmail]\/Sent Mail/i' --delete2foldersbutnot '^\[Gmail\]'"
+		folder_cases = " --regextrans2 's/^drafts$/[Gmail]\/Drafts/i' --regextrans2 's/^trash$/[Gmail]\/Trash/i' --regextrans2 's/^(sent|sent-mail)$/[Gmail]\/Sent Mail/i'"
 		command = imapsync_cmd + " --pidfile /tmp/imapsync-" + login + ".pid --host1 " + imap_host + " --port1 993 --user1 " + login + " --authuser1 " + imap_login + " --passfile1 " + cyrus_pf + " --host2 imap.gmail.com --port2 993 --user2 " + login + "@" + 'pdx.edu' + " --passfile2 " + google_pf + " --ssl1 --ssl2 --maxsize 26214400 --authmech1 PLAIN --authmech2 XOAUTH -sep1 '/' --exclude " + exclude_list + folder_cases + whitespace_cleanup + extra_opts
 
 		if extra_opts == '':
