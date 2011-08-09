@@ -52,8 +52,12 @@ def select(request):
 	if psu_sys.is_web_suspended(login):
 		return render_to_response('ghoul/suspended.html', { 'login': login },
 								context_instance=RequestContext(request),)
-	
-	large_emails = psu_sys.large_emails(login)
+	try:
+		large_emails = psu_sys.large_emails(login)
+	except:
+		return render_to_response('ghoul/folderbomb.html', { 'login': login },
+								context_instance=RequestContext(request),)
+		
 	
 	return render_to_response('ghoul/select.html', 
 		{ 'login': login,
