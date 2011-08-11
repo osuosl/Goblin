@@ -795,7 +795,13 @@ mailRoutingAddress: %s@%s
 		psu_sys = PSUSys()
 
 		log.info("presync_email_task(): processing user: " + login)
+		optin_key = 'email_copy_progress.' + login
 		key = 'email_presync_progress.' + login
+
+		# Check to see if an opt-in task is running--if so, exit
+		if mc.get(optin_key) != None:
+			log.info("presync_email_task(): user currently opting-in: " + login)
+			return(True)
 
 		account_status = psu_sys.google_account_status(login)
 
