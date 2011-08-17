@@ -5,18 +5,19 @@ from django.template import RequestContext
 from tasks import copy_email_task
 from psusys import PSUSys
 import logging
+from string import lower
 #from celery import task
 
 log = logging.getLogger('ghoul.views')
 
 def select(request):
 	if 'REMOTE_USER' in request.META:
-		login = request.META['REMOTE_USER'] 
+		login = lower(request.META['REMOTE_USER']) 
 		request.session['login'] = login
 		log.info('views.select() found user in META: ' + login )
 	else:
 		if 'login' in request.POST:
-			login = request.POST['login']
+			login = lower(request.POST['login'])
 			request.session['login'] = login
 			log.info('views.select() login found in POST: ' + login )
 		else: 
