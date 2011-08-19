@@ -732,6 +732,12 @@ mailRoutingAddress: %s@%s
 			log.info("copy_email_task(): has not already completed opt-in: " + login)
 			mc.set(key, 40)
 
+		# We temporarily enable suspended accounts for the purposes of synchronization
+		if account_status["enabled"] == False:
+			log.info("presync_email_task(): temporarily enabling account: " + login)
+			psu_sys.enable_google_account(login)	# Enable account if previously disabled
+			mc.set(key, 45)
+
 		# Send conversion info email to users Google account
 		log.info("copy_email_task(): conversion in progress email: " + login)
 		psu_sys.send_conversion_email_in_progress(login)
@@ -783,6 +789,12 @@ mailRoutingAddress: %s@%s
 		log.info("copy_email_task(): sending post conversion email to PSU: " + login)
 		psu_sys.send_conversion_email_psu(login)
 
+		# If the account was disabled, well...
+		if account_status["enabled"] == False:
+			log.info("presync_email_task(): disabling account: " + login)
+			psu_sys.disable_google_account(login)	# Enable account if previously disabled
+			mc.set(key, 90)
+
 		mc.set(key, 100)
 
 		return(True)
@@ -825,12 +837,12 @@ mailRoutingAddress: %s@%s
 		if account_status["enabled"] == False:
 			log.info("presync_email_task(): temporarily enabling account: " + login)
 			psu_sys.enable_google_account(login)	# Enable account if previously disabled
-			mc.set(key, 50)
+			mc.set(key, 45)
 
 		# Enable Google email for the user
 		log.info("presync_email_task(): temporarily enabling Google mail: " + login)
 		psu_sys.enable_gmail(login)
-		mc.set(key, 60)
+		mc.set(key, 50)
 
 		# Synchronize email to Google (and wait)
 		log.info("presync_email_task(): syncing email: " + login)
