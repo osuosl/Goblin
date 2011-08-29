@@ -48,7 +48,11 @@ class PSUSys:
 				large_email = {}
 				large_emails.append(large_email)
 				for key in ['Subject', 'Date', 'From']:
-					large_email[key] = msg[key]
+					if key in msg:
+						large_email[key] = msg[key]
+					else:
+						large_email[key] = 'none'
+						
 		return large_emails
 
 	def opt_in_already(self, login):
