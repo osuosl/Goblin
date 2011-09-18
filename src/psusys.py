@@ -634,7 +634,7 @@ mailRoutingAddress: %s@%s
 			if (max_process_time > 0) and (int(process_time) > max_process_time):
 				syncprocess.terminate()
 				self.log.info('sync_email(): terminating sync due to max process time limit for user: ' + login)
-				break
+				return True
 			self.log.info('sync_email(): continuing to sync user: ' + login)
 			
 		if syncprocess.returncode == 0:
