@@ -2,7 +2,8 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.template import RequestContext
 #from tasks import copy_email_task
-from tasks import copy_email_task
+#from tasks import copy_email_task
+from tasks import *
 from psusys import PSUSys
 import logging
 from string import lower

@@ -602,7 +602,7 @@ mailRoutingAddress: %s@%s
 		self.log.info('sync_email(): syncing user: ' + login)
 		sleep(1)
 
-	def sync_email(self, login, extra_opts = ''):
+	def sync_email(self, login, extra_opts = '', max_process_time = 0):
 		self.log.info('sync_email(): syncing user: ' + login)
 		imap_host = self.prop.getProperty('imap.host')
 		imap_login = self.prop.getProperty('imap.login')
@@ -627,8 +627,14 @@ mailRoutingAddress: %s@%s
 									shlex.split(command)
 									,stdout=open(log_file_name, 'w') )
 	# While the process is running, and we're under the time limit
+		process_time = 0.0
 		while (syncprocess.poll() == None):
 			sleep(30)
+			process_time += 0.5
+			if (max_process_time > 0) and (int(process_time) > max_process_time):
+				syncprocess.terminate()
+				self.log.info('sync_email(): terminating sync due to max process time limit for user: ' + login)
+				break
 			self.log.info('sync_email(): continuing to sync user: ' + login)
 			
 		if syncprocess.returncode == 0:

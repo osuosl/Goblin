@@ -42,6 +42,11 @@ def presync_email_task(login):
 	return(result)
 
 @task(ignore_result = True)
+def presync_email_test_task(login):
+	log = logging.getLogger()
+	log.info('presync_email_test_task(): running presync_email_test_task(' + login + ')')
+
+@task(ignore_result = True)
 def recover_copy_email_task(login):
 	log = logging.getLogger()
 	log.info('copy_email_task(): running recover_copy_email_task(' + login + ')')
