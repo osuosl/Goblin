@@ -816,6 +816,8 @@ mailRoutingAddress: %s@%s
 		mc = memcache.Client([memcache_url], debug=0)
 		psu_sys = PSUSys()
 
+		max_process_time = 60 # Time is in minutes
+		
 		log.info("presync_email_task(): processing user: " + login)
 		optin_key = 'email_copy_progress.' + login
 		key = 'email_presync_progress.' + login
@@ -856,11 +858,11 @@ mailRoutingAddress: %s@%s
 
 		# Synchronize email to Google (and wait)
 		log.info("presync_email_task(): syncing email: " + login)
-		status = psu_sys.sync_email_delete2(login, max_process_time = 2)
+		status = psu_sys.sync_email_delete2(login, max_process_time = max_process_time)
 		retry_count = 0
 		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			log.info("presync_email_task(): Retry syncing email: " + login)
-			status = psu_sys.sync_email_delete2(login)
+			status = psu_sys.sync_email_delete2(login, max_process_time = max_process_time)
 			sleep(4 ** retry_count)
 			retry_count = retry_count + 1
 
@@ -878,7 +880,7 @@ mailRoutingAddress: %s@%s
 			mc.set(key, 90)
 
 		# Call it good.
-		mc.set(key, 100)
+		#mc.set(key, 100)
 
 		return(True)
 	
