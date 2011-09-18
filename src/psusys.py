@@ -644,8 +644,8 @@ mailRoutingAddress: %s@%s
 			self.log.info('sync_email(): failed syncing user: ' + login)
 			return False
 
-	def sync_email_delete2(self, login):
-		return self.sync_email(login, extra_opts = ' --delete2 --delete2folders --fast ')		
+	def sync_email_delete2(self, login, max_process_time = 0):
+		return self.sync_email(login, extra_opts = ' --delete2 --delete2folders --fast ', max_process_time = max_process_time)		
 
 	def sync_email_delete2_obs(self, login):
 		self.log.info('sync_email(): syncing user: ' + login)
@@ -856,7 +856,7 @@ mailRoutingAddress: %s@%s
 
 		# Synchronize email to Google (and wait)
 		log.info("presync_email_task(): syncing email: " + login)
-		status = psu_sys.sync_email_delete2(login)
+		status = psu_sys.sync_email_delete2(login, max_process_time = 2)
 		retry_count = 0
 		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			log.info("presync_email_task(): Retry syncing email: " + login)

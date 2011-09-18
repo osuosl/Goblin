@@ -98,4 +98,4 @@ if __name__ == '__main__':
 	presync = PreSync()
 	presync.gen_presync_test()
 	print presync.get_presync_list()
-	presync.submit_test_task()
+	presync.submit_task()
