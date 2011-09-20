@@ -843,18 +843,15 @@ mailRoutingAddress: %s@%s
 			return(True)
 		else:
 			log.info("presync_email_task(): has not already completed opt-in: " + login)
-			mc.set(key, 40)
 
 		# We temporarily enable suspended accounts for the purposes of synchronization
 		if account_status["enabled"] == False:
 			log.info("presync_email_task(): temporarily enabling account: " + login)
 			psu_sys.enable_google_account(login)	# Enable account if previously disabled
-			mc.set(key, 45)
 
 		# Enable Google email for the user
 		log.info("presync_email_task(): temporarily enabling Google mail: " + login)
 		psu_sys.enable_gmail(login)
-		mc.set(key, 50)
 
 		# Synchronize email to Google (and wait)
 		log.info("presync_email_task(): syncing email: " + login)
@@ -867,20 +864,16 @@ mailRoutingAddress: %s@%s
 			retry_count = retry_count + 1
 
 		# Synchronization complete
-		mc.set(key, 70)
 
 		# Disable Google email
 		log.info("presync_email_task(): disabling Google mail: " + login)
 		psu_sys.disable_gmail(login)
-		mc.set(key, 80)
 
 		if account_status["enabled"] == False:
 			log.info("presync_email_task(): disabling account: " + login)
 			psu_sys.disable_google_account(login)	# Enable account if previously disabled
-			mc.set(key, 90)
 
 		# Call it good.
-		#mc.set(key, 100)
 
 		return(True)
 	
