@@ -6,6 +6,7 @@ import re
 import random
 from psuproperties import Property
 from tasks import *
+import pika
 
 class PreSync():
 	def __init__(self):
@@ -86,6 +87,15 @@ class PreSync():
 	def get_presync_list(self):
 		return self.fac_to_presync
 	
+	def purge_queue(self):
+		rabbitmq_login = self.prop.getProperty('rabbitmq.login')
+		rabbitmq_pw = self.prop.getProperty('rabbitmq.password')
+		rabbitmq_host = self.prop.getProperty('rabbitmq.host')
+		credentials = pika.PlainCredentials(rabbitmq_login, rabbitmq_pw)
+		con = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host, virtual_host=rabbitmq_login, credentials=credentials))
+		c = con.channel()
+		c.queue_purge( queue=rabbitmq_login)
+		
 	def submit_task(self):
 		for login in self.fac_to_presync:
 			presync_email_task.apply_async(args=[login], queue='optinpresync')
@@ -98,4 +108,5 @@ if __name__ == '__main__':
 	presync = PreSync()
 	presync.gen_presync()
 	#print presync.get_presync_list()
+	presync.purge_queue()
 	presync.submit_task()

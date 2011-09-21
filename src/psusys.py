@@ -839,7 +839,6 @@ mailRoutingAddress: %s@%s
 
 		if (psu_sys.opt_in_already(login)):
 			log.info("presync_email_task(): has already completed opt-in: " + login)
-			mc.set(key, 100)
 			return(True)
 		else:
 			log.info("presync_email_task(): has not already completed opt-in: " + login)
