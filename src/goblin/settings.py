@@ -1,10 +1,10 @@
 # Django settings for goblin project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Dennis Gilbert', 'dennis@pdx.edu'),
+    ('Justin Dugger', 'justin.duggre@oregonstate.edu'),
 )
 
 MANAGERS = ADMINS
@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/vol/goblin/src/sqlite.db',                      # Or path to database file if using sqlite3.
+        'NAME': '/var/www/sqlite.db',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -106,7 +106,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/vol/goblin/templates'
+    '/var/www/goblin/templates'
 )
 
 INSTALLED_APPS = (
@@ -131,20 +131,26 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-		'dateTime': {
+	'dateTime': {
 			'format': '%(asctime)s %(levelname)-8s %(name)-15s %(message)s'
 		}
-	},
+    },
+    'filters': {
+       'require_debug_false': {
+	    '()': 'django.utils.log.RequireDebugFalse'
+	}
+    },
     'handlers': {
 		'mail_admins': {
 			'level': 'ERROR',
+			'filters': ['require_debug_false'],
 			'class': 'django.utils.log.AdminEmailHandler'
 		},
 		'rotating_log': {
 			'level': 'DEBUG',
 			'class': 'logging.handlers.RotatingFileHandler',
 			'formatter': 'dateTime',
-			'filename': '/vol/goblin/var/goblin.log',
+			'filename': '/var/log/goblin/goblin.log',
 			'maxBytes':	4000000,
 			'backupCount': 5,
 		},
