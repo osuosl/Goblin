@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Justin Dugger', 'justin.duggre@oregonstate.edu'),
+    ('Admin', 'root@localhost'),
 )
 
 MANAGERS = ADMINS
@@ -201,3 +201,9 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
     }
 }
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
+
