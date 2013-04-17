@@ -10,7 +10,7 @@ Vagrant::Config.run do |config|
   
   config.vm.provision :shell, :path => "config.sh"
 
-  config.vm.share_folder "src", "/home/vagrant/goblin/src", "src/"
+  config.vm.share_folder "goblin", "/home/vagrant/goblin/src", "./"
 
   # Forward ports from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
