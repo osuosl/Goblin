@@ -150,7 +150,7 @@ LOGGING = {
 			'level': 'DEBUG',
 			'class': 'logging.handlers.RotatingFileHandler',
 			'formatter': 'dateTime',
-			'filename': '/var/log/goblin.log',
+			'filename': '/home/vagrant/log/goblin.log',
 			'maxBytes':	4000000,
 			'backupCount': 5,
 		},
