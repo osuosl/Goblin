@@ -2,7 +2,7 @@ from celery.task import task
 import memcache
 from time import sleep
 from celery.log import logging
-from psuproperties import Property
+from property import Property
 from psusys import PSUSys
 
 @task

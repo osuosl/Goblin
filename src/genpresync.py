@@ -4,7 +4,7 @@ import shlex
 from time import sleep
 import re
 import random
-from psuproperties import Property
+from property import Property
 from tasks import *
 import pika
 
