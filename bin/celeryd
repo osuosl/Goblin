@@ -109,9 +109,9 @@ DEFAULT_NODES="celery"
 #fi
 
 
-### PSU Google Migration Specific Settings ###
-CELERYD_PID_FILE="/vol/goblin/var/celeryd@%n.pid"
-CELERYD_LOG_FILE="/vol/goblin/var/celeryd@%n.log"
+### OSU Google Migration Specific Settings ###
+CELERYD_PID_FILE="/var/goblin/celeryd@%n.pid"
+CELERYD_LOG_FILE="/var/goblin/celeryd@%n.log"
 #CELERYD="/usr/bin/celeryd"
 CELERYD_LOG_LEVEL="INFO"
 CELERYD_NODES="celery"
