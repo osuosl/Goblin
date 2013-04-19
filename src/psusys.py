@@ -1,5 +1,5 @@
 from imapstat import imapstat
-from psuproperties import Property
+from property import Property
 import logging
 import simplejson
 import memcache
@@ -33,9 +33,9 @@ class PSUSys:
 		self.log = logger
 		
 	def large_emails(self, login):
-		imap_host = self.prop.getProperty('imap.host')
-		imap_login = self.prop.getProperty('imap.login')
-		imap_password = self.prop.getProperty('imap.password')
+		imap_host = self.prop.get('imap.host')
+		imap_login = self.prop.get('imap.login')
+		imap_password = self.prop.get('imap.password')
 		self.log.info('PSUSys.large_emails() login: ' + login)
 		
 		ims = imapstat( imap_host, imap_login, imap_password )
@@ -57,9 +57,9 @@ class PSUSys:
 
 	def opt_in_already(self, login):
 		ldap = psuldap('/vol/certs')
-		ldap_host = self.prop.getProperty('ldap.read.host')
-		ldap_login = self.prop.getProperty('ldap.login')
-		ldap_password = self.prop.getProperty('ldap.password')
+		ldap_host = self.prop.get('ldap.read.host')
+		ldap_login = self.prop.get('ldap.login')
+		ldap_password = self.prop.get('ldap.password')
 		self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
 				
 		ldap.connect( ldap_host, ldap_login, ldap_password)
@@ -75,9 +75,9 @@ class PSUSys:
 
 	def is_oamed(self, login):
 		ldap = psuldap('/vol/certs')
-		ldap_host = self.prop.getProperty('ldap.read.host')
-		ldap_login = self.prop.getProperty('ldap.login')
-		ldap_password = self.prop.getProperty('ldap.password')
+		ldap_host = self.prop.get('ldap.read.host')
+		ldap_login = self.prop.get('ldap.login')
+		ldap_password = self.prop.get('ldap.password')
 		self.log.info('is_oamed(): connecting to LDAP: ' + ldap_host)
 				
 		attr = 'eduPersonAffiliation'
@@ -98,9 +98,9 @@ class PSUSys:
 
 	def get_ldap_attr(self, login, attr):
 		ldap = psuldap('/vol/certs')
-		ldap_host = self.prop.getProperty('ldap.read.host')
-		ldap_login = self.prop.getProperty('ldap.login')
-		ldap_password = self.prop.getProperty('ldap.password')
+		ldap_host = self.prop.get('ldap.read.host')
+		ldap_login = self.prop.get('ldap.login')
+		ldap_password = self.prop.get('ldap.password')
 		self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
 				
 		ldap.connect( ldap_host, ldap_login, ldap_password)
@@ -125,14 +125,14 @@ class PSUSys:
 			return False
 
 		# Is this user explicitly denied
-		deny_users = prop.getProperty('deny.users')
+		deny_users = prop.get('deny.users')
 		if login in deny_users:
 			return False
 
 		# Is this user explicitly allowed
-		allow_all = prop.getProperty('allow.all')
+		allow_all = prop.get('allow.all')
 		if allow_all == 'False':
-			allow_users = prop.getProperty('allow.users')
+			allow_users = prop.get('allow.users')
 			if login in allow_users:
 				return True
 		else:
@@ -144,7 +144,7 @@ class PSUSys:
 	# Temporary hack till Adrian sorts-out the access issues for modifying LDAP
 	def route_to_google_hack(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
-		memcache_url = prop.getProperty('memcache.url')
+		memcache_url = prop.get('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 		mc.set('gmx_done.' + login, None)
 		mcq = MemcacheQueue('to_google', mc)
@@ -163,9 +163,9 @@ class PSUSys:
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
 		self.log.info('route_to_google(): Routing mail to Google for user: ' + login)
-		ldap_host = prop.getProperty('ldap.write.host')
-		ldap_login = prop.getProperty('ldap.login')
-		ldap_password = prop.getProperty('ldap.password')
+		ldap_host = prop.get('ldap.write.host')
+		ldap_login = prop.get('ldap.login')
+		ldap_password = prop.get('ldap.password')
 		
 		cmd = '/usr/bin/ldapmodify -x -h ' + ldap_host + ' -D ' + ldap_login + " -w " + ldap_password
 
@@ -219,9 +219,9 @@ mailHost: gmx.pdx.edu
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
 		self.log.info('update_mailHost(): Routing mail to psu for user: ' + login)
-		ldap_host = prop.getProperty('ldap.write.host')
-		ldap_login = prop.getProperty('ldap.login')
-		ldap_password = prop.getProperty('ldap.password')
+		ldap_host = prop.get('ldap.write.host')
+		ldap_login = prop.get('ldap.login')
+		ldap_password = prop.get('ldap.password')
 		
 		cmd = '/usr/bin/ldapmodify -x -h ' + ldap_host + ' -D ' + ldap_login + " -w " + ldap_password
 
@@ -252,9 +252,9 @@ mailHost: %s
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
 		self.log.info('update_mailRoutingAddress(): Updating mailRoutingAddress for user: ' + login)
-		ldap_host = prop.getProperty('ldap.write.host')
-		ldap_login = prop.getProperty('ldap.login')
-		ldap_password = prop.getProperty('ldap.password')
+		ldap_host = prop.get('ldap.write.host')
+		ldap_login = prop.get('ldap.login')
+		ldap_password = prop.get('ldap.password')
 		
 		cmd = '/usr/bin/ldapmodify -x -h ' + ldap_host + ' -D ' + ldap_login + " -w " + ldap_password
 
@@ -284,7 +284,7 @@ mailRoutingAddress: %s@%s
 	# Temporary hack till Adrian sorts-out the access issues for modifying LDAP
 	def route_to_psu_hack(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
-		memcache_url = prop.getProperty('memcache.url')
+		memcache_url = prop.get('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 		mc.set('psu_done.' + login, None)
 		mcq = MemcacheQueue('to_psu', mc)
@@ -299,9 +299,9 @@ mailRoutingAddress: %s@%s
 		self.log.info('route_to_google(): routing mail to google for user: ' + login)
 		ldap = psuldap('/vol/certs')
 		# ldapsearch -x -h ldap.oit.pdx.edu -b 'dc=pdx, dc=edu' uid=dennis mailhost
-		ldap_host = self.prop.getProperty('ldap.host')
-		ldap_login = self.prop.getProperty('ldap.login')
-		ldap_password = self.prop.getProperty('ldap.password')
+		ldap_host = self.prop.get('ldap.host')
+		ldap_login = self.prop.get('ldap.login')
+		ldap_password = self.prop.get('ldap.password')
 		#self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
 		ldap.connect( ldap_host, ldap_login, ldap_password)
 		
@@ -311,9 +311,9 @@ mailRoutingAddress: %s@%s
 	def route_to_psu_future(self, login):
 		ldap = psuldap('/vol/certs')
 		# ldapsearch -x -h ldap.oit.pdx.edu -b 'dc=pdx, dc=edu' uid=dennis mailhost
-		ldap_host = self.prop.getProperty('ldap.host')
-		ldap_login = self.prop.getProperty('ldap.login')
-		ldap_password = self.prop.getProperty('ldap.password')
+		ldap_host = self.prop.get('ldap.host')
+		ldap_login = self.prop.get('ldap.login')
+		ldap_password = self.prop.get('ldap.password')
 		#self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
 		ldap.connect( ldap_host, ldap_login, ldap_password)
 		
@@ -322,7 +322,7 @@ mailRoutingAddress: %s@%s
 
 	def get_user(self, meta):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
-		memcache_url = prop.getProperty('memcache.url')
+		memcache_url = prop.get('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 		
 		login = None
@@ -341,7 +341,7 @@ mailRoutingAddress: %s@%s
 
 	def set_user(self, login, meta):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
-		memcache_url = prop.getProperty('memcache.url')
+		memcache_url = prop.get('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 		
 		if self.META_IDENTITY in meta:
@@ -424,9 +424,9 @@ mailRoutingAddress: %s@%s
 		
 	def is_gmail_enabled(self, login):
 		self.log.info('is_gmail_enabled(): Checking if gmail is enabled for user: ' + login)
-		email = self.prop.getProperty('google.email')
-		domain = self.prop.getProperty('google.domain')
-		pw = self.prop.getProperty('google.password')
+		email = self.prop.get('google.email')
+		domain = self.prop.get('google.domain')
+		pw = self.prop.get('google.password')
 		
 		client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
 		retry_count = 0; status = False; result = False
@@ -453,9 +453,9 @@ mailRoutingAddress: %s@%s
 		
 	def google_account_status(self, login):
 		self.log.info('google_account_status(): Querying account status for user: ' + login)
-		email = self.prop.getProperty('google.email')
-		domain = self.prop.getProperty('google.domain')
-		pw = self.prop.getProperty('google.password')
+		email = self.prop.get('google.email')
+		domain = self.prop.get('google.domain')
+		pw = self.prop.get('google.password')
 
 		client = gdata.apps.service.AppsService(email=email, domain=domain, password=pw)
 		retry_count = 0; status = False
@@ -487,9 +487,9 @@ mailRoutingAddress: %s@%s
 
 	def enable_google_account(self, login):
 		self.log.info('enable_google_account(): Enabling account for user: ' + login)
-		email = self.prop.getProperty('google.email')
-		domain = self.prop.getProperty('google.domain')
-		pw = self.prop.getProperty('google.password')
+		email = self.prop.get('google.email')
+		domain = self.prop.get('google.domain')
+		pw = self.prop.get('google.password')
 
 		client = gdata.apps.service.AppsService(email=email, domain=domain, password=pw)
 		retry_count = 0; status = False
@@ -519,9 +519,9 @@ mailRoutingAddress: %s@%s
 
 	def disable_google_account(self, login):
 		self.log.info('disable_google_account(): Disabling account for user: ' + login)
-		email = self.prop.getProperty('google.email')
-		domain = self.prop.getProperty('google.domain')
-		pw = self.prop.getProperty('google.password')
+		email = self.prop.get('google.email')
+		domain = self.prop.get('google.domain')
+		pw = self.prop.get('google.password')
 
 		client = gdata.apps.service.AppsService(email=email, domain=domain, password=pw)
 		retry_count = 0; status = False
@@ -560,9 +560,9 @@ mailRoutingAddress: %s@%s
 
 	def gmail_set_active(self, login):
 		self.log.info('enable_gmail(): Enabling gmail for user: ' + login)
-		email = self.prop.getProperty('google.email')
-		domain = self.prop.getProperty('google.domain')
-		pw = self.prop.getProperty('google.password')
+		email = self.prop.get('google.email')
+		domain = self.prop.get('google.domain')
+		pw = self.prop.get('google.password')
 		
 		client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
 		retry_count = 0; status = False
@@ -588,9 +588,9 @@ mailRoutingAddress: %s@%s
 		
 	def disable_gmail(self, login):
 		self.log.info('disable_gmail(): Disabling gmail for user: ' + login)
-		email = self.prop.getProperty('google.email')
-		domain = self.prop.getProperty('google.domain')
-		pw = self.prop.getProperty('google.password')
+		email = self.prop.get('google.email')
+		domain = self.prop.get('google.domain')
+		pw = self.prop.get('google.password')
 		
 		client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
 		client.ProgrammaticLogin()
@@ -604,8 +604,8 @@ mailRoutingAddress: %s@%s
 
 	def sync_email(self, login, extra_opts = '', max_process_time = 0):
 		self.log.info('sync_email(): syncing user: ' + login)
-		imap_host = self.prop.getProperty('imap.host')
-		imap_login = self.prop.getProperty('imap.login')
+		imap_host = self.prop.get('imap.host')
+		imap_login = self.prop.get('imap.login')
 				
 		imapsync_dir = "/vol/google-imap/"
 		imapsync_cmd = imapsync_dir + "imapsync"
@@ -650,8 +650,8 @@ mailRoutingAddress: %s@%s
 	def sync_email_delete2_obs(self, login):
 		self.log.info('sync_email(): syncing user: ' + login)
 		imapsync_cmd = '/vol/google-imap/imapsync'
-		imap_host = self.prop.getProperty('imap.host')
-		imap_login = self.prop.getProperty('imap.login')
+		imap_host = self.prop.get('imap.host')
+		imap_login = self.prop.get('imap.login')
 		cyrus_pf = '/opt/google-imap/cyrus.pf'
 		google_pf = '/opt/google-imap/google-prod.pf'
 		
@@ -677,7 +677,7 @@ mailRoutingAddress: %s@%s
 		
 	def is_processing(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
-		memcache_url = prop.getProperty('memcache.url')
+		memcache_url = prop.get('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 		key = 'email_copy_progress.' + login
 		cached_data = mc.get(key)
@@ -688,7 +688,7 @@ mailRoutingAddress: %s@%s
 
 	def is_web_suspended(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
-		web_suspended = prop.getProperty('web.suspended')
+		web_suspended = prop.get('web.suspended')
 
 		if web_suspended == 'True':
 			self.log.info('is_web_suspended(): user: ' + login + " visited while the opt-in web site was suspended")
@@ -698,7 +698,7 @@ mailRoutingAddress: %s@%s
 	
 	def copy_progress(self, login):	
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
-		memcache_url = prop.getProperty('memcache.url')
+		memcache_url = prop.get('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 
 		#cache_key = "copy_progress_%s" % (request.GET['login', 'default'])
@@ -717,7 +717,7 @@ mailRoutingAddress: %s@%s
 	def copy_email_task(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 		log = logging.getLogger('')		# Logging is occuring within celery worker here
-		memcache_url = prop.getProperty('memcache.url')
+		memcache_url = prop.get('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 		psu_sys = PSUSys()
 
@@ -812,7 +812,7 @@ mailRoutingAddress: %s@%s
 	def presync_email_task(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 		log = logging.getLogger('')		# Logging is occuring within celery worker here
-		memcache_url = prop.getProperty('memcache.url')
+		memcache_url = prop.get('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 		psu_sys = PSUSys()
 
@@ -884,7 +884,7 @@ mailRoutingAddress: %s@%s
 		
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 		log = logging.getLogger('')		# Logging is occuring within celery worker here
-		memcache_url = prop.getProperty('memcache.url')
+		memcache_url = prop.get('memcache.url')
 		mc = memcache.Client([memcache_url], debug=0)
 		psu_sys = PSUSys()
 
