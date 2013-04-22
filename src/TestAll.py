@@ -5,7 +5,7 @@ from psusys import PSUSys
 class TestAll(unittest.TestCase):
 	def setUp(self):
 		self.psusys = PSUSys()
-		logging.config.fileConfig('/vol/goblin/etc/logging.conf')
+		logging.config.fileConfig('/etc/goblin/logging.conf')
 		log = logging.getLogger('goblin.psusys')
 		self.psusys.setLogger(log)
 

@@ -23,7 +23,7 @@ class PSUSys:
 		print "Logging default handlers: " + str(self.log.handlers)
 		if len(self.log.handlers) == 0:
 			# No handlers for this logger, assume logging is not initialized..
-			logging.config.fileConfig('/vol/goblin/etc/logging.conf')
+			logging.config.fileConfig('/etc/goblin/logging.conf')
 			log = logging.getLogger('goblin.psusys')
 			self.setLogger(log)
 
