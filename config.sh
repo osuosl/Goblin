@@ -7,3 +7,4 @@ apt-get install -y virtualenvwrapper
 apt-get install -y libsasl2-dev
 apt-get install -y libldap2-dev
 apt-get install -y python2.6-dev
+apt-get install -y ldap-utils
