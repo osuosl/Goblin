@@ -1,4 +1,4 @@
-from imapstat import imapstat
+from google-imap import imapstat
 from property import Property
 import logging
 import simplejson
