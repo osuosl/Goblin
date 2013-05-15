@@ -12,7 +12,6 @@ kombu==1.5.1
 ordereddict==1.1
 pika==0.9.12
 pyparsing==1.5.7
-python-apt==0.7.100.1-squeeze1
 python-dateutil==1.5
 python-ldap==2.4.10
 python-memcached==1.48
