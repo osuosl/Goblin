@@ -4,7 +4,6 @@ amqplib==1.0.2
 anyjson==0.3.3
 billiard==2.7.3.26
 celery==2.3.3
-distribute==0.6.10
 gdata==2.0.17
 importlib==1.0.2
 jprops==0.2
