@@ -1,9 +1,9 @@
-from google-imap import imapstat
+from googleimap import imapstat
 from property import Property
 import logging
 import simplejson
 import memcache
-from psuldap import psuldap
+from googleimap.psuldap import psuldap
 from time import sleep
 import shlex, subprocess
 from memcacheq import MemcacheQueue
