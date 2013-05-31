@@ -5,7 +5,7 @@ for path in [ '/var/www/goblin/shared/env/bin','/home/vagrant/goblin/etc']:
 	if path not in sys.path:
 		sys.path.append(path)
 
-ACTIVATE = os.path.join(sys.path, 'python env/bin/activate_this.py')
+ACTIVATE = os.path.append('python env/bin/activate_this.py')
 
 sys.path.insert(0, PROJECT_PATH)
  
