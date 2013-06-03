@@ -1,16 +1,15 @@
-import os
-import sys
+import os, sys
 
-for path in [ '/var/www/goblin/shared/env/bin','/home/vagrant/goblin/etc']:
-	if path not in sys.path:
-		sys.path.append(path)
+# get root of project
+path =  os.path.dirname(os.path.realpath(__file__))
+path = '/var/www/goblin/shared/env'
 
-ACTIVATE = os.path.join('python env/bin/activate_this.py')
+# activate virtual environment
+activate_this = '%s/bin/activate_this.py' % path
+execfile(activate_this, dict(__file__=activate_this))
 
-sys.path.insert(0, PROJECT_PATH)
- 
-execfile( ACTIVATE, dict(__file__=ACTIVATE) )
 
+sys.path.insert(0, '/var/www/goblin/current')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'goblin.settings'
 
 import django.core.handlers.wsgi
