@@ -80,7 +80,7 @@ class PSUSys:
 		ldap_password = self.prop.get('ldap.password')
 		self.log.info('is_oamed(): connecting to LDAP: ' + ldap_host)
 				
-		attr = 'eduPersonAffiliation'
+		attr = 'googlePreSync'
 		ldap.connect( ldap_host, ldap_login, ldap_password)
 		res = ldap.search( searchfilter = 'uid=' + login, attrlist = [attr])
 		
