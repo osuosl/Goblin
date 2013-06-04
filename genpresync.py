@@ -19,7 +19,7 @@ class PreSync():
 
 	def gen_presync(self):
 		tmp_file = '/tmp/presync'
-		command = 'ldapsearch -x -LLL -h ldap-batch.oit.pdx.edu -w "jr83;gZ" -D uid=lms-system,ou=profile,dc=pdx,dc=edu  -b ou=people,dc=pdx,dc=edu  "(&(mailHost=cyrus.psumail.pdx.edu)(!(eduPersonAffiliation=DELETED))(!(psuUnixAccountStatus=pending))(!(eduPersonAffiliation=SERVICE))(!(eduPersonAffiliation=SPONSORED))(!(eduPersonAffiliation=TERMINATED)))" uid uniqueidentifier sn givenName eduPersonAffiliation'
+		command = 'ldapsearch -x -LLL -h ldap.onid.orst.edu -D uid=onid_googlesync,ou=specials,o=orst.edu -b ou=people,o=orst.edu "(googlePreSync=1)" uid uniqueidentifier sn givenName osuPrimaryAffiliation'
 		syncprocess = subprocess.Popen(shlex.split(command), stdout=open(tmp_file, 'w'))
 		while (syncprocess.poll() == None):
 			sleep(30)
