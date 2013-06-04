@@ -19,7 +19,7 @@ class PreSync():
 
 	def gen_presync(self):
 		tmp_file = '/tmp/presync'
-		command = 'ldapsearch -x -LLL -h ldap.onid.orst.edu -D uid=onid_googlesync,ou=specials,o=orst.edu -b ou=people,o=orst.edu "(googlePreSync=1)" uid uniqueidentifier sn givenName osuPrimaryAffiliation'
+		command = 'ldapsearch -x -LLL -h ldap.onid.orst.edu -D uid=onid_googlesync,ou=specials,o=orst.edu -b ou=people,o=orst.edu "(googlePreSync=1)" uid osuUID sn givenName osuPrimaryAffiliation'
 		syncprocess = subprocess.Popen(shlex.split(command), stdout=open(tmp_file, 'w'))
 		while (syncprocess.poll() == None):
 			sleep(30)
@@ -31,13 +31,6 @@ class PreSync():
 		role = ''
 		invalid = False
 		cmd = ''
-		facRe = re.compile('FAC', re.IGNORECASE)
-		staffRe = re.compile('STAFF', re.IGNORECASE)
-		empRe = re.compile('EMP', re.IGNORECASE)
-		stuRe = re.compile('STUDENT', re.IGNORECASE)
-		disabledRe = re.compile('DISABLED', re.IGNORECASE)
-		terminatedRe = re.compile('TERMINATED', re.IGNORECASE)
-		expiredRe = re.compile('EXPIRED', re.IGNORECASE)
 		
 		for line in lines:
 			line = line.rstrip()
@@ -53,16 +46,8 @@ class PreSync():
 					lastName = v.lstrip()
 				if (a == "givenName"):
 					firstName = v.lstrip()
-				if (a == 'eduPersonAffiliation'):
-					if (facRe.search(v) is not None) or (staffRe.search(v) is not None)  or (empRe.search(v) is not None) and not invalid:
-						role = 'Faculty'
-					elif (stuRe.search(v) is not None) and (role <> 'Faculty') and not invalid: 
-						role = 'Student'
-					elif (disabledRe.search(v) is not None) or (terminatedRe.search(v) is not None) or (expiredRe.search(v) is not None):
-						invalid = True
-						role = ''
 						
-				if (a == "uniqueidentifier"):
+				if (a == "osuUID"):
 					pidm = ""
 					id = v.lstrip()
 					if (id[0:1] == "B"):
