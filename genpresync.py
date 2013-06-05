@@ -12,7 +12,7 @@ class PreSync():
 	def __init__(self):
 		self.fac_to_presync = []
 		self.prop = Property(key_file = 'opt-in.key', properties_file = 'opt-in.properties')
-		self.deny = self.prop.getProperty('deny.users')
+		self.deny = self.prop['deny.users']
 	
 	def gen_presync_test(self):
 		self.fac_to_presync = ['fogartym', 'bjms']
