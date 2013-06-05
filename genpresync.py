@@ -56,17 +56,13 @@ class PreSync():
 						pidm = id[1:]
 			else:
 				if (haveRead == True) and (id):
-					if role == 'Faculty':
-						if loginName not in self.deny:
-							self.fac_to_presync.append(loginName)
-					elif role == 'Student':
-						pass
-						#print 'student ' + loginName
+					if loginName not in self.deny:
+						self.fac_to_presync.append(loginName)
 						
-					firstName = lastName = loginName = pidm = id = ""
-					role = ''
-					haveRead = False
-					invalid = False
+				firstName = lastName = loginName = pidm = id = ""
+				role = ''
+				haveRead = False
+				invalid = False
 		random.shuffle(self.fac_to_presync)
 
 	def get_presync_list(self):
