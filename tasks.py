@@ -9,7 +9,7 @@ from psusys import PSUSys
 def copy_email_task_null(login):
 	prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 	log = logging.getLogger()
-	memcache_url = prop.getProperty('memcache.url')
+	memcache_url = prop['memcache.url']
 	mc = memcache.Client([memcache_url], debug=0)
 
 	timer = 90;

@@ -73,9 +73,9 @@ class PreSync():
 		return self.fac_to_presync
 	
 	def purge_queue(self):
-		rabbitmq_login = self.prop.getProperty('rabbitmq.login')
-		rabbitmq_pw = self.prop.getProperty('rabbitmq.password')
-		rabbitmq_host = self.prop.getProperty('rabbitmq.host')
+		rabbitmq_login = self.prop['rabbitmq.login']
+		rabbitmq_pw = self.prop['rabbitmq.password']
+		rabbitmq_host = self.prop['rabbitmq.host']
 		credentials = pika.PlainCredentials(rabbitmq_login, rabbitmq_pw)
 		con = pika.BlockingConnection(pika.ConnectionParameters(host=rabbitmq_host, virtual_host=rabbitmq_login, credentials=credentials))
 		c = con.channel()
