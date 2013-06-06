@@ -7,6 +7,9 @@ import random
 from property import Property
 from tasks import *
 import pika
+import logging
+
+logging.getLogger('pika').setLevel(logging.WARN)
 
 class PreSync():
 	def __init__(self):
