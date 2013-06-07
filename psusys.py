@@ -362,7 +362,7 @@ mailRoutingAddress: %s@%s
 		self.log.info('send_conversion_email_in_progress(): sending mail to user: ' + login)
 		# Send the conversion confirmation email to the user
 		# Launch a Subprocess here to send email
-		cmd = '/vol/goblin/src/conversion_email_in_progress ' + login
+		cmd = '/var/www/goblin/current/conversion_email_in_progress ' + login
 		
 		syncprocess = subprocess.Popen(	shlex.split(cmd) )
 
@@ -382,7 +382,7 @@ mailRoutingAddress: %s@%s
 		self.log.info('send_conversion_email_psu(): sending mail to user: ' + login)
 		# Send the conversion confirmation email to the user
 		# Launch a Subprocess here to send email
-		cmd = '/vol/goblin/src/conversion_email_psu ' + login
+		cmd = '/var/www/goblin/current/conversion_email_psu ' + login
 		
 		syncprocess = subprocess.Popen(	shlex.split(cmd) )
 
@@ -401,7 +401,7 @@ mailRoutingAddress: %s@%s
 		self.log.info('send_conversion_email_google(): sending mail to user: ' + login)
 		# Send the conversion confirmation email to the user
 		# Launch a Subprocess here to send email
-		cmd = '/vol/goblin/src/conversion_email_google ' + login
+		cmd = '/var/www/goblin/current/conversion_email_google ' + login
 		
 		syncprocess = subprocess.Popen(	shlex.split(cmd) )
 
@@ -607,7 +607,7 @@ mailRoutingAddress: %s@%s
 		imap_host = self.prop.get('imap.host')
 		imap_login = self.prop.get('imap.login')
 				
-		imapsync_dir = "/vol/google-imap/"
+		imapsync_dir = "/etc/google-imap/"
 		imapsync_cmd = imapsync_dir + "imapsync"
 		cyrus_pf = imapsync_dir + "cyrus.pf"
 		google_pf = imapsync_dir + "google-prod.pf"
@@ -649,11 +649,11 @@ mailRoutingAddress: %s@%s
 
 	def sync_email_delete2_obs(self, login):
 		self.log.info('sync_email(): syncing user: ' + login)
-		imapsync_cmd = '/vol/google-imap/imapsync'
+		imapsync_cmd = '/etc/google-imap/imapsync'
 		imap_host = self.prop.get('imap.host')
 		imap_login = self.prop.get('imap.login')
-		cyrus_pf = '/opt/google-imap/cyrus.pf'
-		google_pf = '/opt/google-imap/google-prod.pf'
+		cyrus_pf = '/etc/google-imap/cyrus.pf'
+		google_pf = '/etc/google-imap/google-prod.pf'
 		
 		command = imapsync_cmd + " --pidfile /tmp/imapsync-full-" + login + ".pid --host1 " + imap_host + " --port1 993 --user1 " + login + " --authuser1 " + imap_login + " --passfile1 " + cyrus_pf + " --host2 imap.gmail.com --port2 993 --user2 " + login + "@" + 'pdx.edu' + " --passfile2 " + google_pf + " --ssl1 --ssl2 --maxsize 26214400 --delete2 --delete2folders --authmech1 PLAIN --authmech2 XOAUTH -sep1 '/' --exclude '^Shared Folders' "
 		log_file_name = '/tmp/imapsync-' + login + '-delete.log'
