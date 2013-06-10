@@ -1,6 +1,7 @@
 from googleimap import imapstat
 from property import Property
 import logging
+import logging.config
 import simplejson
 import memcache
 from googleimap.psuldap import psuldap
