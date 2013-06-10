@@ -18,7 +18,7 @@ class PreSync():
 		self.deny = self.prop['deny.users']
 	
 	def gen_presync_test(self):
-		self.fac_to_presync = ['fogartym', 'bjms']
+		self.fac_to_presync = ['pittsh', ]
 
 	def gen_presync(self):
 		tmp_file = '/tmp/presync'
