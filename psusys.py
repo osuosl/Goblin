@@ -598,8 +598,8 @@ mailRoutingAddress: %s@%s
 		client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
 		client.ProgrammaticLogin()
 		customerId = client.RetrieveCustomerId()["customerId"]
-		userEmail = login + '@pdx.edu'
-		client.UpdateOrgUser( customerId, userEmail, '/')
+		userEmail = login + '@' + domain
+		client.UpdateOrgUser( customerId, userEmail, 'NO_SERVICES')
 		
 	def sync_email_null(self, login):
 		self.log.info('sync_email(): syncing user: ' + login)
