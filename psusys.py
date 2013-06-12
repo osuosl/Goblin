@@ -64,13 +64,13 @@ class PSUSys:
 		self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
 				
 		ldap.connect( ldap_host, ldap_login, ldap_password)
-		res = ldap.search( searchfilter = 'uid=' + login, attrlist = ['mailHost'])
+		res = ldap.search( searchfilter = 'uid=' + login, attrlist = ['googleMailEnabled'])
 		
 		for (dn, result) in res:
-			if result.has_key("mailHost"):
-				self.log.info('opt_in_alread() user: ' + login + ' has a mailHost ' + str(result['mailHost']))
-				if "gmx.pdx.edu" in result["mailHost"]:
-					self.log.info('opt_in_alread() user: ' + login + ' has a mailHost entry set to gmx.pdx.edu')
+			if result.has_key("googleMailEnabled"):
+				self.log.info('opt_in_alread() user: ' + login + ' has a googleMailEnabled ' + str(result['googleMailEnabled']))
+				if "1" in result["googleMailEnabled"]:
+					self.log.info('opt_in_alread() user: ' + login + ' has googleMailEnabled already set')
 					return True
 		return False
 
