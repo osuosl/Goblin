@@ -435,8 +435,8 @@ mailRoutingAddress: %s@%s
 			try:
 				client.ProgrammaticLogin()
 				customerId = client.RetrieveCustomerId()["customerId"]
-				userEmail = login + '@pdx.edu'
-				result = (client.RetrieveOrgUser( customerId, userEmail )['orgUnitPath'] == 'people')
+				userEmail = login + '@' + domain
+				result = (client.RetrieveOrgUser( customerId, userEmail )['orgUnitPath'] == 'ONID')
 				status = True
 			except CaptchaRequired :
 				self.log.error('is_gmail_enabled(): Captcha being requested')
