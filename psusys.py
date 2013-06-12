@@ -468,6 +468,8 @@ mailRoutingAddress: %s@%s
 					return {"exists": True, "enabled": True}
 				elif userDisabled == 'true':
 					return {"exists": True, "enabled": False}
+				else 
+					return {"exists": False ,"enabled": False }
 
 			except AppsForYourDomainException, e:
 				if e.error_code == 1301:
