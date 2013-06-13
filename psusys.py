@@ -464,7 +464,7 @@ mailRoutingAddress: %s@%s
 		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			try:
 				client.ClientLogin(email=email, password=pw, source='apps')
-				userDisabled = client.RetrieveUser(login).login.suspended
+				userDisabled = client.RetrieveUser(login).suspended
 				if userDisabled == 'false':
 					return {"exists": True, "enabled": True}
 				elif userDisabled == 'true':
@@ -501,7 +501,7 @@ mailRoutingAddress: %s@%s
 		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			try:
 				client.ClientLogin(email=email, password=pw, source='apps')
-				userDisabled = client.RestoreUser(login).login.suspended
+				userDisabled = client.RestoreUser(login).suspended
 				if userDisabled == 'false':
 					status = True
 
@@ -534,7 +534,7 @@ mailRoutingAddress: %s@%s
 		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			try:
 				client.ClientLogin(email=email, password=pw, source='apps')
-				userDisabled = client.SuspendUser(login).login.suspended
+				userDisabled = client.SuspendUser(login).suspended
 				if userDisabled == 'true':
 					status = True
 
