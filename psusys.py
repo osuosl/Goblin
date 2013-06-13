@@ -458,13 +458,14 @@ mailRoutingAddress: %s@%s
 		email = self.prop.get('google.email')
 		domain = self.prop.get('google.domain')
 		pw = self.prop.get('google.password')
+		useremail = login + '@' + domain
 
 		client = gdata.apps.multidomain.client.MultiDomainProvisioningClient(domain=domain)
 		retry_count = 0; status = False
 		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			try:
 				client.ClientLogin(email=email, password=pw, source='apps')
-				userDisabled = client.RetrieveUser(login).suspended
+				userDisabled = client.RetrieveUser(useremail).suspended
 				if userDisabled == 'false':
 					return {"exists": True, "enabled": True}
 				elif userDisabled == 'true':
