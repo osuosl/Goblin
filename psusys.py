@@ -483,7 +483,8 @@ mailRoutingAddress: %s@%s
 			except( BadAuthentication ):
 				self.log.error('enable_google_account(): Authentication Error' )
 
-			except:
+			except Exception, e:
+				self.log.error('google_account_status(): Exception occured: ' + str(e))
 				# Retry if not an obvious non-retryable error
 				sleep(1)
 
@@ -515,7 +516,8 @@ mailRoutingAddress: %s@%s
 			except( BadAuthentication ):
 				self.log.error('enable_google_account(): Authentication Error' )
 
-			except:
+			except Exception, e:
+				self.log.error('gmail_set_active(): Exception occured: ' + str(e))
 				# Retry if not an obvious non-retryable error
 				sleep(1)
 
@@ -547,7 +549,8 @@ mailRoutingAddress: %s@%s
 			except( BadAuthentication ):
 				self.log.error('disable_google_account(): Authentication Error' )
 
-			except:
+			except Exception, e:
+				self.log.error('gmail_set_active(): Exception occured: ' + str(e))
 				# Retry if not an obvious non-retryable error
 				sleep(1)
 
