@@ -10,6 +10,7 @@ import shlex, subprocess
 from memcacheq import MemcacheQueue
 import gdata.apps.organization.service
 import gdata.apps.service
+import gdata.apps.multidomain.client
 from gdata.service import BadAuthentication
 from gdata.service import CaptchaRequired
 from gdata.apps.service import AppsForYourDomainException
@@ -458,11 +459,11 @@ mailRoutingAddress: %s@%s
 		domain = self.prop.get('google.domain')
 		pw = self.prop.get('google.password')
 
-		client = gdata.apps.service.AppsService(email=email, domain=domain, password=pw)
+		client = gdata.apps.multidomain.client.MultiDomainProvisioningClient(domain=domain)
 		retry_count = 0; status = False
 		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			try:
-				client.ProgrammaticLogin()
+				client.ClientLogin(email=email, password=pw, source='apps')
 				userDisabled = client.RetrieveUser(login).login.suspended
 				if userDisabled == 'false':
 					return {"exists": True, "enabled": True}
@@ -494,11 +495,11 @@ mailRoutingAddress: %s@%s
 		domain = self.prop.get('google.domain')
 		pw = self.prop.get('google.password')
 
-		client = gdata.apps.service.AppsService(email=email, domain=domain, password=pw)
+		client = gdata.apps.multidomain.client.MultiDomainProvisioningClient(domain=domain)
 		retry_count = 0; status = False
 		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			try:
-				client.ProgrammaticLogin()
+				client.ClientLogin(email=email, password=pw, source='apps')
 				userDisabled = client.RestoreUser(login).login.suspended
 				if userDisabled == 'false':
 					status = True
@@ -526,11 +527,11 @@ mailRoutingAddress: %s@%s
 		domain = self.prop.get('google.domain')
 		pw = self.prop.get('google.password')
 
-		client = gdata.apps.service.AppsService(email=email, domain=domain, password=pw)
+		client = gdata.apps.multidomain.client.MultiDomainProvisioningClient(domain=domain)
 		retry_count = 0; status = False
 		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			try:
-				client.ProgrammaticLogin()
+				client.ClientLogin(email=email, password=pw, source='apps')
 				userDisabled = client.SuspendUser(login).login.suspended
 				if userDisabled == 'true':
 					status = True
