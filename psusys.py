@@ -615,7 +615,7 @@ mailRoutingAddress: %s@%s
 		imap_host = self.prop.get('imap.host')
 		imap_login = self.prop.get('imap.login')
 				
-		imapsync_dir = "/etc/google-imap/"
+		imapsync_dir = "/opt/google-imap/"
 		imapsync_cmd = imapsync_dir + "imapsync"
 		cyrus_pf = imapsync_dir + "cyrus.pf"
 		google_pf = imapsync_dir + "google-prod.pf"
@@ -630,10 +630,7 @@ mailRoutingAddress: %s@%s
 			log_file_name = '/tmp/imapsync-' + login + '.log'
 		else:
 			log_file_name = '/tmp/imapsync-' + login + '-delete.log'
-			
-		syncprocess = subprocess.Popen(
-									shlex.split(command)
-									,stdout=open(log_file_name, 'w') )
+		syncprocess = subprocess.Popen(shlex.split(command),stdout=open(log_file_name, 'w') )
 	# While the process is running, and we're under the time limit
 		process_time = 0.0
 		while (syncprocess.poll() == None):
@@ -657,11 +654,11 @@ mailRoutingAddress: %s@%s
 
 	def sync_email_delete2_obs(self, login):
 		self.log.info('sync_email(): syncing user: ' + login)
-		imapsync_cmd = '/etc/google-imap/imapsync'
+		imapsync_cmd = '/opt/google-imap/imapsync'
 		imap_host = self.prop.get('imap.host')
 		imap_login = self.prop.get('imap.login')
-		cyrus_pf = '/etc/google-imap/cyrus.pf'
-		google_pf = '/etc/google-imap/google-prod.pf'
+		cyrus_pf = '/opt/google-imap/cyrus.pf'
+		google_pf = '/opt/google-imap/google-prod.pf'
 		
 		command = imapsync_cmd + " --pidfile /tmp/imapsync-full-" + login + ".pid --host1 " + imap_host + " --port1 993 --user1 " + login + " --authuser1 " + imap_login + " --passfile1 " + cyrus_pf + " --host2 imap.gmail.com --port2 993 --user2 " + login + "@" + 'pdx.edu' + " --passfile2 " + google_pf + " --ssl1 --ssl2 --maxsize 26214400 --delete2 --delete2folders --authmech1 PLAIN --authmech2 XOAUTH -sep1 '/' --exclude '^Shared Folders' "
 		log_file_name = '/tmp/imapsync-' + login + '-delete.log'
