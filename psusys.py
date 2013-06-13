@@ -563,7 +563,7 @@ mailRoutingAddress: %s@%s
 			retry_count = retry_count + 1
 
 	def gmail_set_active(self, login):
-		self.log.info('enable_gmail(): Enabling gmail for user: ' + login)
+		self.log.info('gmail_set_active(): Enabling gmail for user: ' + login)
 		email = self.prop.get('google.email')
 		domain = self.prop.get('google.domain')
 		pw = self.prop.get('google.password')
