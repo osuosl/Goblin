@@ -646,7 +646,7 @@ mailRoutingAddress: %s@%s
 			self.log.info('sync_email(): success syncing user: ' + login)
 			return True
 		else:
-			self.log.info('sync_email(): failed syncing user: ' + login)
+			self.log.info('sync_email(): failed syncing user: ' + login + ' ' + syncprocess.returncode)
 			return False
 
 	def sync_email_delete2(self, login, max_process_time = 0):
