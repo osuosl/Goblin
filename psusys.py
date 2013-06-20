@@ -157,10 +157,6 @@ class PSUSys:
 			print 'Waiting for ' + login + ' to route to Google' 
 			sleep(10)
 
-	def route_to_google_needswork(self, login):
-		self.update_mailHost(login, 'gmx.pdx.edu')
-		self.update_mailRoutingAddress(login, )
-		
 	def route_to_google_old(self, login):
 		prop = Property( key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 
