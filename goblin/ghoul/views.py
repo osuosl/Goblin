@@ -57,14 +57,17 @@ def select(request):
 		return render_to_response('ghoul/folderbomb.html', { 'login': login },
 								context_instance=RequestContext(request),)
 		
-	
-	return render_to_response('ghoul/select.html', 
-		{ 'login': login,
-		  'large_emails': large_emails,
-		  },
-		context_instance=RequestContext(request),
-	)
-	
+    if psu_sys.presync_enabled(login):
+        template = 'ghoul/form_wizard/step1yes.html'
+    else:
+        template = 'ghoul/form_wizard/step1no.html'
+
+    return render_to_response(template,
+        {'login': login,
+         'large_emails': large_emails},
+        context_instance=RequestContext(request),
+    )
+
 def copy_progress(request):
 	psu_sys = PSUSys()
 	login = request.GET.get('login', '')
