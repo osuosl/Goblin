@@ -56,6 +56,9 @@ def select(request):
         return render_to_response('ghoul/folderbomb.html', {'login': login},
                                   context_instance=RequestContext(request),)
 
+    log.error("psu_sys.presync_enabled(login): " +
+              psu_sys.presync_enabled(login))
+
     if psu_sys.presync_enabled(login):
         template = 'ghoul/form_wizard/step1yes.html'
     else:
