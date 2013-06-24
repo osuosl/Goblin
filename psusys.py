@@ -33,7 +33,7 @@ class PSUSys:
 		
 	def setLogger(self, logger):
 		self.log = logger
-		
+
 	def large_emails(self, login):
 		imap_host = self.prop.get('imap.host')
 		imap_login = self.prop.get('imap.login')
@@ -56,6 +56,24 @@ class PSUSys:
 						large_email[key] = 'none'
 						
 		return large_emails
+
+    def presync_enabled(self, login):
+		ldap = psuldap('/vol/certs')
+		ldap_host = self.prop.get('ldap.read.host')
+		ldap_login = self.prop.get('ldap.login')
+		ldap_password = self.prop.get('ldap.password')
+		self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
+
+		ldap.connect( ldap_host, ldap_login, ldap_password)
+		res = ldap.search( searchfilter = 'uid=' + login, attrlist = ['googleMailEnabled'])
+
+		for (dn, result) in res:
+			if result.has_key("googlePreSync"):
+				self.log.info('opt_in_alread() user: ' + login + ' has a googlePreSync ' + str(result['googlePreSync']))
+				if "1" in result["googlePreSync"]:
+					self.log.info('opt_in_alread() user: ' + login + ' has googlePreSync is set')
+					return True
+		return False
 
 	def opt_in_already(self, login):
 		ldap = psuldap('/vol/certs')
