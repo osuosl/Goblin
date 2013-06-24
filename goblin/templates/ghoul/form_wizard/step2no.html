@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<strong><u>Prohibited Data Notice</u></strong>
+
+<p>State and federal regulations and OSU policy prohibit certain data elements from being stored on or transmitted via Google. These data elements are:</p>
+
+<ul>
+    <li>Export Control Data (EAR, ITAR), including:</li>
+    <ul>
+        <li>Manuscripts that need a sponsoring agency's prior approval before submission to a journal;</li>
+        <li>Data or information gather on a grant or contract that has export control restrictions</li>
+    </ul>
+    <li>Health Insurance Policy Numbers</li>
+    <li>Protected Health Information</li>
+    <li>Personally Identifiable Information (PII), including:</li>
+    <ul>
+        <li>Social Security Numbers</li>
+        <li>Credit Card Numbers</li>
+        <li>Bank/Financial Account Numbers</li>
+        <li>Driver's License Numbers</li>
+        <li>Passport and Visa Numbers</li>
+    </ul>
+</ul>
+
+<p>If any of the above types of data are stored in your ONID mailbox, and if you are unable to clear your mailbox of any such data, you must cancel opt-in migration.</p>
+
+<input type="checkbox" name="accept">I understand that the above data elements are prohibited from being stored or transmitted on Google.</input>
+
+<button>Continue</button>
+<button>Cancel Opt-In</button>
+
+{% endblock %}
