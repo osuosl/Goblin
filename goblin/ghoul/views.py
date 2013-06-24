@@ -8,54 +8,53 @@ from string import lower
 
 log = logging.getLogger('ghoul.views')
 
+
 def select(request):
     if 'REMOTE_USER' in request.META:
         login = lower(request.META['REMOTE_USER'])
         request.session['login'] = login
-        log.info('views.select() found user in META: ' + login )
+        log.info('views.select() found user in META: ' + login)
     else:
         if 'login' in request.POST:
             login = lower(request.POST['login'])
             request.session['login'] = login
-            log.info('views.select() login found in POST: ' + login )
+            log.info('views.select() login found in POST: ' + login)
         else:
             if 'login' in request.session:
                 login = request.session['login']
-                log.info('views.select() login found in session: ' + login )
+                log.info('views.select() login found in session: ' + login)
             else:
                 login = 'dennis'
-                log.info('views.select() login not found, defaulting to : ' + login)
+                log.info('views.select() login not found, defaulting to : ' +
+                         login)
 
     log.info('views.select() using login: ' + login)
 
     psu_sys = PSUSys()
     psu_sys.set_user(login, request.META)
 
-
     # Go to informational page for folks who are not yet allowed-in
     if not psu_sys.is_allowed(login):
-        return render_to_response('ghoul/closed.html', { 'login': login },
-                                context_instance=RequestContext(request),)
+        return render_to_response('ghoul/closed.html', {'login': login},
+                                  context_instance=RequestContext(request),)
 
     # Go to the confirmation page if the user has already opt'd-in
-
     if psu_sys.opt_in_already(login):
-        return render_to_response('ghoul/confirm.html', { 'login': login },
-                                context_instance=RequestContext(request),)
+        return render_to_response('ghoul/confirm.html', {'login': login},
+                                  context_instance=RequestContext(request),)
 
     if psu_sys.is_processing(login):
-        return render_to_response('ghoul/status.html', { 'login': login} )
+        return render_to_response('ghoul/status.html', {'login': login})
 
     # Go to suspended page if site is not available
-
     if psu_sys.is_web_suspended(login):
-        return render_to_response('ghoul/suspended.html', { 'login': login },
-                                context_instance=RequestContext(request),)
+        return render_to_response('ghoul/suspended.html', {'login': login},
+                                  context_instance=RequestContext(request),)
     try:
         large_emails = psu_sys.large_emails(login)
     except:
-        return render_to_response('ghoul/folderbomb.html', { 'login': login },
-                                context_instance=RequestContext(request),)
+        return render_to_response('ghoul/folderbomb.html', {'login': login},
+                                  context_instance=RequestContext(request),)
 
     if psu_sys.presync_enabled(login):
         template = 'ghoul/form_wizard/step1yes.html'
@@ -63,10 +62,10 @@ def select(request):
         template = 'ghoul/form_wizard/step1no.html'
 
     return render_to_response(template,
-        {'login': login,
-         'large_emails': large_emails},
-        context_instance=RequestContext(request),
-    )
+                              {'login': login,
+                               'large_emails': large_emails},
+                              context_instance=RequestContext(request),)
+
 
 def copy_progress(request):
     psu_sys = PSUSys()
@@ -83,22 +82,22 @@ def copy_progress(request):
 def status(request):
     if 'REMOTE_USER' in request.META:
         login = request.META['REMOTE_USER']
-        log.info('views.status() login found in META: ' + login )
+        log.info('views.status() login found in META: ' + login)
     else:
         if 'login' in request.POST:
             login = request.POST['login']
-            log.info('views.status() login found in POST: ' + login )
+            log.info('views.status() login found in POST: ' + login)
         else:
             if 'login' in request.session:
                 login = request.session['login']
-                log.info('views.status() login found in session: ' + login )
+                log.info('views.status() login found in session: ' + login)
             else:
                 login = 'dennis'
-                log.info('views.status() login not found, defaulting to : ' + login)
+                log.info('views.status() login not found, defaulting to : ' +
+                         login)
 
-    log.info('views.status() META: ' + str(request.META) )
+    log.info('views.status() META: ' + str(request.META))
     login = login.encode('latin-1')
-
 
     #key = 'email_copy_progress.' + login
     #if ( cache.get(key) == None ):
@@ -112,35 +111,32 @@ def status(request):
         copy_email_task.apply_async(args=[login], queue='optin')
 
     return render_to_response('ghoul/status.html',
-        { 'login': login, },
-        context_instance=RequestContext(request))
+                              {'login': login},
+                              context_instance=RequestContext(request))
+
 
 def confirm(request):
     psu_sys = PSUSys()
     if 'REMOTE_USER' in request.META:
         login = request.META['REMOTE_USER']
-        log.info('views.confirm() login found in META: ' + login )
+        log.info('views.confirm() login found in META: ' + login)
     else:
         if 'login' in request.POST:
             login = request.POST['login']
-            log.info('views.confirm() login found in POST: ' + login )
+            log.info('views.confirm() login found in POST: ' + login)
         else:
             if 'login' in request.session:
                 login = request.session['login']
-                log.info('views.status() login found in session: ' + login )
+                log.info('views.status() login found in session: ' + login)
             else:
                 login = psu_sys.get_user(request.META)
-                log.info('views.confirm() login not found, defaulting to : ' + login)
+                log.info('views.confirm() login not found, defaulting to : ' +
+                         login)
 
     #log.info('views.confirm(), META = ' + str(request.META))
 
     large_emails = psu_sys.large_emails(login)
 
     return render_to_response('ghoul/confirm.html',
-        { 'login': login,
-          'large_emails': large_emails,
-          },
+        {'login': login, 'large_emails': large_emails},
         context_instance=RequestContext(request))
-
-
-
