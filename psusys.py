@@ -1,4 +1,4 @@
-from googleimap import imapstat
+from googleimap.imapstat import imapstat
 from property import Property
 import logging
 import logging.config
