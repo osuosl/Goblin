@@ -1,12 +1,29 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.template import RequestContext
+from django.contrib.formtools.wizard.views import SessionWizardView
 from tasks import *
 from psusys import PSUSys
 import logging
 from string import lower
 
 log = logging.getLogger('ghoul.views')
+
+
+class MigrationWizard(SessionWizardView):
+    """
+    SessionWizardView for the ond->gmail migration
+    """
+
+    def done(self, form_list, **kwargs):
+        """
+        Step5done is the final step of the form, which is just a
+        reiteration of all the pages the user just went through.
+        """
+
+        return renter_to_respose('ghoul/form_wizard/step5done.html', {
+            'form_data': [form.cleaned_data for form in form_list],
+        })
 
 
 def select(request):
