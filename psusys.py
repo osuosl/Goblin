@@ -223,8 +223,8 @@ mailHost: gmx.pdx.edu
 
         while (syncprocess.poll() is None):
             sleep(3)
-            self.log.info('route_to_google(): continuing to route mail to
-                          Google for user: ' + login)
+            self.log.info("route_to_google(): continuing to route mail to\
+                          Google for user: " + login)
 
         if syncprocess.returncode == 0:
             self.log.info('route_to_google(): success for user: ' + login)
@@ -248,7 +248,7 @@ mailHost: gmx.pdx.edu
         status = self.update_mailRoutingAddress(login, 'pdx.edu')
         retry_count = 0
         while (status is False) and (retry_count < self.MAX_RETRY_COUNT):
-            self.log.error("route_to_google():
+            self.log.error("route_to_google(): \
                            mailRoutingAddress: Retrying LDAP update")
             status = self.update_mailRoutingAddress(login, 'pdx.edu')
             retry_count += 1
@@ -279,7 +279,7 @@ mailHost: %s
 
         while (syncprocess.poll() is None):
             sleep(3)
-            self.log.info('update_mailHost(): continuing to route mail to
+            self.log.info('update_mailHost(): continuing to route mail to \
                           psu for user: ' + login)
 
         if syncprocess.returncode == 0:
@@ -293,7 +293,7 @@ mailHost: %s
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
 
-        self.log.info('update_mailRoutingAddress():
+        self.log.info('update_mailRoutingAddress(): \
                       Updating mailRoutingAddress for user: ' + login)
         ldap_host = prop.get('ldap.write.host')
         ldap_login = prop.get('ldap.login')
@@ -316,7 +316,7 @@ mailRoutingAddress: %s@%s
 
         while (syncprocess.poll() is None):
             sleep(3)
-            self.log.info('update_mailRoutingAddress():
+            self.log.info('update_mailRoutingAddress(): \
                           Continuing to update mailRoutingAddress for user: ' +
                           login)
 
@@ -412,7 +412,7 @@ mailRoutingAddress: %s@%s
         # Launch a Subprocess here to send email
 
     def send_conversion_email_in_progress(self, login):
-        self.log.info('send_conversion_email_in_progress():
+        self.log.info('send_conversion_email_in_progress(): \
                       sending mail to user: ' + login)
         # Send the conversion confirmation email to the user
         # Launch a Subprocess here to send email
@@ -422,15 +422,15 @@ mailRoutingAddress: %s@%s
 
         while (syncprocess.poll() is None):
             sleep(3)
-            self.log.info('send_conversion_email_in_progress():
+            self.log.info('send_conversion_email_in_progress(): \
                           continuing to send mail for user: ' + login)
 
         if syncprocess.returncode == 0:
-            self.log.info('send_conversion_email_in_progress():
+            self.log.info('send_conversion_email_in_progress(): \
                           success for user: ' + login)
             return True
         else:
-            self.log.info('send_conversion_email_in_progress():
+            self.log.info('send_conversion_email_in_progress(): \
                           failed for user: ' + login)
             return False
 
@@ -445,7 +445,7 @@ mailRoutingAddress: %s@%s
 
         while (syncprocess.poll() is None):
             sleep(3)
-            self.log.info('send_conversion_email_psu():
+            self.log.info('send_conversion_email_psu(): \
                           continuing to send mail for user: ' + login)
 
         if syncprocess.returncode == 0:
@@ -468,11 +468,11 @@ mailRoutingAddress: %s@%s
 
         while (syncprocess.poll() is None):
             sleep(3)
-            self.log.info('send_conversion_email_google():
+            self.log.info('send_conversion_email_google(): \
                           continuing to send mail for user: ' + login)
 
         if syncprocess.returncode == 0:
-            self.log.info('send_conversion_email_google():
+            self.log.info('send_conversion_email_google(): \
                           success for user: ' + login)
             return True
         else:
@@ -486,7 +486,7 @@ mailRoutingAddress: %s@%s
         sleep(1)
 
     def is_gmail_enabled(self, login):
-        self.log.info('is_gmail_enabled():
+        self.log.info('is_gmail_enabled(): \
                       Checking if gmail is enabled for user: ' + login)
         email = self.prop.get('google.email')
         domain = self.prop.get('google.domain')
@@ -524,7 +524,7 @@ mailRoutingAddress: %s@%s
         return result
 
     def google_account_status(self, login):
-        self.log.info('google_account_status():
+        self.log.info('google_account_status(): \
                       Querying account status for user: ' + login)
         email = self.prop.get('google.email')
         domain = self.prop.get('google.domain')
@@ -548,20 +548,20 @@ mailRoutingAddress: %s@%s
 
             except AppsForYourDomainException, e:
                 if e.error_code == 1301:
-                    self.log.error('enable_google_account():
+                    self.log.error('enable_google_account(): \
                                    User %s does not exist' % login)
                     return {"exists": False, "enabled": False}
 
             except(CaptchaRequired):
-                self.log.error('enable_google_account():
+                self.log.error('enable_google_account(): \
                                Captcha being requested')
 
             except(BadAuthentication):
-                self.log.error('enable_google_account():
+                self.log.error('enable_google_account(): \
                                Authentication Error')
 
             except Exception, e:
-                self.log.error('google_account_status():
+                self.log.error('google_account_status(): \
                                Exception occured: ' + str(e))
                 # Retry if not an obvious non-retryable error
                 sleep(1)
@@ -569,7 +569,7 @@ mailRoutingAddress: %s@%s
             retry_count += 1
 
     def enable_google_account(self, login):
-        self.log.info('enable_google_account():
+        self.log.info('enable_google_account(): \
                       Enabling account for user: ' + login)
         email = self.prop.get('google.email')
         domain = self.prop.get('google.domain')
@@ -588,12 +588,12 @@ mailRoutingAddress: %s@%s
 
             except AppsForYourDomainException, e:
                 if e.error_code == 1301:
-                    self.log.error('enable_google_account():
+                    self.log.error('enable_google_account(): \
                                    User %s does not exist' % login)
                     status = True
 
             except(CaptchaRequired):
-                self.log.error('enable_google_account():
+                self.log.error('enable_google_account(): \
                                Captcha being requested')
 
             except(BadAuthentication):
@@ -627,16 +627,16 @@ mailRoutingAddress: %s@%s
 
             except AppsForYourDomainException, e:
                 if e.error_code == 1301:
-                    self.log.error('disable_google_account():
+                    self.log.error('disable_google_account(): \
                                    User %s does not exist' % login)
                     status = True
 
             except(CaptchaRequired):
-                self.log.error('disable_google_account():
+                self.log.error('disable_google_account(): \
                                Captcha being requested')
 
             except(BadAuthentication):
-                self.log.error('disable_google_account():
+                self.log.error('disable_google_account(): \
                                Authentication Error')
 
             except Exception, e:
@@ -740,8 +740,8 @@ mailRoutingAddress: %s@%s
             process_time += 0.5
             if max_process_time > 0 and int(process_time) > max_process_time:
                 syncprocess.terminate()
-                self.log.info('sync_email():
-                              terminating sync due to max process time limit
+                self.log.info('sync_email(): \
+                              terminating sync due to max process time limit \
                               for user: ' + login)
                 return True
             self.log.info('sync_email(): continuing to sync user: ' + login)
