@@ -33,22 +33,21 @@ def select(request):
     psu_sys = PSUSys()
     psu_sys.set_user(login, request.META)
 
+    # Go to informational page for folks who are not yet allowed-in
     if not psu_sys.is_allowed(login):
-        # Go to informational page for folks who are not yet allowed-in
         return render_to_response('ghoul/closed.html', {'login': login},
                                   context_instance=RequestContext(request),)
-    elif psu_sys.opt_in_already(login):
-        # Go to the confirmation page if the user has already opt'd-in
+    # Go to the confirmation page if the user has already opt'd-in
+    if psu_sys.opt_in_already(login):
         return render_to_response('ghoul/confirm.html', {'login': login},
                                   context_instance=RequestContext(request),)
-    elif psu_sys.is_web_suspended(login):
-        # Go to suspended page if site is not available
+    # Go to suspended page if site is not available
+    if psu_sys.is_web_suspended(login):
         return render_to_response('ghoul/suspended.html', {'login': login},
                                   context_instance=RequestContext(request),)
-
     if psu_sys.is_processing(login):
         return render_to_response('ghoul/status.html', {'login': login})
-
+    # So, folderbombing is a thing
     try:
         large_emails = psu_sys.large_emails(login)
     except:
