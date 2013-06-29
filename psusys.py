@@ -553,14 +553,31 @@ mailRoutingAddress: %s@%s
 
 			retry_count = retry_count + 1
 
+	def retrieve_orgunit(self, login)
+		email = self.prop.get('google.email')
+                domain = self.prop.get('google.domain')
+                pw = self.prop.get('google.password')
+
+                client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
+                client.ProgrammaticLogin()
+                customerId = client.RetrieveCustomerId()["customerId"]
+                userEmail = login + '@' + domain
+                old_org  = client.retrieveOrgUser( customerId, userEmail)
+	
+		return old_org
+
 	def enable_gmail(self, login):
 		retry_count = 0; status = False
-		
+
+ 		old_org = self.retrieve_orgunit(login)
+
 		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			self.gmail_set_active(login)
 			if self.is_gmail_enabled(login):
 				status = True
 			retry_count = retry_count + 1
+
+		return old_org
 
 	def gmail_set_active(self, login):
 		self.log.info('gmail_set_active(): Enabling gmail for user: ' + login)
@@ -590,7 +607,7 @@ mailRoutingAddress: %s@%s
 			retry_count = retry_count + 1
 		return status
 		
-	def disable_gmail(self, login):
+	def disable_gmail(self, login, old_org='NO_SERVICES'):
 		self.log.info('disable_gmail(): Disabling gmail for user: ' + login)
 		email = self.prop.get('google.email')
 		domain = self.prop.get('google.domain')
@@ -600,8 +617,8 @@ mailRoutingAddress: %s@%s
 		client.ProgrammaticLogin()
 		customerId = client.RetrieveCustomerId()["customerId"]
 		userEmail = login + '@' + domain
-		client.UpdateOrgUser( customerId, userEmail, 'NO_SERVICES')
-		
+		client.UpdateOrgUser( customerId, userEmail, old_org)
+
 	def sync_email_null(self, login):
 		self.log.info('sync_email(): syncing user: ' + login)
 		sleep(1)
@@ -853,7 +870,7 @@ mailRoutingAddress: %s@%s
 
 		# Enable Google email for the user
 		log.info("presync_email_task(): temporarily enabling Google mail: " + login)
-		psu_sys.enable_gmail(login)
+		old_org = psu_sys.enable_gmail(login)
 
 		# Synchronize email to Google (and wait)
 		log.info("presync_email_task(): syncing email: " + login)
@@ -869,7 +886,7 @@ mailRoutingAddress: %s@%s
 
 		# Disable Google email
 		log.info("presync_email_task(): disabling Google mail: " + login)
-		psu_sys.disable_gmail(login)
+		psu_sys.disable_gmail(login,old_org)
 
 		if account_status["enabled"] == False:
 			log.info("presync_email_task(): disabling account: " + login)
