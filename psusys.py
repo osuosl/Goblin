@@ -553,7 +553,7 @@ mailRoutingAddress: %s@%s
 
 			retry_count = retry_count + 1
 
-	def retrieve_orgunit(self, login)
+	def retrieve_orgunit(self, login):
                 email = self.prop.get('google.email')
                 domain = self.prop.get('google.domain')
                 pw = self.prop.get('google.password')
