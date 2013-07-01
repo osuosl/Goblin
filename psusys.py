@@ -554,7 +554,7 @@ mailRoutingAddress: %s@%s
 			retry_count = retry_count + 1
 
 	def retrieve_orgunit(self, login)
-		email = self.prop.get('google.email')
+                email = self.prop.get('google.email')
                 domain = self.prop.get('google.domain')
                 pw = self.prop.get('google.password')
 
@@ -563,13 +563,13 @@ mailRoutingAddress: %s@%s
                 customerId = client.RetrieveCustomerId()["customerId"]
                 userEmail = login + '@' + domain
                 old_org  = client.retrieveOrgUser( customerId, userEmail)
-	
-		return old_org
+
+                return old_org
 
 	def enable_gmail(self, login):
 		retry_count = 0; status = False
 
- 		old_org = self.retrieve_orgunit(login)
+		old_org = self.retrieve_orgunit(login)
 
 		while (status == False) and (retry_count < self.MAX_RETRY_COUNT):
 			self.gmail_set_active(login)
