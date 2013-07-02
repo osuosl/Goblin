@@ -562,7 +562,7 @@ mailRoutingAddress: %s@%s
                 client.ProgrammaticLogin()
                 customerId = client.RetrieveCustomerId()["customerId"]
                 userEmail = login + '@' + domain
-                old_org  = client.retrieveOrgUser( customerId, userEmail)
+                old_org  = client.RetrieveOrgUser( customerId, userEmail)
 
                 return old_org
 
