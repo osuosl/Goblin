@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     (r'^status', 'goblin.ghoul.views.status'),
     (r'^confirm', 'goblin.ghoul.views.confirm'),
     (r'^select', 'goblin.ghoul.views.select'),
-    (r'^migrate', MigrationWizard.as_view(FORMS))
+    (r'^migrate', MigrationWizard.as_view(FORMS)),
     (r'^', 'goblin.ghoul.views.select'),
 
 )
