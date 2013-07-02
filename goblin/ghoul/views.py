@@ -7,13 +7,30 @@ from psusys import PSUSys
 import logging
 from string import lower
 
+from goblin.ghoul.forms import FORMS
+
 log = logging.getLogger('ghoul.views')
+
+TEMPLATES = {"ready": ["ghoul/form_wizard/step1yes.html",
+                       "ghoul/form_wizard/step1no.html"],
+             "transition": ["ghoul/form_wizard/step1noB.html"],
+             "forward-notice": ["ghoul/form_wizard/step2yes.html"],
+             "prohibit": ["ghoul/form_wizard/step2no.html"],
+             "mobile": ["ghoul/form_wizard/step3.html"],
+             "confirm": ["ghoul/form_wizard/step4yes.html"],
+             "final_confirm": ["ghoul/form_wizard/step4no.html"]}
 
 
 class MigrationWizard(SessionWizardView):
     """
     SessionWizardView for the ond->gmail migration
     """
+
+    def get_template_names(self):
+        '''if self.steps.current == "ready":
+            if GooglePreSyncEnable
+                return [TEMPLATES[self.steps.current[1]]]'''
+        return [TEMPLATES[self.steps.current][0]]
 
     def done(self, form_list, **kwargs):
         """

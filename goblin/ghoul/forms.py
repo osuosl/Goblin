@@ -52,3 +52,11 @@ class FinalConfirmForm(Form):
     """
 
     i_accept = BooleanField(required=True)
+
+FORMS = [("ready", StandInForm),
+         ("trasnition", TransitionForm),
+         ("forward-notice", StandInForm),
+         ("prohibit", ProhibatedDataForm),
+         ("mobile", MobileAccessForm),
+         ("confirm", ConfirmForm),
+         ("confirm_again", FinalConfirmForm)]
