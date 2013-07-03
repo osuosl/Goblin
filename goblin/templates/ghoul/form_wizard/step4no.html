@@ -4,6 +4,8 @@
 
 <p>Please confirm you wish to opt in to Google Mail.</p>
 
-<input type="checkbox" name="i_accept">This process can not be reversed. After you click “Yes! I want to opt in,” your ONID mailbox will be on Google Mail permanently.</input>
+<p>{{ form.i_accept }}
+This process can not be reversed. After you click “Yes! I want to opt in,” your ONID mailbox will be on Google Mail permanently.</p>
+<p>{{ form.i_accept.errors }}</p>
 
 {% endblock %}

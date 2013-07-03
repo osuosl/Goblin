@@ -6,8 +6,12 @@
 
 <p><b>Be aware the best user experience occurs through the Google Mail web app – commonly referred to as Gmail – and the Google mobile apps.</b> Clients such as Thunderbird and Outlook will work, but they are not optimized for use with Google Mail, and they may not perform as well as Google’s apps.</p>
 
-<input type="checkbox" name="reconfig">I understand that I will need to reconfigure any non-Webmail email clients I use to check your ONID email.</input>
+<p>{{ form.reconfig }}
+I understand that I will need to reconfigure any non-Webmail email clients I use to check your ONID email.</p>
+<p>{{ form.reconfig.errors }}</p>
 
-<input type="checkbox" name="narcissism">I understand that mobile clients such as Thunderbird and Outlook may not perform as well as Google’s own mobile apps.</input>
+<p>{{ form.narcissism }}
+I understand that mobile clients such as Thunderbird and Outlook may not perform as well as Google’s own mobile apps.</p>
+<p>{{ form.narcissism.errors }}</p>
 
 {% endblock %}
