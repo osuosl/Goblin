@@ -137,11 +137,11 @@ jQuery.extend(Drupal.settings, {"basePath":"\u002Fis\u002F", "pathPrefix":"", "a
 {% endblock %}
 
 <div class="form-actions form-wrapper" id="edit-actions">
-   <button name="wizard_goto_step" class="form-submit" type="submit"
+   <button name="wizard_goto_step" class="btn" type="submit"
           value="{{ wizard.steps.next }}" >
        Continue
    </button>
-   <input name="wizard_goto_step" class="form-submit" type="submit"
+   <button name="wizard_goto_step" class="btn" type="submit"
           value="{{ wizard.steps.prev }}">
        Cancel Opt-In Migration
    </button>
