@@ -1024,7 +1024,7 @@ mailRoutingAddress: %s@%s
 
         # Disable Google email
         log.info("presync_email_task(): disabling Google mail: " + login)
-        psu_sys.disable_gmail(login.old_org)
+        psu_sys.disable_gmail(old_org)
 
         if account_status["enabled"] is False:
             log.info("presync_email_task(): disabling account: " + login)
