@@ -32,7 +32,7 @@ class MigrationWizard(SessionWizardView):
                                                  ONID Mailbox to Google?"},
                    "confirm_trans": {'page_title': "Current Email Will \
                                                         Not Be Migrated"},
-                   "forward-notice": {'page_title': "Notice to Reset Your \
+                   "forward_notice": {'page_title': "Notice to Reset Your \
                                                     Forward"},
                    "prohibit": {'page_title': "Prohibited Data Notice"},
                    "mobile": {'page_title': "Mobile Access Notice"},
