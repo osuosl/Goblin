@@ -30,7 +30,7 @@ class MigrationWizard(SessionWizardView):
                                              Mailbox to Google?"},
                    "transition":  {'page_title': "Are You Ready to Move Your \
                                                  ONID Mailbox to Google?"},
-                   "confirm_transition": {'page_title': "Current Email Will \
+                   "confirm_trans": {'page_title': "Current Email Will \
                                                         Not Be Migrated"},
                    "forward-notice": {'page_title': "Notice to Reset Your \
                                                     Forward"},
