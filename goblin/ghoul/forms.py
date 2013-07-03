@@ -11,7 +11,7 @@ class StandInForm(Form):
 
 class TransitionForm(Form):
     """
-    Step1B: Current Email Will Not Be Migrated
+    Step1noB: Current Email Will Not Be Migrated
     """
 
     transition = BooleanField(required=True)
