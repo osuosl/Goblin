@@ -2,3 +2,4 @@
 src/celeryconfig.py
 .vagrant
 local_settings.py
+*.swp
