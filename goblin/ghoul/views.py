@@ -20,6 +20,19 @@ TEMPLATES = {"migrate": "ghoul/form_wizard/step1yes.html",
              "confirm": "ghoul/form_wizard/step4yes.html",
              "final_confirm": "ghoul/form_wizard/step4no.html"}
 
+page_titles = {"migrate": {'page_title': "Are You Ready to Move Your ONID \
+                                         Mailbox to Google?"},
+               "transition":  {'page_title': "Are You Ready to Move Your ONID \
+                                              Mailbox to Google?"},
+               "confirm_transition": {'page_title': "Current Email Will Not \
+                                                    BeMigrated"},
+               "forward-notice": {'page_title': "Notice to Reset \
+                                                 Your Forward"},
+               "prohibit": {'page_title': "Prohibited Data Notice"},
+               "mobile": {'page_title': "Mobile Access Notice"},
+               "confirm": {'page_title': "Confirm"},
+               "final_confirm": {'page_title': "Final Confirm"},}
+
 
 class MigrationWizard(SessionWizardView):
     """

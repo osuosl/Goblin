@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, include, url
 from goblin.ghoul.forms import FORMS
-from goblin.ghoul.views import MigrationWizard
+from goblin.ghoul.views import MigrationWizard, page_titles
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     (r'^status', 'goblin.ghoul.views.status'),
     (r'^confirm', 'goblin.ghoul.views.confirm'),
     (r'^select', 'goblin.ghoul.views.select'),
-    (r'^migrate', MigrationWizard.as_view(FORMS)),
+    (r'^migrate', MigrationWizard.as_view(FORMS, page_titles)),
     (r'^', 'goblin.ghoul.views.select'),
 
 )
