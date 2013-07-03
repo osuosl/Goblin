@@ -14,7 +14,7 @@ log = logging.getLogger('ghoul.views')
 TEMPLATES = {"migrate": "ghoul/form_wizard/step1yes.html",
              "transition": "ghoul/form_wizard/step1no.html",
              "confirm_trans": "ghoul/form_wizard/step1noB.html",
-             "forward-notice": "ghoul/form_wizard/step2yes.html",
+             "forward_notice": "ghoul/form_wizard/step2yes.html",
              "prohibit": "ghoul/form_wizard/step2no.html",
              "mobile": "ghoul/form_wizard/step3.html",
              "confirm": "ghoul/form_wizard/step4yes.html",
