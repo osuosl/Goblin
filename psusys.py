@@ -715,7 +715,7 @@ mailRoutingAddress: %s@%s
         client.ProgrammaticLogin()
         customerId = client.RetrieveCustomerId()["customerId"]
         userEmail = login + '@' + domain
-        client.UpdateOrgUser(customerId, userEmail, old_org)
+        client.UpdateOrgUser(customerId, userEmail, old_org['orgUnitPath'])
 
     def sync_email_null(self, login):
         self.log.info('sync_email(): syncing user: ' + login)
