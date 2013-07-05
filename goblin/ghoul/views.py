@@ -11,14 +11,14 @@ from goblin.ghoul.forms import FORMS
 
 log = logging.getLogger('ghoul.views')
 
-TEMPLATES = {"ready": ["ghoul/form_wizard/step1yes.html",
-                       "ghoul/form_wizard/step1no.html"],
-             "transition": ["ghoul/form_wizard/step1noB.html"],
-             "forward-notice": ["ghoul/form_wizard/step2yes.html"],
-             "prohibit": ["ghoul/form_wizard/step2no.html"],
-             "mobile": ["ghoul/form_wizard/step3.html"],
-             "confirm": ["ghoul/form_wizard/step4yes.html"],
-             "final_confirm": ["ghoul/form_wizard/step4no.html"]}
+TEMPLATES = {"migrate": "ghoul/form_wizard/step1yes.html",
+             "transition": "ghoul/form_wizard/step1no.html",
+             "confirm_trans": "ghoul/form_wizard/step1noB.html",
+             "forward_notice": "ghoul/form_wizard/step2yes.html",
+             "prohibit": "ghoul/form_wizard/step2no.html",
+             "mobile": "ghoul/form_wizard/step3.html",
+             "confirm": "ghoul/form_wizard/step4yes.html",
+             "final_confirm": "ghoul/form_wizard/step4no.html"}
 
 
 class MigrationWizard(SessionWizardView):
@@ -26,11 +26,28 @@ class MigrationWizard(SessionWizardView):
     SessionWizardView for the ond->gmail migration
     """
 
+    page_titles = {"migrate": {'page_title': "Are You Ready to Move Your ONID \
+                                             Mailbox to Google?"},
+                   "transition":  {'page_title': "Are You Ready to Transition \
+                                                 Your ONID Mailbox \
+                                                 to Google?"},
+                   "confirm_trans": {'page_title': "Current Email Will \
+                                                        Not Be Migrated"},
+                   "forward_notice": {'page_title': "Notice to Reset Your \
+                                                    Forward"},
+                   "prohibit": {'page_title': "Prohibited Data Notice"},
+                   "mobile": {'page_title': "Mobile Access Notice"},
+                   "confirm": {'page_title': "Confirm"},
+                   "final_confirm": {'page_title': "Final Confirm"},}
+
+    def get_context_data(self, form, **kwargs):
+        context = super(MigrationWizard, self).get_context_data(form=form,
+                                                                **kwargs)
+        context.update(self.page_titles.get(self.steps.current))
+        return context
+
     def get_template_names(self):
-        '''if self.steps.current == "ready":
-            if GooglePreSyncEnable
-                return [TEMPLATES[self.steps.current[1]]]'''
-        return [TEMPLATES[self.steps.current][0]]
+        return [TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
         """
@@ -38,7 +55,7 @@ class MigrationWizard(SessionWizardView):
         reiteration of all the pages the user just went through.
         """
 
-        return renter_to_respose('ghoul/form_wizard/step5done.html', {
+        return renter_to_response('ghoul/form_wizard/step5done.html', {
             'form_data': [form.cleaned_data for form in form_list],
         })
 

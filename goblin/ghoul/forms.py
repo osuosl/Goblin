@@ -11,7 +11,7 @@ class StandInForm(Form):
 
 class TransitionForm(Form):
     """
-    Step1B: Current Email Will Not Be Migrated
+    Step1noB: Current Email Will Not Be Migrated
     """
 
     transition = BooleanField(required=True)
@@ -53,10 +53,11 @@ class FinalConfirmForm(Form):
 
     i_accept = BooleanField(required=True)
 
-FORMS = [("ready", StandInForm),
-         ("trasnition", TransitionForm),
-         ("forward-notice", StandInForm),
+FORMS = [("migrate", StandInForm),
+         ("transition", StandInForm),
+         ("confirm_trans", TransitionForm),
+         ("forward_notice", StandInForm),
          ("prohibit", ProhibatedDataForm),
          ("mobile", MobileAccessForm),
          ("confirm", ConfirmForm),
-         ("confirm_again", FinalConfirmForm)]
+         ("final_confirm", FinalConfirmForm)]
