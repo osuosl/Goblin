@@ -21,6 +21,8 @@ TEMPLATES = {"migrate": "ghoul/form_wizard/step1yes.html",
              "final_confirm": "ghoul/form_wizard/step4no.html"}
 
 
+
+
 class MigrationWizard(SessionWizardView):
     """
     SessionWizardView for the ond->gmail migration
@@ -41,8 +43,8 @@ class MigrationWizard(SessionWizardView):
                    "final_confirm": {'page_title': "Final Confirm"},}
 
     def get_context_data(self, form, **kwargs):
-        context = super(MigrationWizard, self).get_context_data(form=form,
-                                                                **kwargs)
+        context = super(MigrationWizard, self)\
+                  .get_context_data(form=form, **kwargs)
         context.update(self.page_titles.get(self.steps.current))
         return context
 
