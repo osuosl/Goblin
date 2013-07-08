@@ -55,6 +55,10 @@ def no_presync(wizard):
     log.info("Prsync disabled: " + str(not sync))
     return not sync
 
+def forward_set(wizard):
+    return True
+
+
 class MigrationWizard(SessionWizardView):
     """
     SessionWizardView for the ond->gmail migration
