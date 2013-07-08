@@ -70,7 +70,7 @@ class PSUSys:
 
         ldap.connect(ldap_host, ldap_login, ldap_password)
         res = ldap.search(searchfilter='uid=' + login,
-                          attrlist=['googleMailEnabled'])
+                          attrlist=['googlePreSync'])
 
         for (dn, result) in res:
             if "googlePreSync" in result:
