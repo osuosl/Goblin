@@ -57,7 +57,7 @@ class MigrationWizard(SessionWizardView):
         reiteration of all the pages the user just went through.
         """
 
-        return renter_to_response('ghoul/form_wizard/step5done.html', {
+        return render_to_response('ghoul/form_wizard/step5done.html', {
             'form_data': [form.cleaned_data for form in form_list],
         })
 
