@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, include, url
 from goblin.ghoul.forms import FORMS
-from goblin.ghoul.views import MigrationWizard
+from goblin.ghoul.views import MigrationWizard, presync, no_presync
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -12,16 +12,16 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    #(r'^media(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/var/www/goblin/doc'}),
-    #(r'^js(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/var/www/goblin/doc/js'}),
     (r'^status/js(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/var/www/goblin/doc/js'}),
-    #(r'^images(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/var/www/goblin/doc/images'}),
     (r'^status/images(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/var/www/goblin/doc/images'}),
     (r'^copy_progress', 'goblin.ghoul.views.copy_progress'),
     (r'^status', 'goblin.ghoul.views.status'),
     (r'^confirm', 'goblin.ghoul.views.confirm'),
     (r'^select', 'goblin.ghoul.views.select'),
-    (r'^migrate', MigrationWizard.as_view(FORMS)),
+    (r'^migrate', MigrationWizard.as_view(FORMS,
+                                          condition_dict={'migrate': presync,
+                                                          'transition': no_presync,
+                                                          'confirm': presync,})),
     (r'^', 'goblin.ghoul.views.select'),
 
 )
