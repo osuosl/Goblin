@@ -1,5 +1,16 @@
 #!/usr/bin/perl -w
 #
+# Get goblin imap info from goblin.ini
+#
+
+use Config::Simple;
+
+$cfg = new Config::Simple('goblin.ini');
+$imaphost = $cfg->param('ImapHost');
+$imapuser = $cfg->param('User');
+$imappass = $cfg->param('Password');
+
+#
 # Fetch an ONID user's forward from Cyrus
 #
 
@@ -12,10 +23,10 @@ if ($#ARGV < 0) {
 
 our $username = $ARGV[0];
 
-our %prefs = (	'imapserver'	=> 'test-cyrus-fe.onid.oregonstate.edu',
-		'imapuser'	=> 'cyr_gmig',
-		'imappass'	=> ''
-		);
+our %prefs = ('imapserver' => $imaphost,
+              'imapuser' => $imapuser,
+              'imappass' => $imappass
+             );
 
 # Setup an empty hash to store the Sieve values
 my %sievehash = (
