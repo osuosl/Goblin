@@ -5,7 +5,7 @@
 
 use Config::Simple;
 
-$cfg = new Config::Simple($ARGV[1]);
+$cfg = new Config::Simple($ARGV[0]);
 $imaphost = $cfg->param('ImapHost');
 $imapuser = $cfg->param('User');
 $imappass = $cfg->param('Password');
@@ -14,14 +14,14 @@ $imappass = $cfg->param('Password');
 # Fetch an ONID user's forward from Cyrus
 #
 
-if ($#ARGV < 0) {
-	print "Usage: $0 <username>\n";
+if ($#ARGV < 1) {
+	print "Usage: $0 <config> <username>\n";
 	print "  Fetch the forward from Cyrus for <username>.\n";
 	print "  Prints 'none' if no forward is set.\n";
 	exit;
 }
 
-our $username = $ARGV[0];
+our $username = $ARGV[1];
 
 our %prefs = ('imapserver' => $imaphost,
               'imapuser' => $imapuser,
