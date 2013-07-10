@@ -5,7 +5,7 @@
 
 use Config::Simple;
 
-$cfg = new Config::Simple('../etc/ldap_fwd.cfg');
+$cfg = new Config::Simple($ARGV[1]);
 $imaphost = $cfg->param('ImapHost');
 $imapuser = $cfg->param('User');
 $imappass = $cfg->param('Password');
