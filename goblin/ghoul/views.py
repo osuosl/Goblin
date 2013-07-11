@@ -37,14 +37,12 @@ def get_login(wizard):
 def presync(wizard):
     if not wizard.login:
         get_login(wizard)
-        return False
     sync = wizard.psusys.presync_enabled(wizard.login)
     return sync
 
 def no_presync(wizard):
     if not wizard.login:
         get_login(wizard)
-        return False
     sync = wizard.psusys.presync_enabled(wizard.login)
     return not sync
 
