@@ -70,19 +70,19 @@ def forward_set(wizard):
     forward_set:
         Shell out to a perl script to see if the user has a forward setup
     """
-    if not wizard.forward:
+    if wizard.forward is None:
         get_fwd = os.path.join(settings.ROOT, 'bin', 'get-cyrus-fwd.pl')
         fwd_cfg = os.path.join(settings.ROOT, 'etc', 'imap_fwd.cfg')
         wizard.forward = Popen(['perl', get_fwd, fwd_cfg, wizard.login],
                                 stdout=PIPE).communicate()[0]
 
-        # Now to handle the information returned
-        location = wizard.psusys.prop.get('imap.host')
-        location_str = "Could not connect to mail server" + location + ", please try again."
-        if wizard.forward not in [None, "none", location_str]:
-            return True
+    # Now to handle the information returned
+    location = wizard.psusys.prop.get('imap.host')
+    location_str = "Could not connect to mail server %s, please try again." %\
+                   location
+    if wizard.forward not in [None, "none", location_str]:
+        return True
 
-    log.info("wizard.forward: " + wizard.forward)
     return False
 
 
@@ -114,6 +114,8 @@ class MigrationWizard(SessionWizardView):
         context = super(MigrationWizard, self)\
                   .get_context_data(form=form, **kwargs)
         context.update(self.page_titles.get(self.steps.current))
+        if self.steps.current == "forward_notice":
+            context.udate({"forward": self.forward})
         return context
 
     def get_template_names(self):
