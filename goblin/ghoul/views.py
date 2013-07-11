@@ -26,6 +26,12 @@ TEMPLATES = {"migrate": "ghoul/form_wizard/step1yes.html",
              "final_confirm": "ghoul/form_wizard/step4no.html"}
 
 def get_login(wizard):
+    """
+    Get user account name
+
+    This comes from the various methods
+    """
+
     if 'REMOTE_USER' in wizard.request.META:
         wizard.login = lower(wizard.request.META['REMOTE_USER'])
         wizard.request.session['login'] = wizard.login
@@ -36,17 +42,25 @@ def get_login(wizard):
         else:
             if 'login' in wizard.request.session:
                 wizard.login = wizard.request.session['login']
-            else:
-                login = 'dennis'
 
 def presync(wizard):
+    """
+    presync:
+        Check ldap to see if 'login' has the googlePreSync flag set.
+        If the flag is set, return true.
+    """
     if not wizard.login:
         get_login(wizard)
     sync = wizard.psusys.presync_enabled(wizard.login)
     return sync
 
 def no_presync(wizard):
-    if not wizard.login:
+     """
+    no_presync:
+        Check ldap to see if 'login' has the googlePreSync flag set.
+        If the flag is not set, return true.
+    """
+   if not wizard.login:
         get_login(wizard)
     sync = wizard.psusys.presync_enabled(wizard.login)
     return not sync
