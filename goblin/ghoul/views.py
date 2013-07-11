@@ -60,7 +60,7 @@ def no_presync(wizard):
         Check ldap to see if 'login' has the googlePreSync flag set.
         If the flag is not set, return true.
     """
-   if not wizard.login:
+    if not wizard.login:
         get_login(wizard)
     sync = wizard.psusys.presync_enabled(wizard.login)
     return not sync
