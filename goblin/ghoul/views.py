@@ -55,7 +55,7 @@ def presync(wizard):
     return sync
 
 def no_presync(wizard):
-     """
+    """
     no_presync:
         Check ldap to see if 'login' has the googlePreSync flag set.
         If the flag is not set, return true.
