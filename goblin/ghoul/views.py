@@ -24,35 +24,24 @@ def get_login(wizard):
     if 'REMOTE_USER' in wizard.request.META:
         wizard.login = lower(wizard.request.META['REMOTE_USER'])
         wizard.request.session['login'] = wizard.login
-        log.info('views.select() found user in META: ' + wizard.login)
     else:
         if 'login' in wizard.request.POST:
             wizard.login = lower(wizard.request.POST['login'])
             wizard.request.session['login'] = wizard.login
-            log.info('views.select() login found in POST: ' + wizard.login)
         else:
             if 'login' in wizard.request.session:
                 wizard.login = wizard.request.session['login']
-                log.info('views.select() login found in session: ' +
-                         wizard.login)
             else:
                 login = 'dennis'
-                self.log.info('views.select() login not found, defaulting to : '
-                         + wizard.login)
-
-        log.info('views.select() using login: ' + wizard.login)
-
 
 def presync(wizard):
     get_login(wizard)
     sync = wizard.psusys.presync_enabled(wizard.login)
-    log.info("Presync enabled: " + str(sync))
     return sync
 
 def no_presync(wizard):
     get_login(wizard)
     sync = wizard.psusys.presync_enabled(wizard.login)
-    log.info("Prsync disabled: " + str(not sync))
     return not sync
 
 def forward_set(wizard):
