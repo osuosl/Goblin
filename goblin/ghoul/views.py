@@ -1,4 +1,4 @@
-from subprocess import check_output
+from subprocess import PIPE, Popen
 
 from django.conf import settings
 from django.shortcuts import render_to_response
@@ -73,7 +73,8 @@ def forward_set(wizard):
     if not wizard.forward:
         get_fwd = os.path.join(settings.ROOT, 'bin', 'get-cyrus-fwd.pl')
         fwd_cfg = os.path.join(settings.ROOT, 'etc', 'imap_fwd.cfg')
-        wizard.forward = check_output(['perl', get_fwd, fwd_cfg, wizard.login])
+        wizard.forward = Popen(['perl', get_fwd, fwd_cfg, wizard.login],
+                                stdout=PIPE).communicate()[0]
 
         # Now to handle the information returned
         location = wizard.psusys.prop.get('imap.host')
