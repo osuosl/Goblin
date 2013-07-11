@@ -115,7 +115,7 @@ class MigrationWizard(SessionWizardView):
                   .get_context_data(form=form, **kwargs)
         context.update(self.page_titles.get(self.steps.current))
         if self.steps.current == "forward_notice":
-            context.udate({"forward": self.forward})
+            context.update({"forward": self.forward})
         return context
 
     def get_template_names(self):
