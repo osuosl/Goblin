@@ -35,12 +35,16 @@ def get_login(wizard):
                 login = 'dennis'
 
 def presync(wizard):
-    get_login(wizard)
+    if not wizard.login:
+        get_login(wizard)
+        return False
     sync = wizard.psusys.presync_enabled(wizard.login)
     return sync
 
 def no_presync(wizard):
-    get_login(wizard)
+    if not wizard.login:
+        get_login(wizard)
+        return False
     sync = wizard.psusys.presync_enabled(wizard.login)
     return not sync
 
@@ -68,6 +72,9 @@ class MigrationWizard(SessionWizardView):
                    "final_confirm": {'page_title': "Final Confirm"},}
 
     psusys = PSUSys()
+
+    forward = None
+    login = None
 
     def get_context_data(self, form, **kwargs):
         context = super(MigrationWizard, self)\
