@@ -1,3 +1,6 @@
+from subprocess import check_output
+
+from django.conf import settings
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.template import RequestContext
@@ -6,6 +9,8 @@ from tasks import *
 from psusys import PSUSys
 import logging
 from string import lower
+
+import os
 
 from goblin.ghoul.forms import FORMS
 
@@ -47,7 +52,23 @@ def no_presync(wizard):
     return not sync
 
 def forward_set(wizard):
-    return True
+    """
+    forward_set:
+        Shell out to a perl script to see if the user has a forward setup
+    """
+    if not wizard.forward:
+        get_fwd = os.path.join(settings.ROOT, 'bin', 'get-cyrus-fwd.pl')
+        fwd_cfg = os.path.join(settings.ROOT, 'etc', 'imap_fwd.cfg')
+        wizard.forward = check_output(['perl', get_fwd, fwd_cfg, wizard.login])
+
+        # Now to handle the information returned
+        location = wizard.psusys.prop.get('imap.host')
+        location_str = "Could not connect to mail server" + location + ", please try again."
+        if wizard.forward not in [None, "none", location_str]:
+            return True
+
+    log.info("wizard.forward: " + wizard.forward)
+    return False
 
 
 class MigrationWizard(SessionWizardView):
