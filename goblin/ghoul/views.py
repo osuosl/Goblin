@@ -2,7 +2,7 @@ from subprocess import PIPE, Popen
 
 from django.conf import settings
 from django.shortcuts import render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.contrib.formtools.wizard.views import SessionWizardView
 from tasks import *
@@ -85,6 +85,10 @@ def forward_set(wizard):
 
     return False
 
+def done_page(request):
+    return render_to_response('ghoul/form_wizard/step5done.html', {
+        'page_title': "Migration in Progress",
+    })
 
 class MigrationWizard(SessionWizardView):
     """
@@ -126,10 +130,7 @@ class MigrationWizard(SessionWizardView):
         Step5done is the final step of the form, which is just a
         reiteration of all the pages the user just went through.
         """
-
-        return render_to_response('ghoul/form_wizard/step5done.html', {
-            'form_data': [form.cleaned_data for form in form_list],
-        })
+        return HttpResponseRedirect('/progress')
 
 
 def select(request):

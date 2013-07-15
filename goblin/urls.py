@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     (r'^status', 'goblin.ghoul.views.status'),
     (r'^confirm', 'goblin.ghoul.views.confirm'),
     (r'^select', 'goblin.ghoul.views.select'),
+    (r'^progress', 'goblin.ghoul.views.progress'),
     (r'^migrate', MigrationWizard\
                   .as_view(FORMS,
                            condition_dict={'migrate': presync,
