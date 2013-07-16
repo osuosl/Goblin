@@ -135,8 +135,7 @@ class MigrationWizard(SessionWizardView):
         reiteration of all the pages the user just went through.
         """
         # Celery task: copy_email_task
-        tasks.copy_email_task(self.login)
-
+        copy_email_task(self.login)
         # Now that emails are sent and conversion has kicked off,
         # redirect the user to the progress page
         return HttpResponseRedirect('/progress')

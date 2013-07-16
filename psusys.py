@@ -17,7 +17,7 @@ from gdata.service import BadAuthentication
 from gdata.service import CaptchaRequired
 from gdata.apps.service import AppsForYourDomainException
 
-from django.config import settings
+from django.conf import settings
 
 class PSUSys:
     def __init__(self):
