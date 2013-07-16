@@ -134,16 +134,8 @@ class MigrationWizard(SessionWizardView):
         Step5done is the final step of the form, which is just a
         reiteration of all the pages the user just went through.
         """
-        log.info("Send Notify EMAIL")
-        # Celery: Send Notify Email
-        psusys.send_conversion_email_in_progress(self.login,
-                                                 settings.ROOT)
-        # Celery: Send Email
-        log.info("Send Email to OLD email account")
-        # Celery: Enable Gmail
-        # psusys.enable_google_account(self.login)
-        # Celery: Send Email
-        log.info("Send Email to NEW gmail account")
+        # Celery task: copy_email_task
+        tasks.copy_email_task(self.login)
 
         # Now that emails are sent and conversion has kicked off,
         # redirect the user to the progress page
