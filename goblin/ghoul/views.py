@@ -85,7 +85,7 @@ def forward_set(wizard):
 
     return False
 
-def done_page(request):
+def progress(request):
     return render_to_response('ghoul/form_wizard/step5done.html', {
         'page_title': "Migration in Progress",
     })
@@ -130,6 +130,12 @@ class MigrationWizard(SessionWizardView):
         Step5done is the final step of the form, which is just a
         reiteration of all the pages the user just went through.
         """
+        log.info("Send Notify EMAIL")
+        # Celery: Send Notify Email
+        log.info("Send Email to NEW gmail account")
+        # Celery: Send Email
+        log.info("Send Email to OLD email account")
+        # Celery: Send Email
         return HttpResponseRedirect('/progress')
 
 
