@@ -8,6 +8,7 @@ from googleimap.psuldap import psuldap
 from time import sleep
 import shlex
 import subprocess
+import os
 from memcacheq import MemcacheQueue
 import gdata.apps.organization.service
 import gdata.apps.service
@@ -421,19 +422,17 @@ mailRoutingAddress: %s@%s
         # Send the conversion confirmation email to the user
         # Launch a Subprocess here to send email
 
-    def send_conversion_email_in_progress(self, login):
+    def send_conversion_email_in_progress(self, login, root_dir):
         self.log.info('send_conversion_email_in_progress(): \
                       sending mail to user: ' + login)
         # Send the conversion confirmation email to the user
         # Launch a Subprocess here to send email
-        cmd = '/var/www/goblin/current/conversion_email_in_progress ' + login
+        cmd = os.path.join(root_dir, 'conversion_email_in_progress')
 
-        syncprocess = subprocess.Popen(shlex.split(cmd))
-
-        while (syncprocess.poll() is None):
-            sleep(3)
-            self.log.info('send_conversion_email_in_progress(): \
-                          continuing to send mail for user: ' + login)
+        syncprocess = subprocess.Popen([cmd, login],
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
+        sync_output = syncprocess.communitace()
 
         if syncprocess.returncode == 0:
             self.log.info('send_conversion_email_in_progress(): \
@@ -441,7 +440,8 @@ mailRoutingAddress: %s@%s
             return True
         else:
             self.log.info('send_conversion_email_in_progress(): \
-                          failed for user: ' + login)
+                          failed for user: ' + login + '\n' +
+                          sync_output[1])
             return False
 
     def send_conversion_email_psu(self, login):

@@ -86,6 +86,10 @@ def forward_set(wizard):
     return False
 
 def progress(request):
+    """
+    Show the user the final info and a progress bar of their
+    transfer status
+    """
     return render_to_response('ghoul/form_wizard/step5done.html', {
         'page_title': "Migration in Progress",
     })
@@ -132,10 +136,17 @@ class MigrationWizard(SessionWizardView):
         """
         log.info("Send Notify EMAIL")
         # Celery: Send Notify Email
-        log.info("Send Email to NEW gmail account")
+        psusys.send_conversion_email_in_progress(self.login,
+                                                 settings.ROOT)
         # Celery: Send Email
         log.info("Send Email to OLD email account")
+        # Celery: Enable Gmail
+        # psusys.enable_google_account(self.login)
         # Celery: Send Email
+        log.info("Send Email to NEW gmail account")
+
+        # Now that emails are sent and conversion has kicked off,
+        # redirect the user to the progress page
         return HttpResponseRedirect('/progress')
 
 
