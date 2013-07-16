@@ -658,17 +658,17 @@ mailRoutingAddress: %s@%s
             retry_count += 1
 
     def retrieve_orgunit(self, login):
-                email = self.prop.get('google.email')
-                domain = self.prop.get('google.domain')
-                pw = self.prop.get('google.password')
+        email = self.prop.get('google.email')
+        domain = self.prop.get('google.domain')
+        pw = self.prop.get('google.password')
 
-                client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
-                client.ProgrammaticLogin()
-                customerId = client.RetrieveCustomerId()["customerId"]
-                userEmail = login + '@' + domain
-                old_org  = client.RetrieveOrgUser( customerId, userEmail)
+        client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
+        client.ProgrammaticLogin()
+        customerId = client.RetrieveCustomerId()["customerId"]
+        userEmail = login + '@' + domain
+        old_org  = client.RetrieveOrgUser( customerId, userEmail)
 
-                return old_org
+        return old_org
 
     def enable_gmail(self, login):
         retry_count = 0
@@ -873,7 +873,7 @@ mailRoutingAddress: %s@%s
         account_status = psu_sys.google_account_status(login)
 
         # Check to make sure the user has a Google account
-        if account_status["exists"] is False:
+        if account_status.get("exists", False) is False:
             log.info("presync_email_task(): user does not exist in Google: " +
                      login)
             return(True)
@@ -881,10 +881,11 @@ mailRoutingAddress: %s@%s
         # Check for LDAP mail forwarding already (double checking), if
         # already opt'd-in, then immediately return and mark as complete.
 
-        if (psu_sys.opt_in_already(login)):
+        if psu_sys.opt_in_already(login):
             log.info("copy_email_task(): has already completed opt-in: " +
                      login)
             mc.set(key, 100)
+            # Done?
             return(True)
         else:
             log.info("copy_email_task(): has not already completed opt-in: " +
@@ -893,10 +894,11 @@ mailRoutingAddress: %s@%s
 
         # We temporarily enable suspended accounts for
         # the purposes of synchronization
-        if account_status["enabled"] is False:
+        if account_status.get("enabled", False) is False:
             log.info("presync_email_task(): temporarily enabling account: " +
                      login)
             # Enable account if previously disabled
+            # XXX: This function doesn't seem to do anything, incomplete?
             psu_sys.enable_google_account(login)
             mc.set(key, 45)
 
