@@ -17,6 +17,7 @@ from gdata.service import BadAuthentication
 from gdata.service import CaptchaRequired
 from gdata.apps.service import AppsForYourDomainException
 
+from django.config import settings
 
 class PSUSys:
     def __init__(self):
@@ -926,9 +927,18 @@ mailRoutingAddress: %s@%s
         mc.set(key, 60)
 
         # Switch routing of email to flow to Google
-
         log.info("copy_email_task(): Routing email to Google: " + login)
-        psu_sys.route_to_google(login)
+        #psu_sys.route_to_google(login)
+        # Perl script to run
+        cmd = os.join(settings.ROOT, 'set-cyrus-fwd.pl')
+        # Imap config file
+        config = os.join(settings.ROOT, 'etc', 'imap_fwd.cfg')
+        # Subprocess
+        results = subprocess.Popen(['perl', cmd, config, login])
+        # Communicate to get (stdout, stderr)
+        output = results.communicate()
+        log.info("set-fwd stdout: " + output[0])
+        log.info("set-fwd stderr: " + output[1])
         mc.set(key, 70)
 
         # Final email sync
