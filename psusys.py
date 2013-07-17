@@ -18,6 +18,7 @@ from gdata.service import CaptchaRequired
 from gdata.apps.service import AppsForYourDomainException
 
 from django.conf import settings
+import celeryconfig
 
 class PSUSys:
     def __init__(self):
@@ -905,7 +906,7 @@ mailRoutingAddress: %s@%s
 
         # Send conversion info email to users Google account
         log.info("copy_email_task(): conversion in progress email: " + login)
-        psu_sys.send_conversion_email_in_progress(login, settings.ROOT)
+        psu_sys.send_conversion_email_in_progress(login, celeryconfig.ROOT)
 
         # Enable Google email for the user
         # This is the last item that the user should wait for.
@@ -930,9 +931,9 @@ mailRoutingAddress: %s@%s
         log.info("copy_email_task(): Routing email to Google: " + login)
         #psu_sys.route_to_google(login)
         # Perl script to run
-        cmd = os.join(settings.ROOT, 'set-cyrus-fwd.pl')
+        cmd = os.join(celeryconfig.ROOT, 'set-cyrus-fwd.pl')
         # Imap config file
-        config = os.join(settings.ROOT, 'etc', 'imap_fwd.cfg')
+        config = os.join(celeryconfig.ROOT, 'etc', 'imap_fwd.cfg')
         # Subprocess
         results = subprocess.Popen(['perl', cmd, config, login])
         # Communicate to get (stdout, stderr)
