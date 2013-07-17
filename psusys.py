@@ -434,7 +434,7 @@ mailRoutingAddress: %s@%s
         syncprocess = subprocess.Popen([cmd, login],
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE)
-        sync_output = syncprocess.communitace()
+        sync_output = syncprocess.communicate()
 
         if syncprocess.returncode == 0:
             self.log.info('send_conversion_email_in_progress(): \
