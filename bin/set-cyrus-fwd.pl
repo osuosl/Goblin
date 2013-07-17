@@ -1,22 +1,30 @@
 #!/usr/bin/perl -w
+use Config::Simple;
+
+$cfg = new Config::Simple($ARGV[0]);
+$imaphost = $cfg->param('ImapHost');
+$imapuser = $cfg->param('User');
+$imappass = $cfg->param('Password');
+
+
 #
 # Sets an ONID user's forward in Cyrus to Google
 #
 
 use Cyrus::SIEVE::managesieve;
 
-if ($#ARGV < 0) {
+if ($#ARGV < 1) {
 	print "Usage: $0 <username>\n";
 	print "  Set the forward in Cyrus for <username> to <username>\@g-mx.oregonstate.edu.\n";
 	print "  Prints 'success' if forward is successfully set.\n";
 	exit;
 }
 
-our $username = $ARGV[0];
+our $username = $ARGV[1];
 
-my %prefs = (	'imapserver'	=> 'test-cyrus-fe.onid.oregonstate.edu',
-		'imapuser'	=> 'cyr_gmig',
-		'imappass'	=> ''
+my %prefs = ('imapserver' => $imaphost,
+		'imapuser'	=> %imapuser,
+		'imappass'	=> $imappass
 		);
 
 my $scriptname = "google-mig";

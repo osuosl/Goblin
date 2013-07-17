@@ -19,12 +19,14 @@ urlpatterns = patterns('',
     (r'^status', 'goblin.ghoul.views.status'),
     (r'^confirm', 'goblin.ghoul.views.confirm'),
     (r'^select', 'goblin.ghoul.views.select'),
+    (r'^progress', 'goblin.ghoul.views.progress'),
     (r'^migrate', MigrationWizard\
                   .as_view(FORMS,
                            condition_dict={'migrate': presync,
                                            'transition': no_presync,
+                                           'confirm_trans': no_presync,
                                            'forward_notice': forward_set,
-                                            'confirm': presync,})),
+                                           'confirm': presync,})),
     (r'^', 'goblin.ghoul.views.select'),
 
 )

@@ -4,10 +4,10 @@ PATH=$PATH:/vol/goblin/bin
 
 msgSendmail(){
 cat << ESO
-REPLY-To: PSU Google Project Team <no-reply@pdx.edu>
-Organization: Portland State University
+REPLY-To: OSU Google Project Team <no-reply@oregonstate.edu>
+Organization: Oregon State University
 MIME-Version: 1.0
-Subject: Account Migration to PSU Google Mail in Progress
+Subject: Account Migration to Google Mail in Progress
 
 ESO
 msg
@@ -15,37 +15,30 @@ msg
 
 msg(){
 cat << EOS
-Your migration to PSU Google Mail has begun!  Please read the 
+Your ONID email is now being migrated to Google Apps for OSU!  Please read the
 following important items:
 
-1. Your access to Google Mail has been enabled in order to complete 
-the migration process, but it is VERY important that you do not use 
-Google Mail until you receive notification that the process is complete.  
-Using Google Mail before the migration is complete could cause email 
-messages to be permanently erased.
+1. Your access to Google Mail has been enabled in order to complete the
+migration process, but it is VERY important that you do not use Google Mail
+until you receive notification that the process is complete.  Using Google Mail
+before the migration is complete could cause email messages to be permanently
+erased.
 
-2. During this process, you can continue to use your current mail setup.  
-The migration typically takes between 10 minutes and 1 hour to complete, 
-but can take up to 48 hours.   You will receive a final email in your 
-PSU mailbox when the migration has finished along with your next steps.
+2. During this process, you can continue to use your current mail setup.  You
+will receive a final email in your (old) ONID mailbox when the migration has
+finished.
 
-3. Email clients (i.e. Thunderbird, Outlook, and iPhone/Android mail apps) 
-will not work correctly and need to be reconfigured once the migration 
-process is complete.  Links to instructions for configuring email clients 
-will be included in the completion notification sent to your new 
-Google Mail account.
+3. Email clients (i.e. Thunderbird, Outlook, and iPhone/Android mail apps) will
+not work correctly and need to be reconfigured once the migration process is
+complete.  Links to instructions for configuring email clients will be included
+in the completion notification sent to your new Google Mail account.
 
-4. Email forwarding (if configured in OAM or Webmail) will stop, and 
-any existing mail filters & rules will need to be re-configured in Google Mail.  
-Links to instructions for configuring email forwarding and rules/filters in 
-Google Mail will be included in the completion notification sent to your 
-new Google Mail account.
-
-For more information please visit: http://google.pdx.edu
-
--PSU Google Project Team
+4. Email forwarding and any existing mail filters/rules will need to be
+re-configured in Google Mail.  Links to instructions for configuring email
+forwarding and filters/rules in Google Mail will be included in the completion
+notification sent to your new Google Mail account.
 EOS
 }
 
-msgSendmail | /usr/lib/sendmail -f no-reply@pdx.edu ${1}@pdx.edu
-msg | sendEmail -q -o reply-to=no-reply@pdx.edu -f no-reply@pdx.edu -u 'Your PSU email is about to be migrated to Google Mail' -f no-reply@pdx.edu -t ${1}@odin.pdx.edu -s cyrus.psumail.pdx.edu 
+msgSendmail | /usr/lib/sendmail -f no-reply@pdx.edu ${1}@onid.oregonstate.edu
+msg | sendEmail -q -o reply-to=no-reply@oregonstate.edu -f no-reply@oregonstate.edu -u 'Your ONID email is about to be migrated to Google Mail' -f no-reply@oregonstate.edu -t ${1}@onid.oregonstate.edu -s smtp.oregonstate.edu

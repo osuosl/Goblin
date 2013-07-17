@@ -2,7 +2,7 @@ from subprocess import PIPE, Popen
 
 from django.conf import settings
 from django.shortcuts import render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.contrib.formtools.wizard.views import SessionWizardView
 from tasks import *
@@ -13,6 +13,8 @@ from string import lower
 import os
 
 from goblin.ghoul.forms import FORMS
+
+import celeryconfig
 
 log = logging.getLogger('ghoul.views')
 
@@ -71,7 +73,7 @@ def forward_set(wizard):
         Shell out to a perl script to see if the user has a forward setup
     """
     if wizard.forward is None:
-        get_fwd = os.path.join(settings.ROOT, 'bin', 'get-cyrus-fwd.pl')
+        get_fwd = os.path.join(celeryconfig.ROOT, 'bin', 'get-cyrus-fwd.pl')
         fwd_cfg = os.path.join(settings.ROOT, 'etc', 'imap_fwd.cfg')
         wizard.forward = Popen(['perl', get_fwd, fwd_cfg, wizard.login],
                                 stdout=PIPE).communicate()[0]
@@ -85,6 +87,14 @@ def forward_set(wizard):
 
     return False
 
+def progress(request):
+    """
+    Show the user the final info and a progress bar of their
+    transfer status
+    """
+    return render_to_response('ghoul/form_wizard/step5done.html', {
+        'page_title': "Migration in Progress",
+    })
 
 class MigrationWizard(SessionWizardView):
     """
@@ -126,10 +136,11 @@ class MigrationWizard(SessionWizardView):
         Step5done is the final step of the form, which is just a
         reiteration of all the pages the user just went through.
         """
-
-        return render_to_response('ghoul/form_wizard/step5done.html', {
-            'form_data': [form.cleaned_data for form in form_list],
-        })
+        # Celery task: copy_email_task
+        copy_email_task.apply_async(args=[self.login], queue='optinpresync')
+        # Now that emails are sent and conversion has kicked off,
+        # redirect the user to the progress page
+        return HttpResponseRedirect('/progress')
 
 
 def select(request):
