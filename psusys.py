@@ -1003,7 +1003,7 @@ mailRoutingAddress: %s@%s
         account_status = psu_sys.google_account_status(login)
 
         # Check to make sure the user has a Google account
-        if account_status["exists"] is False:
+        if account_status.get("exists", False) is False:
             log.info("presync_email_task(): user does not exist in Google: " +
                      login)
             return(True)
