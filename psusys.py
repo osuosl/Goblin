@@ -21,6 +21,7 @@ class PSUSys:
     def __init__(self):
         self.MAX_MAIL_SIZE = pow(2, 20) * 25
         self.MAX_RETRY_COUNT = 5
+        self.large_emails = []
         self.prop = Property(key_file='opt-in.key',
                              properties_file='opt-in.properties')
         self.log = logging.getLogger('goblin.psusys')
