@@ -43,13 +43,13 @@ class PSUSys:
         imap_host = self.prop.get('imap.host')
         imap_login = self.prop.get('imap.login')
         imap_password = self.prop.get('imap.password')
-        
+
         self.log.info('PSUSys.large_emails() login: ' + login)
 
         ims = imapstat(imap_host, imap_login, imap_password)
         self.log.info('PSUSys.large_emails() imapstat host: ' + imap_host)
 
-        #stat returns: 
+        #stat returns:
         # {'mbox_list': [box1, box2...], 'quota': quota, 'quota_used': used}
         stat = ims.stat(login)
         large_emails = []
@@ -59,7 +59,7 @@ class PSUSys:
 
         # bigmessages returns:
         # { 'box1': [header1, header2...] }
-        # where header1, etc are: 
+        # where header1, etc are:
         # [{'Recieved': 'recieved header', 'From': 'from header', etc..}]
         msg_list = ims.bigmessages(login,
                                    stat['mbox_list'], self.MAX_MAIL_SIZE)

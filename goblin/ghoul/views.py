@@ -159,8 +159,8 @@ def select(request):
     # Go to informational page for folks who are not yet allowed-in
     if not psu_sys.is_allowed(login):
         status_message = "psu_sys.is_allowed is false"
-        return render_to_response('ghoul/notyet.html', 
-                                  {'login': login, 
+        return render_to_response('ghoul/notyet.html',
+                                  {'login': login,
                                    'status_message': status_message},
                                   context_instance=RequestContext(request),)
     # Go to the confirmation page if the user has already opt'd-in
