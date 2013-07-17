@@ -906,7 +906,7 @@ mailRoutingAddress: %s@%s
 
         # Send conversion info email to users Google account
         log.info("copy_email_task(): conversion in progress email: " + login)
-        psu_sys.send_conversion_email_in_progress(login, self.imap_conf)
+        psu_sys.send_conversion_email_in_progress(login, settings.ROOT)
 
         # Enable Google email for the user
         # This is the last item that the user should wait for.
