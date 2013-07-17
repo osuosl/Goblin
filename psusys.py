@@ -38,26 +38,39 @@ class PSUSys:
         self.log = logger
 
     def large_emails(self, login):
+        # verify these values - are these correct for the user we are testing?
         imap_host = self.prop.get('imap.host')
         imap_login = self.prop.get('imap.login')
         imap_password = self.prop.get('imap.password')
+        
         self.log.info('PSUSys.large_emails() login: ' + login)
 
         ims = imapstat(imap_host, imap_login, imap_password)
         self.log.info('PSUSys.large_emails() imapstat host: ' + imap_host)
+
+        #stat returns: 
+        # {'mbox_list': [box1, box2...], 'quota': quota, 'quota_used': used}
         stat = ims.stat(login)
+        large_emails = []
+
+        if not stat['mbox_list']:
+            return large_emails
+
+        # bigmessages returns:
+        # { 'box1': [header1, header2...] }
+        # where header1, etc are: 
+        # [{'Recieved': 'recieved header', 'From': 'from header', etc..}]
         msg_list = ims.bigmessages(login,
                                    stat['mbox_list'], self.MAX_MAIL_SIZE)
-        large_emails = []
-        for folder in msg_list.keys():
-            for msg in msg_list[folder]:
+        for folder in msg_list.keys(): # box1, etc
+            for msg in msg_list[folder]: # header1, etc
                 large_email = {}
-                large_emails.append(large_email)
                 for key in ['Subject', 'Date', 'From']:
                     if key in msg:
                         large_email[key] = msg[key]
                     else:
-                        large_email[key] = 'none'
+                        large_email[key] = 'none'  # why bother?
+                large_emails.append(large_email)
 
         return large_emails
 

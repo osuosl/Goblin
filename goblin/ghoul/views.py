@@ -158,21 +158,35 @@ def select(request):
 
     # Go to informational page for folks who are not yet allowed-in
     if not psu_sys.is_allowed(login):
-        return render_to_response('ghoul/closed.html', {'login': login},
+        status_message = "psu_sys.is_allowed is false"
+        return render_to_response('ghoul/notyet.html', 
+                                  {'login': login, 
+                                   'status_message': status_message},
                                   context_instance=RequestContext(request),)
     # Go to the confirmation page if the user has already opt'd-in
     if psu_sys.opt_in_already(login):
-        return render_to_response('ghoul/confirm.html', {'login': login},
+        status_message = "you are opted-in already"
+        return render_to_response('ghoul/notyet.html',
+                                  {'login': login,
+                                   'status_message': status_message},
                                   context_instance=RequestContext(request),)
     # Go to suspended page if site is not available
     if psu_sys.is_web_suspended(login):
-        return render_to_response('ghoul/suspended.html', {'login': login},
+        status_message = "web is suspended"
+        return render_to_response('ghoul/notyet.html',
+                                  {'login': login,
+                                   'status_message': status_message},
                                   context_instance=RequestContext(request),)
     if psu_sys.is_processing(login):
-        return render_to_response('ghoul/status.html', {'login': login})
+        status_message = "we are already processing this user"
+        return render_to_response('ghoul/notyet.html',
+                                  {'login': login,
+                                   'status_message': status_message},
+                                  context_instance=RequestContext(request),)
+
     # So, folderbombing is a thing
     try:
-        large_emails = psu_sys.large_emails(login)
+        psu_sys.large_emails = psu_sys.large_emails(login)
     except:
         return render_to_response('ghoul/folderbomb.html', {'login': login},
                                   context_instance=RequestContext(request),)
@@ -185,7 +199,7 @@ def select(request):
 
     return render_to_response(template,
                               {'login': login,
-                               'large_emails': large_emails},
+                               'large_emails': psu_sys.large_emails},
                               context_instance=RequestContext(request),)
 
 
