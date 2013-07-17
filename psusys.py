@@ -27,6 +27,7 @@ class PSUSys:
         self.prop = Property(key_file='opt-in.key',
                              properties_file='opt-in.properties')
         self.log = logging.getLogger('goblin.psusys')
+        self.imap_conf = os.path.join(settings.ROOT, 'etc', 'imap_fwd.cfg')
         print "Logging default handlers: " + str(self.log.handlers)
         if len(self.log.handlers) == 0:
             # No handlers for this logger, assume logging is not initialized..
@@ -905,7 +906,7 @@ mailRoutingAddress: %s@%s
 
         # Send conversion info email to users Google account
         log.info("copy_email_task(): conversion in progress email: " + login)
-        psu_sys.send_conversion_email_in_progress(login)
+        psu_sys.send_conversion_email_in_progress(login, self.imap_conf)
 
         # Enable Google email for the user
         # This is the last item that the user should wait for.
