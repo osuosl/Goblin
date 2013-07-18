@@ -85,12 +85,12 @@ def forward_set(wizard):
 
     # If wizard.form is not set or the perl script returns the location
     # string, return False
-    if (wizard.forward in [None, location_str]:
+    if wizard.forward in [None, location_str]:
         return False
 
     # If the word none is found within the output of the perl script,
     # return False
-    if 'none' in wizard.forward):
+    if 'none' in wizard.forward:
         return False
 
     # If we are given any other response by the perl script,
