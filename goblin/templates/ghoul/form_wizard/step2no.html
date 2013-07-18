@@ -2,6 +2,10 @@
 
 {% block content %}
 
+{% csrf_token %}
+
+{{ wizard.management_form }}
+
 <p>State and federal regulations and OSU policy prohibit certain data elements from being stored on or transmitted via Google. These data elements are:</p>
 
 <ul>

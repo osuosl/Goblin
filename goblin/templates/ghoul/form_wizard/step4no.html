@@ -2,6 +2,10 @@
 
 {% block content %}
 
+{% csrf_token %}
+
+{{ wizard.management_form }}
+
 <p>Please confirm you wish to opt in to Google Mail.</p>
 
 <p>{{ form.i_accept }}

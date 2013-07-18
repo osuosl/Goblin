@@ -2,6 +2,10 @@
 
 {% block content %}
 
+{% csrf_token %}
+
+{{ wizard.management_form }}
+
 <p>Once you confirm that your account is ready to migrate, you will click “Opt in” on the next page, which commits you to moving ONID email to Google. The migration process typically takes between 10 minutes and 1 hour to complete. After the migration is complete, ONID email services will be delivered via Google.</p>
 
 <p><b>IMPORTANT: Before opting in to Google Mail, indicate that you understand the items below.</b> You may cancel the opt-in migration if you’re not certain you wish to continue, and you may return to opt in at any point in the future, through an approximate date of December 20th, 2013.</p>

@@ -2,6 +2,10 @@
 
 {% block content %}
 
+{% csrf_token %}
+
+{{ wizard.management_form }}
+
 <p>If you currently use any non-Webmail email clients to check your ONID email – and that includes iPhone and Android email apps, as well as desktop clients such as Thunderbird and Outlook – you will need to reconfigure them once the process is complete. You will receive an email after the migration is complete with instructions on how to do this.</p>
 
 <p><b>Be aware the best user experience occurs through the Google Mail web app – commonly referred to as Gmail – and the Google mobile apps.</b> Clients such as Thunderbird and Outlook will work, but they are not optimized for use with Google Mail, and they may not perform as well as Google’s apps.</p>
