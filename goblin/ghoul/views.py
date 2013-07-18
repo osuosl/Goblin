@@ -73,7 +73,7 @@ def forward_set(wizard):
         Shell out to a perl script to see if the user has a forward setup
     """
     if wizard.forward is None:
-        get_fwd = '/var/www/goblin/current/bin/get-cyrus-fwd.gl'
+        get_fwd = '/var/www/goblin/current/bin/get-cyrus-fwd.pl'
         fwd_cfg = '/var/www/goblin/current/etc/imap_fwd.cfg'
         wizard.forward = Popen(['perl', get_fwd, fwd_cfg, wizard.login],
                                 stdout=PIPE).communicate()[0]
@@ -82,10 +82,13 @@ def forward_set(wizard):
     location = wizard.psusys.prop.get('imap.host')
     location_str = "Could not connect to mail server %s, please try again." %\
                    location
-    if wizard.forward not in [None, "none", location_str]:
-        return True
+    if wizard.forward in [None, location_str]:
+        return False
 
-    return False
+    if 'none' in wizard.forward:
+        return False
+
+    return True
 
 def progress(request):
     """
