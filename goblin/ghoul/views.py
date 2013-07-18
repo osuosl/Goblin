@@ -27,7 +27,7 @@ TEMPLATES = {"migrate": "ghoul/form_wizard/step1yes.html",
              "confirm": "ghoul/form_wizard/step4yes.html",
              "final_confirm": "ghoul/form_wizard/step4no.html"}
 
-def forward_set():
+def forward_set(wizard):
     """
     forward_set:
         Shell out to a perl script to see if the user has a forward setup
@@ -148,9 +148,11 @@ class MigrationWizard(SessionWizardView):
                    "confirm": {'page_title': "Confirm"},
                    "final_confirm": {'page_title': "Final Confirm"},}
 
+    # All the fancy tools
     psusys = PSUSys()
 
-    forward = forward_set()
+    # Some needed vars for showing/skipping form pages
+    forward = None
     login = None
     presync = None
 
@@ -167,6 +169,7 @@ class MigrationWizard(SessionWizardView):
 
     def dispatch(self, request, *args, **kwargs):
         get_login(self)
+        self.forward = forward_set(self)
         self.presync = self.psusys.presync_enabled(self.login)
         super(self, SessionWizardView).dispatch(self, request, *args, **kwargs)
 
