@@ -82,10 +82,9 @@ def forward_set(wizard):
     location = wizard.psusys.prop.get('imap.host')
     location_str = "Could not connect to mail server %s, please try again." %\
                    location
-    if wizard.forward in [None, location_str]:
-        return False
 
-    if 'none' in wizard.forward:
+    if (wizard.forward in [None, location_str]
+        and 'none' in wizard.forward):
         return False
 
     return True
