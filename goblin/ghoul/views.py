@@ -27,6 +27,35 @@ TEMPLATES = {"migrate": "ghoul/form_wizard/step1yes.html",
              "confirm": "ghoul/form_wizard/step4yes.html",
              "final_confirm": "ghoul/form_wizard/step4no.html"}
 
+def forward_set():
+    """
+    forward_set:
+        Shell out to a perl script to see if the user has a forward setup
+    """
+    get_fwd = '/var/www/goblin/current/bin/get-cyrus-fwd.pl'
+    fwd_cfg = '/var/www/goblin/current/etc/imap_fwd.cfg'
+    forward = Popen(['perl', get_fwd, fwd_cfg, wizard.login],
+                    stdout=PIPE).communicate()[0]
+
+    # Now to handle the information returned
+    location = wizard.psusys.prop.get('imap.host')
+    location_str = "Could not connect to mail server %s, please try again." %\
+                   location
+
+    # If wizard.form is not set or the perl script returns the location
+    # string, return False
+    if forward in [None, location_str]:
+        return False
+
+    # If the word none is found within the output of the perl script,
+    # return False
+    if 'none' in forward:
+        return False
+
+    # If we are given any other response by the perl script,
+    # return True
+    return True
+
 def get_login(wizard):
     """
     Get user account name
@@ -51,51 +80,36 @@ def presync_set(wizard):
 
     return wizard.psusys.presync_enabled(wizard.login)
 
-def presync(wizard):
+def show_migrate(wizard):
     """
-    presync:
-        Check ldap to see if 'login' has the googlePreSync flag set.
+    show_migrate:
+        Check ldap to see if the user has the googlePreSync flag set.
         If the flag is set, return true.
     """
-    return presync_set(wizard)
+   return wizard.presync
 
-def no_presync(wizard):
+def show_transition(wizard):
     """
-    no_presync:
-        Check ldap to see if 'login' has the googlePreSync flag set.
+    show_transition:
+        Check ldap to see if user has the googlePreSync flag set.
         If the flag is not set, return true.
     """
-    return not presync_set(wizard)
+    return not wizard.presync
 
-def forward_set(wizard):
+def show_confirm_trans(wizard):
     """
-    forward_set:
-        Shell out to a perl script to see if the user has a forward setup
+    show_confirm_trans:
+        Check ldap to see if user has the googlePreSync flag set.
+        If the flag is not set, return true.
     """
-    if wizard.forward is None:
-        get_fwd = '/var/www/goblin/current/bin/get-cyrus-fwd.pl'
-        fwd_cfg = '/var/www/goblin/current/etc/imap_fwd.cfg'
-        wizard.forward = Popen(['perl', get_fwd, fwd_cfg, wizard.login],
-                                stdout=PIPE).communicate()[0]
+    return not wizard.presync
 
-    # Now to handle the information returned
-    location = wizard.psusys.prop.get('imap.host')
-    location_str = "Could not connect to mail server %s, please try again." %\
-                   location
-
-    # If wizard.form is not set or the perl script returns the location
-    # string, return False
-    if wizard.forward in [None, location_str]:
-        return False
-
-    # If the word none is found within the output of the perl script,
-    # return False
-    if 'none' in wizard.forward:
-        return False
-
-    # If we are given any other response by the perl script,
-    # return True
-    return True
+def show_forward_notice(wizard):
+    """
+    show_forward_notice:
+        Check the wizard to see if a forward is set
+    """
+    return wizard.forward
 
 def progress(request):
     """
@@ -136,8 +150,9 @@ class MigrationWizard(SessionWizardView):
 
     psusys = PSUSys()
 
-    forward = None
+    forward = forward_set()
     login = None
+    presync = None
 
     def get_context_data(self, form, **kwargs):
         context = super(MigrationWizard, self)\
@@ -149,6 +164,11 @@ class MigrationWizard(SessionWizardView):
 
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
+
+    def dispatch(self, request, *args, **kwargs):
+        get_login(self)
+        self.presync = self.psusys.presync_enabled(self.login)
+        super(self, SessionWizardView).dispatch(self, request, *args, **kwargs)
 
     def done(self, form_list, **kwargs):
         """
