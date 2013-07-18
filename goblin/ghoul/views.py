@@ -45,16 +45,19 @@ def get_login(wizard):
             if 'login' in wizard.request.session:
                 wizard.login = wizard.request.session['login']
 
+def presync_set(wizard):
+    if not wizard.login:
+        get_login(wizard)
+
+    return wizard.psusys.presync_enabled(wizard.login)
+
 def presync(wizard):
     """
     presync:
         Check ldap to see if 'login' has the googlePreSync flag set.
         If the flag is set, return true.
     """
-    if not wizard.login:
-        get_login(wizard)
-    sync = wizard.psusys.presync_enabled(wizard.login)
-    return sync
+    return presync_set(wizard)
 
 def no_presync(wizard):
     """
@@ -62,10 +65,7 @@ def no_presync(wizard):
         Check ldap to see if 'login' has the googlePreSync flag set.
         If the flag is not set, return true.
     """
-    if not wizard.login:
-        get_login(wizard)
-    sync = wizard.psusys.presync_enabled(wizard.login)
-    return not sync
+    return not presync_set(wizard)
 
 def forward_set(wizard):
     """
