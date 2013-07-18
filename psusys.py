@@ -936,8 +936,7 @@ mailRoutingAddress: %s@%s
         results = subprocess.Popen(['perl', cmd, config, login])
         # Communicate to get (stdout, stderr)
         output = results.communicate()
-        log.info("set-fwd stdout: " + output[0])
-        log.info("set-fwd stderr: " + output[1])
+        log.info("set-fwd: " + str(output))
         mc.set(key, 70)
 
         # Final email sync

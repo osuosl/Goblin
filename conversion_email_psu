@@ -1,42 +1,17 @@
 #!/bin/sh
 
-PATH=$PATH:/vol/goblin/bin
-
 msg(){
 cat << EOS
-You have successfully migrated to Google Mail! New mail will NOT be delivered to this location. 
-Please discontinue using this mailbox for sending or receiving messages. All messages sent to 
-your @pdx.edu address will now be delivered to your Google Mail inbox at mail.pdx.edu.
+<p>You have successfully migrated to Google Mail! New mail will NOT be delivered to this location. Please discontinue using this mailbox for sending or receiving messages. All messages sent to your ONID email address will now be delivered to Google Mail.</p>
 
-Your next steps...
+<p>Your next steps...
+<ol>
+    <li>Login to your Google Mail account at <a href="http://oregonstate.edu/google/">http://oregonstate.edu/google/</a> to verify your email is working properly.</li>
+    <li>Read the welcome email delivered to your new Google Mail inbox for important information and next steps.</li>
+</ol>
+</p>
 
-   1. Login to your Google Mail using mail.pdx.edu to verify your
-   mail is working properly.
-
-   2. Mail Clients (i.e. Thunderbird, Outlook, and iPhone/Android mail apps)
-   will not work correctly and will need to be reconfigured to work with 
-   Google Mail.  Before setting up Outlook or Thunderbird we encourage
-   you to give the Google Mail web interface a try at mail.pdx.edu.
-
-
-   More information can be found here: 
-   http://www.oit.pdx.edu/google-mail-client-settings
-
-   3. Email forwarding configured in OAM or Webmail has been disabled (if you were
-   using it), and mail filters/rules will need to be re-created in Google Mail.  
-
-   More information can be found here: 
-   http://www.oit.pdx.edu/google-mail-filter-settings
-
-   4. While the PSU directory is integrated into Google Mail, personal
-   contacts may be imported, as they were not imported as part of the 
-   opt-in process. 
-
-   More information can be found here: http://oit.pdx.edu/Contacts-Google
-
-For more information please visit the Google Apps project site: 
-https://sites.google.com/a/pdx.edu/google-apps/email-migration/opt-in-complete
 EOS
 }
 
-msg | sendEmail -q -o reply-to=no-reply@pdx.edu -f no-reply@pdx.edu -u 'Email Migration Complete!  Use PSU Google Mail at mail.pdx.edu' -f no-reply@pdx.edu -t ${1}@odin.pdx.edu -s cyrus.psumail.pdx.edu 
+msg | bin/sendEmail -u 'Email Migration Complete!  Use Google Apps for OSU at http://oregonstate.edu/google/.' -f no-reply@oregonstate.edu ${1}@onid.oregonstate.edu
