@@ -101,13 +101,13 @@ jQuery.extend(Drupal.settings, {"basePath":"\u002Fis\u002F", "pathPrefix":"", "a
     
     <!-- Now divide into main column and right sidebar -->
     <div class='row'>
-      <div class='span9' >
+      <div class='span12' >
 
         <!-- Features -->
         
                 <div class='row'>
         <!-- Main content and middle sidebar -->
-          <div class='span9'>
+          <div class='span12'>
 
             <!-- Pre-content -->
             
@@ -158,25 +158,32 @@ jQuery.extend(Drupal.settings, {"basePath":"\u002Fis\u002F", "pathPrefix":"", "a
       
       
       <!-- Right Sidebar - sidebar_first -->
+
+      <!-- ## commented out since no links are known, to re-instate the sidebar, be sure
+      ## to set the main content and main column divs to class="span9" instead of 
+      ## span12
+
               <div id='sidebar-first' class='span3'>
             <div class="region region-sidebar-first">
-    
 <div id="block-book-navigation" class="block block-book">
+    <h2><a href="#" class="book-title active">ONID Email Migration</a></h2>
+  
+    <div class="content">
+        <ul class="menu">
+            <li class="first collapsed"><a href="#">Link 1</a></li>
+            <li class="collapsed"><a href="#">Link 2</a></li>
+            <li class="collapsed"><a href="#">Link 3</a></li>
+            <li class="last collapsed"><a href="#">Last Link in this App</a></li>
+        </ul >  
+    </div>
+</div>
 
-    <h2><a href="#" class="book-title active">ONID Email Migraion</a></h2>
-  
-  <div class="content">
-    <ul class="menu"><li class="first collapsed"><a href="#">Link 1</a></li>
-<li class="collapsed"><a href="#">Link 2</a></li>
-<li class="collapsed"><a href="#">Link 3</a></li>
-<li class="last collapsed"><a href="#">Last Link in this App</a></li>
-</ul>  </div>
-</div>
 </div>
   
   
-  
-</div>  </div>
+</div>  
+-->
+ </div>
 </div>
   </div>
         </div>
