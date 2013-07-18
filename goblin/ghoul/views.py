@@ -73,8 +73,8 @@ def forward_set(wizard):
         Shell out to a perl script to see if the user has a forward setup
     """
     if wizard.forward is None:
-        get_fwd = os.path.join(celeryconfig.ROOT, 'bin', 'get-cyrus-fwd.pl')
-        fwd_cfg = os.path.join(settings.ROOT, 'etc', 'imap_fwd.cfg')
+        get_fwd = '/var/www/goblin/current/bin/get-cyrus-fwd.gl'
+        fwd_cfg = '/var/www/goblin/current/etc/imap_fwd.cfg'
         wizard.forward = Popen(['perl', get_fwd, fwd_cfg, wizard.login],
                                 stdout=PIPE).communicate()[0]
 
