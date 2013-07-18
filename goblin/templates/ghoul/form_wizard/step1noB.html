@@ -1,10 +1,6 @@
-{% extends "base.html" %}
+{% extends "form_base.html" %}
 
 {% block content %}
-
-{% csrf_token %}
-
-{{ wizard.management_form }}
 
 <p><b>IMPORTANT:</b> This tool does not migrate any email that’s currently stored in your ONID mailbox. We will provide an email migration tool late in the Summer 2013 term. This means that:</p>
 

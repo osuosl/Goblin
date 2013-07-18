@@ -1,10 +1,6 @@
-{% extends "base.html" %}
+{% extends "form_base.html" %}
 
 {% block content %}
-
-{% csrf_token %}
-
-{{ wizard.management_form }}
 
 <p>We see that your ONID email account has been forwarding to {{ forward }}.</p>
 

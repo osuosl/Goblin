@@ -1,10 +1,6 @@
-{% extends "base.html" %}
+{% extends "form_base.html" %}
 
 {% block content %}
-
-{% csrf_token %}
-
-{{ wizard.management_form }}
 
 <p>Once you confirm that your account is ready to migrate, you will click “Opt in” on the next page, which commits you to moving ONID email to Google. The migration process typically takes between 10 minutes and 1 hour to complete. After the migration is complete, ONID email services will be delivered via Google.</p>
 
