@@ -74,19 +74,15 @@ def get_login(wizard):
             if 'login' in wizard.request.session:
                 wizard.login = wizard.request.session['login']
 
-def presync_set(wizard):
-    if not wizard.login:
-        get_login(wizard)
-
-    return wizard.psusys.presync_enabled(wizard.login)
-
 def show_migrate(wizard):
     """
     show_migrate:
         Check ldap to see if the user has the googlePreSync flag set.
         If the flag is set, return true.
     """
-    return wizard.presync
+    sync = wizard.presync
+    log.info("show_migrate(): " + str(sync))
+    return sync
 
 def show_transition(wizard):
     """
@@ -94,7 +90,10 @@ def show_transition(wizard):
         Check ldap to see if user has the googlePreSync flag set.
         If the flag is not set, return true.
     """
-    return not wizard.presync
+    sync = not wizard.presync
+    log.info("show_transition(): " + str(sync))
+    return sync
+
 
 def show_confirm_trans(wizard):
     """
@@ -102,14 +101,18 @@ def show_confirm_trans(wizard):
         Check ldap to see if user has the googlePreSync flag set.
         If the flag is not set, return true.
     """
-    return not wizard.presync
+    sync = not wizard.presync
+    log.info("show_confirm_trans(): " + str(sync))
+    return sync
 
 def show_forward_notice(wizard):
     """
     show_forward_notice:
         Check the wizard to see if a forward is set
     """
-    return wizard.forward
+    fwd = wizard.forward
+    log.info("show_forward_notice(): " + str(fwd))
+    return fwd
 
 def show_confirm(wizard):
     """
@@ -117,7 +120,9 @@ def show_confirm(wizard):
         Check ldap to see if the user has the googlePreSync flag set.
         If the flag is set, return true.
     """
-    return wizard.presync
+    sync = wizard.presync
+    log.info("show_confirm(): " + str(sync))
+    return sync
 
 def progress(request):
     """
@@ -179,7 +184,7 @@ class MigrationWizard(SessionWizardView):
         get_login(self)
         self.forward = forward_set(self)
         self.presync = self.psusys.presync_enabled(self.login)
-        super(self, SessionWizardView).dispatch(self, request, *args, **kwargs)
+        return super(SessionWizardView, self).dispatch(request, *args, **kwargs)
 
     def done(self, form_list, **kwargs):
         """
