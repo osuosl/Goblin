@@ -1,7 +1,8 @@
 from django.conf.urls.defaults import patterns, include, url
 from goblin.ghoul.forms import FORMS
-from goblin.ghoul.views import (MigrationWizard, presync,
-                                no_presync, forward_set)
+from goblin.ghoul.views import (MigrationWizard, show_migrate, show_transition,
+                                show_confirm_trans, show_forward_notice,
+                                show_confirm)
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -21,9 +22,9 @@ urlpatterns = patterns('',
     (r'^select', 'goblin.ghoul.views.select'),
     (r'^progress', 'goblin.ghoul.views.progress'),
     (r'^', MigrationWizard.as_view(FORMS,
-           condition_dict={'migrate': presync,
-                           'transition': no_presync,
-                           'confirm_trans': no_presync,
-                           'forward_notice': forward_set,
-                           'confirm': presync,})),
+           condition_dict={'migrate': show_migrate,
+                           'transition': show_transition,
+                           'confirm_trans': show_confirm_trans,
+                           'forward_notice': show_forward_notice,
+                           'confirm': show_confirm,})),
 )

@@ -111,6 +111,14 @@ def show_forward_notice(wizard):
     """
     return wizard.forward
 
+def show_confirm(wizard):
+    """
+    show_confirm:
+        Check ldap to see if the user has the googlePreSync flag set.
+        If the flag is set, return true.
+    """
+    return wizard.presync
+
 def progress(request):
     """
     Show the user the final info and a progress bar of their
