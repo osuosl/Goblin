@@ -86,7 +86,7 @@ def show_migrate(wizard):
         Check ldap to see if the user has the googlePreSync flag set.
         If the flag is set, return true.
     """
-   return wizard.presync
+    return wizard.presync
 
 def show_transition(wizard):
     """
