@@ -98,6 +98,15 @@ def progress(request):
         'page_title': "Migration in Progress",
     })
 
+def missing_google_account(request):
+    """
+    Error page when the user does not have an account
+    """
+    return render_to_respons('ghoul/no_gmail_account.html', {
+        'page_titile': "No google account exists",
+    })
+
+
 class MigrationWizard(SessionWizardView):
     """
     SessionWizardView for the ond->gmail migration
