@@ -992,7 +992,7 @@ mailRoutingAddress: %s@%s
         # Send forward email info if a forward is set
         if forward:
             log.info("copy_email_task(): sending forward information email")
-            psusys.send_forward_email(login, fwd_email)
+            psu_sys.send_forward_email(login, fwd_email)
 
         # If the account was disabled, well...
         if account_status.get("enabled", False) is False:
