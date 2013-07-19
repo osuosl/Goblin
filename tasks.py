@@ -24,11 +24,11 @@ def copy_email_task_null(login):
 	return(True)
 
 @task(ignore_result = True)
-def copy_email_task(login, sync, forward):
+def copy_email_task(login, sync, forward, fwd_email):
 	log = logging.getLogger()
 	log.info('copy_email_task(): running copy_email_task(' + login + ')')
 	psu_sys = PSUSys()
-	result = psu_sys.copy_email_task(login, sync, forward)
+	result = psu_sys.copy_email_task(login, sync, forward, fwd_email)
 	log.info('copy_email_task(): finished running copy_email_task(' + login + ')')
 	return(result)
 
