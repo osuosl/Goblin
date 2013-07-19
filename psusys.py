@@ -451,20 +451,19 @@ mailRoutingAddress: %s@%s
         # More perl
         cmd = '/var/www/goblin/current/conversion_email_forward ' + login + " '" + fwd_email + "'"
 
-        syncprocess = subprocess.Popen(shlex.split(cmd))
-
-        while (syncprocess.poll() is None):
-            sleep(3)
-            self.log.info('send_forward_email(): \
-                          continuing to send mail for user: ' + login)
+        syncprocess = subprocess.Popen(shlex.split(cmd),
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
+        sync_output = syncprocess.communicate()
 
         if syncprocess.returncode == 0:
-            self.log.info('send_forward_email(): success for user: ' +
-                          login)
+            self.log.info('send_forward_email(): \
+                          success for user: ' + login)
             return True
         else:
-            self.log.info('send_forward_email(): failed for user: ' +
-                          login)
+            self.log.info('send_forward_email(): \
+                          failed for user: ' + login + '\n' +
+                          sync_output[1])
             return False
 
     def send_conversion_email_psu(self, login):
