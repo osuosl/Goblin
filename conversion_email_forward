@@ -8,4 +8,4 @@ If you would like to continue to have your mail forwarded you must re-set the fo
 EOS
 }
 
-msg | bin/sendEmail -u 'Your email forward' -f no-reply@oregonstate.edu ${1}@onid.oregonstate.edu
+msg | bin/sendEmail -q -o reply-to=no-reply@oregonstate.edu -f no-reply@oregonstate.edu -u 'Your email forward' -f no-reply@oregonstate.edu -t ${1}@onid.oregonstate.edu -s smtp.oregonstate.edu
