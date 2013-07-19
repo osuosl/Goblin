@@ -965,7 +965,7 @@ mailRoutingAddress: %s@%s
         psu_sys.send_conversion_email_psu(login)
 
         # If the account was disabled, well...
-        if account_status["enabled"] is False:
+        if account_status.get("enabled", False) is False:
             log.info("presync_email_task(): disabling account: " + login)
 
             # Enable account if previously disabled
