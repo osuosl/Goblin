@@ -857,7 +857,7 @@ mailRoutingAddress: %s@%s
         return data
         #return HttpResponse(simplejson.dumps(27))
 
-    def copy_email_task(self, login):
+    def copy_email_task(self, login, sync, forward):
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
 
@@ -904,7 +904,9 @@ mailRoutingAddress: %s@%s
 
         # Send conversion info email to users Google account
         log.info("copy_email_task(): conversion in progress email: " + login)
-        psu_sys.send_conversion_email_in_progress(login, '/var/www/goblin/current/')
+        if sync:
+            log.info("update_email_task(): sending migration in progress email")
+            psu_sys.send_conversion_email_in_progress(login, '/var/www/goblin/current/')
 
         # Enable Google email for the user
         # This is the last item that the user should wait for.
