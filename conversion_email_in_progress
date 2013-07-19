@@ -15,28 +15,15 @@ msg
 
 msg(){
 cat << EOS
-Your ONID email is now being migrated to Google Apps for OSU!  Please read the
-following important items:
+Your ONID email is now being migrated to Google Apps for OSU!  Please read the following important items:
 
-1. Your access to Google Mail has been enabled in order to complete the
-migration process, but it is VERY important that you do not use Google Mail
-until you receive notification that the process is complete.  Using Google Mail
-before the migration is complete could cause email messages to be permanently
-erased.
+1. Your access to Google Mail has been enabled in order to complete the migration process, but it is VERY important that you do not use Google Mail until you receive notification that the process is complete.  Using Google Mail before the migration is complete could cause email messages to be permanently erased.
 
-2. During this process, you can continue to use your current mail setup.  You
-will receive a final email in your (old) ONID mailbox when the migration has
-finished.
+2. During this process, you can continue to use your current mail setup.  You will receive a final email in your (old) ONID mailbox when the migration has finished.
 
-3. Email clients (i.e. Thunderbird, Outlook, and iPhone/Android mail apps) will
-not work correctly and need to be reconfigured once the migration process is
-complete.  Links to instructions for configuring email clients will be included
-in the completion notification sent to your new Google Mail account.
+3. Email clients (i.e. Thunderbird, Outlook, and iPhone/Android mail apps) will not work correctly and need to be reconfigured once the migration process is complete.  Links to instructions for configuring email clients will be included in the completion notification sent to your new Google Mail account.
 
-4. Email forwarding and any existing mail filters/rules will need to be
-re-configured in Google Mail.  Links to instructions for configuring email
-forwarding and filters/rules in Google Mail will be included in the completion
-notification sent to your new Google Mail account.
+4. Email forwarding and any existing mail filters/rules will need to be re-configured in Google Mail.  Links to instructions for configuring email forwarding and filters/rules in Google Mail will be included in the completion notification sent to your new Google Mail account.
 EOS
 }
 

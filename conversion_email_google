@@ -3,28 +3,22 @@
 msg(){
 cat << EOS
 
-<p>Congratulations, and welcome to Google Mail! Now that you have migrated, all messages sent to your ${1}@onid.orst.edu email address and ${1}@onid.oregonstate.edu email address will arrive here and will no longer be delivered to ONID Webmail. Email clients such as Thunderbird, Mac Mail, or Outlook may still be used, but they must be reconfigured (see #1 below).</p>
+Congratulations, and welcome to Google Mail! Now that you have migrated, all messages sent to your ${1}@onid.orst.edu email address and ${1}@onid.oregonstate.edu email address will arrive here and will no longer be delivered to ONID Webmail. Email clients such as Thunderbird, Mac Mail, or Outlook may still be used, but they must be reconfigured (see #1 below).
 
-<p>For more information on how to use Google Mail, we encourage you to visit the Google learning center at <a href="http://learn.googleapps.com/gmail">http://learn.googleapps.com/gmail</a>.</p>
+For more information on how to use Google Mail, we encourage you to visit the Google learning center at http://learn.googleapps.com/gmail .
 
-<p><b>Your next steps and where to go for help</b></p>
+Your next steps and where to go for help
 
-<p>The following OSU Helpdocs give you more tips and tricks for using Google Mail.</p>
+The following OSU Helpdocs give you more tips and tricks for using Google Mail.
 
-<p>Configurations
-<ul>
-    <li><a href="">Configure Email Forwarding in Google Mail</a></li>
-    <li><a href="">Configure Your Mobile Apps</a></li>
-    <li><a href="">Configure Desktop Mail Clients</a></li>
-</ul>
-</p>
+Configurations
+    Configure Email Forwarding in Google Mail
+    Configure Your Mobile Apps
+    Configure Desktop Mail Clients
 
-<p>General Tips
-<ul>
-    <li><a href="">Directory and Contacts - What’s the difference?</a></li>
-    <li><a href="">Google Mail Trash (automatically purges data after 30 days)</a></li>
-</ul>
-</p>
+General Tips
+    Directory and Contacts - What’s the difference?
+    Google Mail Trash (automatically purges data after 30 days)
 EOS
 }
 
