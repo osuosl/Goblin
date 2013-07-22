@@ -164,7 +164,7 @@ LOGGING = {
 			'level': 'DEBUG',
 			'class': 'logging.handlers.RotatingFileHandler',
 			'formatter': 'dateTime',
-			'filename': '/tmp/goblin.log',
+			'filename': '/var/log/goblin.log',
 			'maxBytes':	4000000,
 			'backupCount': 5,
 		},
