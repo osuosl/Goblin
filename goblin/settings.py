@@ -85,6 +85,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     path('media'),
+    path('goblin/static')
 )
 
 # List of finder classes that know how to find static files in
@@ -163,7 +164,7 @@ LOGGING = {
 			'level': 'DEBUG',
 			'class': 'logging.handlers.RotatingFileHandler',
 			'formatter': 'dateTime',
-			'filename': '/var/log/goblin.log',
+			'filename': '/tmp/goblin.log',
 			'maxBytes':	4000000,
 			'backupCount': 5,
 		},
