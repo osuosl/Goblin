@@ -1,0 +1,126 @@
+/* OSU top hat styles */
+#osu-top-hat {
+  width: 100%;
+  height: 55px;
+  border-bottom: 3px solid #dbd6d0;
+  font-size: 13px;
+  font-family: 'Gudea', Arial, Helvetica, Verdana, sans-serif;
+  background: rgb(86,86,86); /* Old browsers */
+  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzU2NTY1NiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyNTI1MjUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top, rgba(86,86,86,1) 0%, rgba(37,37,37,1) 100%); /* FF3.6+ */
+  background: -webkit-linear-gradient(top,  rgba(86,86,86,1) 0%,rgba(37,37,37,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(86,86,86,1) 0%,rgba(37,37,37,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(86,86,86,1) 0%,rgba(37,37,37,1) 100%); /* IE10+ future proof */
+  background: linear-gradient(top,  rgba(86,86,86,1) 0%,rgba(37,37,37,1) 100%); /* W3C */
+}
+
+.ie #osu-top-hat {
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#565656', endColorstr='#252525',GradientType=0 ); /* IE6-8 */
+}
+
+#osu-top-hat a {
+  text-decoration: none;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+#osu-top-hat a:hover,
+#osu-top-hat a:active,
+#osu-top-hat a:focus {
+  background-color: #555;
+}
+
+#osu-top-hat a.tag {
+  float: left;
+  margin-left: 1.231em;
+  margin-right: 1.5em;
+  position: relative;
+  border: none;
+  z-index: 51;
+  padding: 0;
+}
+
+#osu-top-hat a.tag:hover,
+#osu-top-hat a.tag:active,
+#osu-top-hat a.tag:focus {
+  background: transparent;
+}
+
+/* Utitlity Links */
+#osu-top-hat ul.menu {
+  float: left;
+  margin: 1.465em 0 0; 
+  padding: 0;
+  width: auto;
+}
+
+#osu-top-hat ul.menu li.leaf {
+  float: left;
+  list-style-type: none;
+  list-style-image: none;
+  font-size: 12px;
+  margin: 0;
+  padding: 0 .5em;
+}
+
+
+#osu-top-hat ul.menu li a.campaign {
+  padding-left: 26px; 
+  background: url('images/campaign.png') 3px center no-repeat;
+}
+
+#osu-top-hat a {
+  text-decoration: none;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+#osu-top-hat a:hover,
+#osu-top-hat a:active,
+#osu-top-hat a:focus,
+#osu-top-hat ul.menu li a.campaign:hover,
+#osu-top-hat ul.menu li a.campaign:active,
+#osu-top-hat ul.menu li a.campaign:focus {
+  background-color: #555;
+}
+
+/* Search box
+ * Note - all we are providing here is a place to put the search form.
+ * The actual styling for the search form is part of the OSU Search module
+ */
+#osu-top-hat form.search {
+  float: right;
+  width: auto;
+  margin: 0.5em 0 0;
+  position: relative;
+}
+
+
+/* VSO Option */
+
+p.vso-standard-header {
+  float: left;
+  margin: 1.465em 0 0 0;
+  padding: .2em  1em;
+  color: #fff;
+  background-color: #171717;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+span.students-orange {
+  color: #c34500;
+  font-size: 110%;
+}
+
+.vso h1#site-name {
+  margin-left: .5em;
+}
+
+.vso #header ul {
+  margin-left: 0;
+}
+
