@@ -91,6 +91,4 @@ class PreSync():
 if __name__ == '__main__':
 	presync = PreSync()
 	presync.gen_presync()
-	#print presync.get_presync_list()
-	presync.purge_queue()
 	presync.submit_task()
