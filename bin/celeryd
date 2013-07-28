@@ -130,7 +130,7 @@ CELERYD_MULTI=${CELERYD_MULTI:-"celeryd-multi"}
 CELERYD=${CELERYD:-$DEFAULT_CELERYD}
 CELERYD_NODES=${CELERYD_NODES:-$DEFAULT_NODES}
 if [ -z "$CELERYD_OPTS" ]; then
-  CELERYD_OPTS="-Q optinpresync"
+  CELERYD_OPTS="-Q optinpresync,optin"
 fi
 
 export CELERY_LOADER
