@@ -81,7 +81,7 @@ class PSUSys:
         ldap_host = self.prop.get('ldap.read.host')
         ldap_login = self.prop.get('ldap.login')
         ldap_password = self.prop.get('ldap.password')
-        self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
+        self.log.info('presync_enabled(): connecting to LDAP: ' + ldap_host)
 
         ldap.connect(ldap_host, ldap_login, ldap_password)
         res = ldap.search(searchfilter='uid=' + login,
@@ -89,12 +89,12 @@ class PSUSys:
 
         for (dn, result) in res:
             if "googlePreSync" in result:
-                self.log.info('opt_in_alread() user: ' + login +
+                self.log.info('presync_enabled() user: ' + login +
                               ' has a googlePreSync ' +
                               str(result['googlePreSync']))
 
                 if "1" in result["googlePreSync"]:
-                    self.log.info('opt_in_alread() user: ' + login +
+                    self.log.info('presync_enabled() user: ' + login +
                                   ' has googlePreSync is set')
                     return True
         return False
@@ -151,7 +151,7 @@ class PSUSys:
         ldap_host = self.prop.get('ldap.read.host')
         ldap_login = self.prop.get('ldap.login')
         ldap_password = self.prop.get('ldap.password')
-        self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
+        self.log.info('get_ldap_attr(): connecting to LDAP: ' + ldap_host)
 
         ldap.connect(ldap_host, ldap_login, ldap_password)
         res = ldap.search(searchfilter='uid=' + login, attrlist=['mailHost'])
@@ -208,7 +208,7 @@ class PSUSys:
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
 
-        self.log.info('route_to_google(): Routing mail to Google for user: ' +
+        self.log.info('route_to_google_old(): Routing mail to Google for user: ' +
                       login)
         ldap_host = prop.get('ldap.write.host')
         ldap_login = prop.get('ldap.login')
@@ -234,11 +234,11 @@ mailHost: gmx.pdx.edu
 
         while (syncprocess.poll() is None):
             sleep(3)
-            self.log.info("route_to_google(): continuing to route mail to\
+            self.log.info("route_to_google_old(): continuing to route mail to\
                           Google for user: " + login)
 
         if syncprocess.returncode == 0:
-            self.log.info('route_to_google(): success for user: ' + login)
+            self.log.info('route_to_google_old(): success for user: ' + login)
             return True
         else:
             self.log.info('route_to_google(): failed for user: ' + login)
@@ -356,7 +356,7 @@ mailRoutingAddress: %s@%s
             sleep(10)
 
     def route_to_google_future(self, login):
-        self.log.info('route_to_google(): routing mail to google for user: ' +
+        self.log.info('route_to_google_future(): routing mail to google for user: ' +
                       login)
         ldap = psuldap('/vol/certs')
         ldap_host = self.prop.get('ldap.host')
@@ -388,15 +388,15 @@ mailRoutingAddress: %s@%s
             key = meta[self.META_IDENTITY]
             login = mc.get(key)
         else:
-            self.log.info('psusys.PSUSys.get_user(), failed to find: ' +
+            self.log.info('get_user(), failed to find: ' +
                           self.META_IDENTITY + ' in META')
 
         if login is None:
             login = 'dennis'
-            self.log.info('psusys.PSUSys.get_user(), defaulting to user ' +
+            self.log.info('get_user(), defaulting to user ' +
                           login)
         else:
-            self.log.info('psusys.PSUSys.get_user(), found user ' + login +
+            self.log.info('get_user(), found user ' + login +
                           ' in memcache')
         return login
 
@@ -409,15 +409,15 @@ mailRoutingAddress: %s@%s
         if self.META_IDENTITY in meta:
             key = meta[self.META_IDENTITY]
             mc.set(key, login)
-            self.log.info('psusys.PSUSys.set_user(), set user ' + login +
+            self.log.info('set_user(), set user ' + login +
                           ' in memcache')
         else:
-            self.log.info('psusys.PSUSys.set_user(), failed to find: ' +
+            self.log.info('set_user(), failed to find: ' +
                           self.META_IDENTITY + ' in META')
 
     def send_conversion_email_null(self, login):
         addr = login + '@pdx.edu'
-        self.log.info('send_conversion_email(): sending mail to user: ' + addr)
+        self.log.info('send_conversion_email_null(): sending mail to user: ' + addr)
         sleep(1)
         # Send the conversion confirmation email to the user
         # Launch a Subprocess here to send email
@@ -491,7 +491,7 @@ mailRoutingAddress: %s@%s
             return False
 
     def enable_gmail_null(self, login):
-        self.log.info('enable_gail(): Enabling gmail for user: ' + login)
+        self.log.info('enable_gail_null(): Enabling gmail for user: ' + login)
         # Enable gmail here
         sleep(1)
 
@@ -558,16 +558,16 @@ mailRoutingAddress: %s@%s
 
             except AppsForYourDomainException, e:
                 if e.error_code == 1301:
-                    self.log.error('enable_google_account(): \
+                    self.log.error('google_account_status(): \
                                    User %s does not exist' % login)
                     return {"exists": False, "enabled": False}
 
             except(CaptchaRequired):
-                self.log.error('enable_google_account(): \
+                self.log.error('google_account_status(): \
                                Captcha being requested')
 
             except(BadAuthentication):
-                self.log.error('enable_google_account(): \
+                self.log.error('google_account_status(): \
                                Authentication Error')
 
             except Exception, e:
@@ -610,7 +610,7 @@ mailRoutingAddress: %s@%s
                 self.log.error('enable_google_account(): Authentication Error')
 
             except Exception, e:
-                self.log.error('gmail_set_active(): Exception occured: ' +
+                self.log.error('enable_google_account(): Exception occured: ' +
                                str(e))
                 # Retry if not an obvious non-retryable error
                 sleep(1)
@@ -650,7 +650,7 @@ mailRoutingAddress: %s@%s
                                Authentication Error')
 
             except Exception, e:
-                self.log.error('gmail_set_active(): Exception occured: ' +
+                self.log.error('disable_google_account(): Exception occured: ' +
                                str(e))
                 # Retry if not an obvious non-retryable error
                 sleep(1)
@@ -732,7 +732,7 @@ mailRoutingAddress: %s@%s
         client.UpdateOrgUser(customerId, userEmail, old_org['orgUnitPath'])
 
     def sync_email_null(self, login):
-        self.log.info('sync_email(): syncing user: ' + login)
+        self.log.info('sync_email_null(): syncing user: ' + login)
         sleep(1)
 
     def sync_email(self, login, extra_opts='', max_process_time=0):
@@ -786,7 +786,7 @@ mailRoutingAddress: %s@%s
                            max_process_time=max_process_time)
 
     def sync_email_delete2_obs(self, login):
-        self.log.info('sync_email(): syncing user: ' + login)
+        self.log.info('sync_email_delete2_obs(): syncing user: ' + login)
         imapsync_cmd = '/opt/google-imap/imapsync'
         imap_host = self.prop.get('imap.host')
         imap_login = self.prop.get('imap.login')
@@ -798,17 +798,17 @@ mailRoutingAddress: %s@%s
         syncprocess = subprocess.Popen(shlex.split(command),
                                        stdout=open(log_file_name, 'w'))
 
-        self.log.info('sync_email(): command: ' + command)
+        self.log.info('sync_email_delete2_obs(): command: ' + command)
     # While the process is running, and we're under the time limit
         while (syncprocess.poll() is None):
             sleep(30)
-            self.log.info('sync_email(): continuing to sync user: ' + login)
+            self.log.info('sync_email_delete2_obs(): continuing to sync user: ' + login)
 
         if syncprocess.returncode == 0:
-            self.log.info('sync_email(): success syncing user: ' + login)
+            self.log.info('sync_email_delete2_obs(): success syncing user: ' + login)
             return True
         else:
-            self.log.info('sync_email(): failed syncing user: ' + login)
+            self.log.info('sync_email_delete2_obs(): failed syncing user: ' + login)
             return False
 
         # Call sync here
@@ -851,7 +851,7 @@ mailRoutingAddress: %s@%s
             cached_data = 0
         #data = simplejson.dumps(cached_data)
         data = simplejson.dumps(cached_data)
-        self.log.info('PSUSys.copy_progress() called, memcache_url: ' +
+        self.log.info('copy_progress() called, memcache_url: ' +
                       memcache_url + ", data: " + data + ', login: ' + login)
 
         return data
