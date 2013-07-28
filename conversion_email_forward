@@ -1,0 +1,11 @@
+#!/bin/sh
+
+msg(){
+cat << EOS
+During the Opt-in to Google Mail process which was just completed for you, we discovered that you had your ONID Email forwarded to: ${2}
+
+If you would like to continue to have your mail forwarded you must re-set the forward here in Google Mail.  Instructions for forwarding mail are provided at: https://support.google.com/mail/answer/10957?hl=en
+EOS
+}
+
+msg | bin/sendEmail -q -o reply-to=no-reply@oregonstate.edu -f no-reply@oregonstate.edu -u 'Your email forward' -f no-reply@oregonstate.edu -t ${1}@onid.oregonstate.edu -s smtp.oregonstate.edu

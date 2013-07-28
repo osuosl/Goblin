@@ -444,6 +444,28 @@ mailRoutingAddress: %s@%s
                           sync_output[1])
             return False
 
+    def send_forward_email(self, login, fwd_email):
+        self.log.info("send_forward_email(): sending mail to user: " + login)
+
+        # Send the forward email to the user
+        # More perl
+        cmd = '/var/www/goblin/current/conversion_email_forward ' + login + " '" + fwd_email + "'"
+
+        syncprocess = subprocess.Popen(shlex.split(cmd),
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
+        sync_output = syncprocess.communicate()
+
+        if syncprocess.returncode == 0:
+            self.log.info('send_forward_email(): \
+                          success for user: ' + login)
+            return True
+        else:
+            self.log.info('send_forward_email(): \
+                          failed for user: ' + login + '\n' +
+                          sync_output[1])
+            return False
+
     def send_conversion_email_psu(self, login):
         self.log.info('send_conversion_email_psu(): sending mail to user: ' +
                       login)
@@ -857,7 +879,7 @@ mailRoutingAddress: %s@%s
         return data
         #return HttpResponse(simplejson.dumps(27))
 
-    def copy_email_task(self, login):
+    def copy_email_task(self, login, sync, forward, fwd_email):
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
 
@@ -904,7 +926,9 @@ mailRoutingAddress: %s@%s
 
         # Send conversion info email to users Google account
         log.info("copy_email_task(): conversion in progress email: " + login)
-        psu_sys.send_conversion_email_in_progress(login, '/var/www/goblin/current/')
+        if sync:
+            log.info("update_email_task(): sending migration in progress email")
+            psu_sys.send_conversion_email_in_progress(login, '/var/www/goblin/current/')
 
         # Enable Google email for the user
         # This is the last item that the user should wait for.
@@ -963,6 +987,11 @@ mailRoutingAddress: %s@%s
         log.info("copy_email_task(): sending post conversion email to PSU: " +
                  login)
         psu_sys.send_conversion_email_psu(login)
+
+        # Send forward email info if a forward is set
+        if forward:
+            log.info("copy_email_task(): sending forward information email")
+            psu_sys.send_forward_email(login, fwd_email)
 
         # If the account was disabled, well...
         if account_status.get("enabled", False) is False:

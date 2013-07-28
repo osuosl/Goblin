@@ -54,6 +54,7 @@ def forward_set(wizard):
 
     # If we are given any other response by the perl script,
     # return True
+    wizard.fwd_email = forward
     return True
 
 def get_login(wizard):
@@ -164,7 +165,8 @@ class MigrationWizard(SessionWizardView):
     # All the fancy tools
     psusys = PSUSys()
 
-    # Some needed vars for showing/skipping form pages
+    # Some needed attributes for showing/skipping form pages
+    fwd_email = None
     forward = None
     login = None
     presync = None
@@ -174,7 +176,7 @@ class MigrationWizard(SessionWizardView):
                   .get_context_data(form=form, **kwargs)
         context.update(self.page_titles.get(self.steps.current))
         if self.steps.current == "forward_notice":
-            context.update({"forward": self.forward})
+            context.update({"forward": self.fwd_email})
         return context
 
     def get_template_names(self):
@@ -192,7 +194,7 @@ class MigrationWizard(SessionWizardView):
         reiteration of all the pages the user just went through.
         """
         # Celery task: copy_email_task
-        copy_email_task.apply_async(args=[self.login], queue='optin')
+        copy_email_task.apply_async(args=[self.login, self.presync, self.forward, self.fwd_email], queue='optin')
         # Now that emails are sent and conversion has kicked off,
         # redirect the user to the progress page
         return HttpResponseRedirect('/progress')
