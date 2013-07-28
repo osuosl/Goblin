@@ -1000,6 +1000,8 @@ googleMailEnabled: 1
                  login)
         psu_sys.send_conversion_email_psu(login)
 
+        # update LDAP to reflect the newly created account
+        psu_sys.set_googleMailEnabled(login)
         mc.set(key, 100)
 
         return(True)
