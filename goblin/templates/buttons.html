@@ -8,11 +8,11 @@
 {% endif %}
 
 {% if wizard.steps.current == "transition" or wizard.steps.current == "confirm_trans" %}
-    <a type="button" class="btn btn-large" href="https://oregonstate.edu" style="text-decoration: none;" target="_blank">Cancel ONID Email Transition</a>
+    <input type="button" class="btn btn-large" onclick="cancel_form()" style="text-decoration: none;" value="Cancel ONID Email Transition" />
 {% elif wizard.steps.current == "forward_notice" or wizard.steps.current == "prohibit" %}
-    <a type="button" class="btn btn-large" href="https://oregonstate.edu" style="text-decoration: none;" target="_blank">Cancel Opt-In</a>
+    <input type="button" class="btn btn-large" onclick="cancel_form()" style="text-decoration: none;" value="Cancel Opt-In" />
 {% else %}
-    <a type="button" class="btn btn-large" href="https://oregonstate.edu" style="text-decoration: none;" target="_blank">Cancel Opt-In Migration</a>
+    <input type="button" class="btn btn-large" onclick="cancel_form()" style="text-decoration: none;" value="Cancel Opt-In Migration" />
 {% endif %}
 </div>
 
