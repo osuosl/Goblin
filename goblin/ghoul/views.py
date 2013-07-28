@@ -130,6 +130,9 @@ def progress(request):
     Show the user the final info and a progress bar of their
     transfer status
     """
+    for seskey in request.session.keys():
+        del request.session[seskey]
+
     return render_to_response('ghoul/form_wizard/step5done.html', {
         'page_title': "Migration in Progress",
     })
