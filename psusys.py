@@ -857,6 +857,42 @@ mailRoutingAddress: %s@%s
         return data
         #return HttpResponse(simplejson.dumps(27))
 
+    def set_googleMailEnabled(self, login):
+        prop = Property(key_file='opt-in.key',
+                        properties_file='opt-in.properties')
+        self.log.info('set_googleMailEnabled(): Routing mail to psu for user: ' +
+                      login)
+        ldap_host = prop.get('ldap.write.host')
+        ldap_login = prop.get('ldap.login')
+        ldap_password = prop.get('ldap.password')
+
+        cmd = '/usr/bin/ldapmodify -x -h ' + ldap_host +\
+              ' -D ' + ldap_login + " -w " + ldap_password
+
+        # Launch a Subprocess here to re-route email
+        input = '''
+dn: uid=%s, ou=people, dc=orst.edu
+changetype: modify
+replace: mailHost
+googleMailEnabled: 1
+''' % (login)
+
+        syncprocess = subprocess.Popen(shlex.split(cmd), stdin=subprocess.PIPE)
+
+        syncprocess.communicate(input)
+
+        while (syncprocess.poll() is None):
+            sleep(3)
+            self.log.info('set_googleMailEnabled(): continuing to route mail to \
+                          psu for user: ' + login)
+
+        if syncprocess.returncode == 0:
+            self.log.info('set_googleMailEnabled(): success for user: ' + login)
+            return True
+        else:
+            self.log.info('set_googleMailEnabled(): failed for user: ' + login)
+            return False
+
     def copy_email_task(self, login):
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
