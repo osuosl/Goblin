@@ -67,6 +67,13 @@
   <script type="text/javascript" src="{% static "js/timers.js" %}"></script>
   <script type="text/javascript" src="{% static "js/menus.js" %}"></script>
 
+  <script type="text/javascript">
+    function cancel_form() {
+        var answer = confirm("Are you sure you want to cancel the Opt-In process?\n\nYou may return to opt in at any point in the future, through an approximate date of December 20th, 2013");
+        if (answer) {
+            window.location = "https://oregonstate.edu";
+        }
+  </script>
 </head>
 
 <body class="html not-front not-logged-in one-sidebar sidebar-first page-node page-node- page-node-339 node-type-webform" >

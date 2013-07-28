@@ -1,0 +1,21 @@
+{% block buttons %}
+
+<div class="form-actions form-wrapper" id="edit-actions">
+{% if wizard.steps.current == "final_cunfirm" %}
+    <input class="form-submit" style="margin-top: 0; " type="submit" value="Yes! I want to opt in" />
+{% else %}
+    <input class="form-submit" style="margin-top: 0; " type="submit" value="Continue" />
+{% endif %}
+
+{% if wizard.steps.current == "transition" or wizard.steps.current == "confirm_trans" %}
+    <input type="button" class="btn btn-large" onclick="cancel_form()" style="text-decoration: none;" value="Cancel ONID Email Transition" />
+{% elif wizard.steps.current == "forward_notice" or wizard.steps.current == "prohibit" %}
+    <input type="button" class="btn btn-large" onclick="cancel_form()" style="text-decoration: none;" value="Cancel Opt-In" />
+{% else %}
+    <input type="button" class="btn btn-large" onclick="cancel_form()" style="text-decoration: none;" value="Cancel Opt-In Migration" />
+{% endif %}
+</div>
+
+Next Step: {{ wizard.steps.next }}
+
+{% endblock %}
