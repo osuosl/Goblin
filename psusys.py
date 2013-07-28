@@ -1000,14 +1000,6 @@ googleMailEnabled: 1
                  login)
         psu_sys.send_conversion_email_psu(login)
 
-        # If the account was disabled, well...
-        if account_status.get("enabled", False) is False:
-            log.info("presync_email_task(): disabling account: " + login)
-
-            # Enable account if previously disabled
-            psu_sys.disable_google_account(login)
-            mc.set(key, 90)
-
         mc.set(key, 100)
 
         return(True)
