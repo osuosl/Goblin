@@ -23,7 +23,7 @@ if ($#ARGV < 1) {
 our $username = $ARGV[1];
 
 my %prefs = ('imapserver' => $imaphost,
-		'imapuser'	=> %imapuser,
+		'imapuser'	=> $imapuser,
 		'imappass'	=> $imappass
 		);
 
