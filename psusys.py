@@ -879,6 +879,25 @@ mailRoutingAddress: %s@%s
         return data
         #return HttpResponse(simplejson.dumps(27))
 
+    def get_osuUID(self, login):
+        ldap = psuldap('/vol/certs')
+        ldap_host = self.prop.get('ldap.read.host')
+        ldap_login = self.prop.get('ldap.login')
+        ldap_password = self.prop.get('ldap.password')
+        self.log.info('get_osuUID(): connecting to LDAP: ' + ldap_host)
+
+        ldap.connect(ldap_host, ldap_login, ldap_password)
+        res = ldap.search(searchfilter='uid=' + login,
+                          attrlist=['osuUID'])
+
+        for (dn, result) in res:
+             if "osuUID" in result:
+                 self.log.info('get_osuUID(): user ' + login +
+                                'has osuUID ' + str(result['osuUID']))
+                 return str(result['osuUID'])
+        return ""
+
+
     def set_googleMailEnabled(self, login):
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
