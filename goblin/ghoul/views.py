@@ -81,7 +81,8 @@ def show_migrate(wizard):
         Check ldap to see if the user has the googlePreSync flag set.
         If the flag is set, return true.
     """
-    sync = presync_cache()
+    login = get_login(wizard.request)
+    sync = presync_cache(login)
     log.info("show_migrate(): " + str(sync))
     return sync
 
@@ -91,7 +92,8 @@ def show_transition(wizard):
         Check ldap to see if user has the googlePreSync flag set.
         If the flag is not set, return true.
     """
-    sync = not presync_cache()
+    login = get_login(wizard.request)
+    sync = not presync_cache(login)
     log.info("show_transition(): " + str(sync))
     return sync
 
@@ -102,7 +104,8 @@ def show_confirm_trans(wizard):
         Check ldap to see if user has the googlePreSync flag set.
         If the flag is not set, return true.
     """
-    sync = not presync_cache()
+    login = get_login(wizard.request)
+    sync = not presync_cache(login)
     log.info("show_confirm_trans(): " + str(sync))
     return sync
 
@@ -111,7 +114,8 @@ def show_forward_notice(wizard):
     show_forward_notice:
         Check the wizard to see if a forward is set
     """
-    fwd = forward_cache()
+    login = get_login(wizard.request)
+    fwd = forward_cache(login)
     log.info("show_forward_notice(): " + str(fwd[0]))
     return fwd[0]
 
@@ -121,7 +125,8 @@ def show_confirm(wizard):
         Check ldap to see if the user has the googlePreSync flag set.
         If the flag is set, return true.
     """
-    sync = presync_cache()
+    login = get_login(wizard.request)
+    sync = presync_cache(login)
     log.info("show_confirm(): " + str(sync))
     return sync
 
@@ -185,7 +190,7 @@ def bounce(request):
     presync_cache(login, psusys)
 
     # Redirect to the migration form
-    return HttpResponceRedirect("/migrate")
+    return HttpResponseRedirect("/migrate")
 
 def progress(request):
     """
