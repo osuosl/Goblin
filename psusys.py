@@ -938,6 +938,8 @@ googleMailEnabled: 1
             return False
 
     def copy_email_task(self, login, sync, forward, fwd_email):
+        self.large_emails(login)
+
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
 
