@@ -890,8 +890,6 @@ mailRoutingAddress: %s@%s
 
         cmd = '/usr/bin/ldapmodify -x -H ' + ldap_host +\
               ' -D ' + ldap_login + " -w " + ldap_password
-        
-        self.log.info('set_googleMailEnabled(): ldap command: ' + cmd)
 
         # Launch a Subprocess here to re-route email
         input = '''
