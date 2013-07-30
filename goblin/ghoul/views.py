@@ -192,6 +192,14 @@ def bounce(request):
     # Redirect to the migration form
     return HttpResponseRedirect("/migrate")
 
+def opted_in(request):
+    """
+    The user has already opted in, show them the proper message
+    """
+    return render_to_response('opted_in.html', {
+        'page_title': 'Opted In',
+    })
+
 def progress(request):
     """
     Show the user the final info and a progress bar of their
