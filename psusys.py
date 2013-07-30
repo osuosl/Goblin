@@ -39,7 +39,7 @@ class PSUSys:
     def setLogger(self, logger):
         self.log = logger
 
-    def large_emails(self, login):
+    def gather_large_emails(self, login):
         # verify these values - are these correct for the user we are testing?
         imap_host = self.prop.get('imap.host')
         imap_login = self.prop.get('imap.login')
@@ -938,7 +938,7 @@ googleMailEnabled: 1
             return False
 
     def copy_email_task(self, login, sync, forward, fwd_email):
-        self.large_emails(login)
+        self.gather_large_emails(login)
 
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
