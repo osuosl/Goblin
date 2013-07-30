@@ -884,7 +884,7 @@ mailRoutingAddress: %s@%s
                         properties_file='opt-in.properties')
         self.log.info('set_googleMailEnabled(): setting LDAP attribute for user: ' +
                       login)
-        ldap_host = prop.get('ldap.write.host')
+        ldap_host = prop.get('ldap.read.host')
         ldap_login = prop.get('ldap.login')
         ldap_password = prop.get('ldap.password')
 
