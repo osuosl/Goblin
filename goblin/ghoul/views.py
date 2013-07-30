@@ -1,6 +1,7 @@
 from subprocess import PIPE, Popen
 
 from django.conf import settings
+from django.core.cache import cache
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
@@ -27,53 +28,52 @@ TEMPLATES = {"migrate": "ghoul/form_wizard/step1yes.html",
              "confirm": "ghoul/form_wizard/step4yes.html",
              "final_confirm": "ghoul/form_wizard/step4no.html"}
 
-def forward_set(wizard):
+def get_forward(login, psusys):
     """
     forward_set:
         Shell out to a perl script to see if the user has a forward setup
     """
     get_fwd = '/var/www/goblin/current/bin/get-cyrus-fwd.pl'
     fwd_cfg = '/var/www/goblin/current/etc/imap_fwd.cfg'
-    forward = Popen(['perl', get_fwd, fwd_cfg, wizard.login],
+    forward = Popen(['perl', get_fwd, fwd_cfg, login],
                     stdout=PIPE).communicate()[0]
 
     # Now to handle the information returned
-    location = wizard.psusys.prop.get('imap.host')
+    location = psusys.prop.get('imap.host')
     location_str = "Could not connect to mail server %s, please try again." %\
                    location
 
     # If wizard.form is not set or the perl script returns the location
     # string, return False
     if forward in [None, location_str]:
-        return False
+        return (False,)
 
     # If the word none is found within the output of the perl script,
     # return False
     if 'none' in forward:
-        return False
+        return (False,)
 
     # If we are given any other response by the perl script,
     # return True
-    wizard.fwd_email = forward
-    return True
+    return (True, forward)
 
-def get_login(wizard):
+def get_login(request):
     """
     Get user account name
 
     This comes from the various methods
     """
 
-    if 'REMOTE_USER' in wizard.request.META:
-        wizard.login = lower(wizard.request.META['REMOTE_USER'])
-        wizard.request.session['login'] = wizard.login
-    else:
-        if 'login' in wizard.request.POST:
-            wizard.login = lower(wizard.request.POST['login'])
-            wizard.request.session['login'] = wizard.login
-        else:
-            if 'login' in wizard.request.session:
-                wizard.login = wizard.request.session['login']
+    if 'REMOTE_USER' in request.META:
+        login = lower(request.META['REMOTE_USER'])
+        request.session['login'] = login
+    elif 'login' in request.POST:
+        login = lower(request.POST['login'])
+        request.session['login'] = login
+    elif 'login' in request.session:
+        login = request.session['login']
+
+    return login
 
 def show_migrate(wizard):
     """
@@ -81,7 +81,7 @@ def show_migrate(wizard):
         Check ldap to see if the user has the googlePreSync flag set.
         If the flag is set, return true.
     """
-    sync = wizard.presync
+    sync = presync_cache()
     log.info("show_migrate(): " + str(sync))
     return sync
 
@@ -91,7 +91,7 @@ def show_transition(wizard):
         Check ldap to see if user has the googlePreSync flag set.
         If the flag is not set, return true.
     """
-    sync = not wizard.presync
+    sync = not presync_cache()
     log.info("show_transition(): " + str(sync))
     return sync
 
@@ -102,7 +102,7 @@ def show_confirm_trans(wizard):
         Check ldap to see if user has the googlePreSync flag set.
         If the flag is not set, return true.
     """
-    sync = not wizard.presync
+    sync = not presync_cache()
     log.info("show_confirm_trans(): " + str(sync))
     return sync
 
@@ -111,9 +111,9 @@ def show_forward_notice(wizard):
     show_forward_notice:
         Check the wizard to see if a forward is set
     """
-    fwd = wizard.forward
-    log.info("show_forward_notice(): " + str(fwd))
-    return fwd
+    fwd = forward_cache()
+    log.info("show_forward_notice(): " + str(fwd[0]))
+    return fwd[0]
 
 def show_confirm(wizard):
     """
@@ -121,9 +121,71 @@ def show_confirm(wizard):
         Check ldap to see if the user has the googlePreSync flag set.
         If the flag is set, return true.
     """
-    sync = wizard.presync
+    sync = presync_cache()
     log.info("show_confirm(): " + str(sync))
     return sync
+
+# Memcache Helper Functions
+
+def presync_cache(psusys=False):
+    if psusys is False:
+        psusys = PSUSys()
+
+    if cache.get(login + "_presync", None) is None:
+        # Presync
+        presync = psusys.presync_enabled(login)
+        # Cache presync
+        cache.set(login + "_presync", presync)
+
+    return cache.get(login + "_presync")
+
+def forward_cache(psusys=False):
+    if psusys is False:
+        psusys = PSUSys()
+
+    if cache.get(login + "_fwd", None) is None:
+        # Forward
+        fwd = get_forward(login, psusys)
+
+        # Set fwd cache
+        if fwd[0]:
+            cache.set(login + "_fwd", True)
+            cache.set(login + "_fwd_email", fwd[1])
+        elif not fwd[0]:
+            cache.set(login + "_fwd", False)
+            cache.set(login + "_fwd_email", False)
+
+    return (cache.get(login + "_fwd"), cache.get(login + "_fwd_email"))
+
+def bounce(request):
+    """
+    Determine if the user should fill out the form or not
+
+    Send them to the "You've done this already" page if not
+    Send them to /migrate if they haven't
+    """
+
+    # Initially we need a PSUSys object to grab all the info
+    # about the user
+    psusys = PSUSys()
+
+    # Using the PSUSys we need:
+    # login
+    login = get_login(request)
+
+    # Check if the user has opt'd in already,
+    # if they have, redirect them to the appropriate page
+    if psusys.opt_in_already(login):
+        return HttpResponseRedirect("/opted_in")
+
+    # Forward
+    forward_cache(psusys)
+
+    # Presync
+    presync_cache(psusys)
+
+    # Redirect to the migration form
+    return HttpResponceRedirect("/migrate")
 
 def progress(request):
     """
@@ -148,7 +210,7 @@ def missing_google_account(request):
 
 class MigrationWizard(SessionWizardView):
     """
-    SessionWizardView for the ond->gmail migration
+    SessionWizardView for the onid->gmail migration
     """
 
     page_titles = {"migrate": {'page_title': "Are You Ready to Move Your ONID \
@@ -165,31 +227,21 @@ class MigrationWizard(SessionWizardView):
                    "confirm": {'page_title': "Confirm"},
                    "final_confirm": {'page_title': "Final Confirm"},}
 
-    # All the fancy tools
-    psusys = PSUSys()
-
-    # Some needed attributes for showing/skipping form pages
-    fwd_email = None
-    forward = None
-    login = None
-    presync = None
-
     def get_context_data(self, form, **kwargs):
         context = super(MigrationWizard, self)\
                   .get_context_data(form=form, **kwargs)
+
+        # Update the page title
         context.update(self.page_titles.get(self.steps.current))
+
+        # Return the email forward if we have one
         if self.steps.current == "forward_notice":
-            context.update({"forward": self.fwd_email})
+            context.update({"forward": forward_cache[1]})
+
         return context
 
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
-
-    def dispatch(self, request, *args, **kwargs):
-        get_login(self)
-        self.forward = forward_set(self)
-        self.presync = self.psusys.presync_enabled(self.login)
-        return super(SessionWizardView, self).dispatch(request, *args, **kwargs)
 
     def done(self, form_list, **kwargs):
         """
