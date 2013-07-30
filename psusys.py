@@ -893,8 +893,8 @@ mailRoutingAddress: %s@%s
         for (dn, result) in res:
              if "osuUID" in result:
                  self.log.info('get_osuUID(): user ' + login +
-                                'has osuUID ' + str(result['osuUID']))
-                 return str(result['osuUID'])
+                                'has osuUID ' + str(result['osuUID'][0]))
+                 return str(result['osuUID'][0])
 
     def set_googleMailEnabled(self, login):
         osuuid = self.get_osuUID(login)
