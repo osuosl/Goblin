@@ -897,7 +897,7 @@ mailRoutingAddress: %s@%s
                  return str(result['osuUID'])
 
     def set_googleMailEnabled(self, login):
-        osuuid = get_osuUID(login)
+        osuuid = self.get_osuUID(login)
         if osuuid is None:
             return
 
