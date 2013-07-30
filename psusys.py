@@ -888,7 +888,7 @@ mailRoutingAddress: %s@%s
         ldap_login = prop.get('ldap.login')
         ldap_password = prop.get('ldap.password')
 
-        cmd = '/usr/bin/ldapmodify -x -h ' + ldap_host +\
+        cmd = '/usr/bin/ldapmodify -x -H ' + ldap_host +\
               ' -D ' + ldap_login + " -w " + ldap_password
         
         self.log.info('set_googleMailEnabled(): ldap command: ' + cmd)
