@@ -882,7 +882,7 @@ mailRoutingAddress: %s@%s
     def set_googleMailEnabled(self, login):
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
-        self.log.info('set_googleMailEnabled(): Routing mail to psu for user: ' +
+        self.log.info('set_googleMailEnabled(): setting LDAP attribute for user: ' +
                       login)
         ldap_host = prop.get('ldap.write.host')
         ldap_login = prop.get('ldap.login')
@@ -905,7 +905,7 @@ googleMailEnabled: 1
 
         while (syncprocess.poll() is None):
             sleep(3)
-            self.log.info('set_googleMailEnabled(): continuing to route mail to \
+            self.log.info('set_googleMailEnabled(): continuing to write to attribute \
                           psu for user: ' + login)
 
         if syncprocess.returncode == 0:
