@@ -127,7 +127,7 @@ def show_confirm(wizard):
 
 # Memcache Helper Functions
 
-def presync_cache(psusys=False):
+def presync_cache(login, psusys=False):
     if psusys is False:
         psusys = PSUSys()
 
@@ -139,7 +139,7 @@ def presync_cache(psusys=False):
 
     return cache.get(login + "_presync")
 
-def forward_cache(psusys=False):
+def forward_cache(login, psusys=False):
     if psusys is False:
         psusys = PSUSys()
 
@@ -179,10 +179,10 @@ def bounce(request):
         return HttpResponseRedirect("/opted_in")
 
     # Forward
-    forward_cache(psusys)
+    forward_cache(login, psusys)
 
     # Presync
-    presync_cache(psusys)
+    presync_cache(login, psusys)
 
     # Redirect to the migration form
     return HttpResponceRedirect("/migrate")
@@ -236,7 +236,9 @@ class MigrationWizard(SessionWizardView):
 
         # Return the email forward if we have one
         if self.steps.current == "forward_notice":
-            context.update({"forward": forward_cache[1]})
+            # Get login, needed for the forward_cache
+            login = get_login(self.request)
+            context.update({"forward": forward_cache(login)[1]})
 
         return context
 
