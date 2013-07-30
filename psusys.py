@@ -937,7 +937,7 @@ mailRoutingAddress: %s@%s
         mc.set(key, 50)
 
         # Synchronize email to Google (and wait)
-        if (psu_sys.presync_enabled(login)):
+        if psu_sys.presync_enabled(login):
 	    log.info("copy_email_task(): first pass syncing email: " + login)
             status = psu_sys.sync_email_delete2(login)
             retry_count = 0
@@ -965,7 +965,7 @@ mailRoutingAddress: %s@%s
         mc.set(key, 70)
 
         # Final email sync
-        if (psu_sys.presync_enabled(login)):
+        if psu_sys.presync_enabled(login)):
             log.info("copy_email_task(): second pass syncing email: " + login)
             status = psu_sys.sync_email(login)
             retry_count = 0
