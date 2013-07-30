@@ -1001,7 +1001,7 @@ googleMailEnabled: 1
         mc.set(key, 70)
 
         # Final email sync
-        if psu_sys.presync_enabled(login)):
+        if psu_sys.presync_enabled(login):
             log.info("copy_email_task(): second pass syncing email: " + login)
             status = psu_sys.sync_email(login)
             retry_count = 0
