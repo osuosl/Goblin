@@ -255,8 +255,12 @@ class MigrationWizard(SessionWizardView):
         Step5done is the final step of the form, which is just a
         reiteration of all the pages the user just went through.
         """
+        login = get_login(self.request)
+        presync = presync_cache(login)
+        fwd = forward_cache(login)
+
         # Celery task: copy_email_task
-        copy_email_task.apply_async(args=[self.login, self.presync, self.forward, self.fwd_email], queue='optin')
+        copy_email_task.apply_async(args=[login, presync, fwd[0], fwd[1]], queue='optin')
         # Now that emails are sent and conversion has kicked off,
         # redirect the user to the progress page
         return HttpResponseRedirect('/progress')
