@@ -895,10 +895,12 @@ mailRoutingAddress: %s@%s
                  self.log.info('get_osuUID(): user ' + login +
                                 'has osuUID ' + str(result['osuUID']))
                  return str(result['osuUID'])
-        return ""
-
 
     def set_googleMailEnabled(self, login):
+        osuuid = get_osuUID(login)
+        if osuuid is None:
+            return
+
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
         self.log.info('set_googleMailEnabled(): setting LDAP attribute for user: ' +
@@ -912,11 +914,11 @@ mailRoutingAddress: %s@%s
 
         # Launch a Subprocess here to re-route email
         input = '''
-dn: uid=%s, ou=people, dc=orst.edu
+dn: osuUID=%s, ou=people, dc=orst.edu
 changetype: modify
 add: googleMailEnabled
 googleMailEnabled: 1
-''' % (login)
+''' % osuuid
 
         syncprocess = subprocess.Popen(shlex.split(cmd), stdin=subprocess.PIPE)
 
