@@ -1028,9 +1028,9 @@ googleMailEnabled: 1
         psu_sys.send_conversion_email_psu(login)
 
         # Wait for conversion mail delivery
-        sleep(30000)
+        sleep(30)
         mc.set(key, 75)
-        sleep(30000)
+        sleep(30)
 
         # Switch routing of email to flow to Google
         log.info("copy_email_task(): Routing email to Google: " + login)
