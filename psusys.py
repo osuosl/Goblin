@@ -895,7 +895,7 @@ mailRoutingAddress: %s@%s
         input = '''
 dn: uid=%s, ou=people, dc=orst.edu
 changetype: modify
-replace: googleMailEnabled
+add: googleMailEnabled
 googleMailEnabled: 1
 ''' % (login)
 
