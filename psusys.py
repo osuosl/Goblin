@@ -1007,19 +1007,6 @@ googleMailEnabled: 1
 
         mc.set(key, 60)
 
-        # Switch routing of email to flow to Google
-        log.info("copy_email_task(): Routing email to Google: " + login)
-        #psu_sys.route_to_google(login)
-        # Perl script to run
-        cmd = '/var/www/goblin/current/bin/set-cyrus-fwd.pl'
-        # Imap config file
-        config = '/var/www/goblin/current/etc/imap_fwd.cfg'
-        # Subprocess
-        results = subprocess.Popen(['perl', cmd, config, login])
-        # Communicate to get (stdout, stderr)
-        output = results.communicate()
-        log.info("set-fwd: " + str(output))
-        mc.set(key, 70)
 
         # Final email sync
         if psu_sys.presync_enabled(login):
@@ -1033,6 +1020,30 @@ googleMailEnabled: 1
                 sleep(4 ** retry_count)
                 retry_count = retry_count + 1
 
+        mc.set(key, 70)
+
+        # Send conversion info email to users PSU account
+        log.info("copy_email_task(): sending post conversion email to PSU: " +
+                 login)
+        psu_sys.send_conversion_email_psu(login)
+
+        # Wait for conversion mail delivery
+        sleep(30000)
+        mc.set(key, 75)
+        sleep(30000)
+
+        # Switch routing of email to flow to Google
+        log.info("copy_email_task(): Routing email to Google: " + login)
+        #psu_sys.route_to_google(login)
+        # Perl script to run
+        cmd = '/var/www/goblin/current/bin/set-cyrus-fwd.pl'
+        # Imap config file
+        config = '/var/www/goblin/current/etc/imap_fwd.cfg'
+        # Subprocess
+        results = subprocess.Popen(['perl', cmd, config, login])
+        # Communicate to get (stdout, stderr)
+        output = results.communicate()
+        log.info("set-fwd: " + str(output))
         mc.set(key, 80)
 
         # The folowing items occur without the user waiting.
@@ -1042,10 +1053,6 @@ googleMailEnabled: 1
                  + login)
         psu_sys.send_conversion_email_google(login)
 
-        # Send conversion info email to users PSU account
-        log.info("copy_email_task(): sending post conversion email to PSU: " +
-                 login)
-        psu_sys.send_conversion_email_psu(login)
 
         # Send forward email info if a forward is set
         if forward:
