@@ -70,9 +70,10 @@ class PSUSys:
                 for key in ['Subject', 'Date', 'From']:
                     if key in msg:
                         large_email[key] = msg[key]
-                    else:
-                        large_email[key] = 'none'  # why bother?
                 large_emails.append(large_email)
+
+        log.info("large_emails(): " + login + "'s dict")
+        log.info("large_emails(): " + str(large_emails))
 
         return large_emails
 
