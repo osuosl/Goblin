@@ -922,7 +922,7 @@ googleMailEnabled: 1
 
         syncprocess = subprocess.Popen(shlex.split(cmd), stdin=subprocess.PIPE)
 
-        syncprocess.communicate(input)
+        sync_out = syncprocess.communicate(input)
 
         while (syncprocess.poll() is None):
             sleep(3)
@@ -933,7 +933,7 @@ googleMailEnabled: 1
             self.log.info('set_googleMailEnabled(): success for user: ' + login)
             return True
         else:
-            self.log.info('set_googleMailEnabled(): failed for user: ' + login)
+            self.log.info('set_googleMailEnabled(): failed for user: ' + login + "\n" + sync_out[1])
             return False
 
     def copy_email_task(self, login, sync, forward, fwd_email):
