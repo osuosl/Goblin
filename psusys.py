@@ -914,7 +914,7 @@ mailRoutingAddress: %s@%s
 
         # Launch a Subprocess here to re-route email
         input = '''
-dn: osuUID=%s, ou=people, dc=orst.edu
+dn: osuUID=%s, ou=people, o=orst.edu
 changetype: modify
 add: googleMailEnabled
 googleMailEnabled: 1
