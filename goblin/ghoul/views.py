@@ -240,6 +240,48 @@ class MigrationWizard(SessionWizardView):
                    "confirm": {'page_title': "Confirm"},
                    "final_confirm": {'page_title': "Final Confirm"},}
 
+    def get_next_step(self, step=None):
+        """
+        Hardcoding next step to avoid potential issues with the condition dict
+        """
+
+
+        # Going along with the original method, if we are given none for the
+        # step, we can still retrieve it
+        if step is None:
+            step = self.steps.current
+
+        log.info("get_next_step(): current step: " + step)
+
+        if step == "migrate":
+            login = get_login(self.request)
+            if forward_cache(login):
+                return "forward_notice"
+            else:
+                return "prohibit"
+        elif step == "transition":
+            return "confirm_trans"
+        elif step == "confirm_trans":
+            login = get_login(self.request)
+             if forward_cache(login):
+                return "forward_notice"
+            else:
+                return "prohibit"
+        elif step == "forward_notice":
+            return "prohibit"
+        elif step == "prohibit":
+            return "mobile"
+        elif step == "mobile":
+            login = get_login(self.request)
+            if presync_cache(login):
+                return "confirm"
+            else:
+                return "final_confirm"
+        elif step = "confirm":
+            return "final_confirm"
+
+        return None
+
     def get_context_data(self, form, **kwargs):
         context = super(MigrationWizard, self)\
                   .get_context_data(form=form, **kwargs)
