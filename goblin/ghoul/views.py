@@ -263,7 +263,7 @@ class MigrationWizard(SessionWizardView):
             return "confirm_trans"
         elif step == "confirm_trans":
             login = get_login(self.request)
-             if forward_cache(login):
+            if forward_cache(login):
                 return "forward_notice"
             else:
                 return "prohibit"
@@ -277,7 +277,7 @@ class MigrationWizard(SessionWizardView):
                 return "confirm"
             else:
                 return "final_confirm"
-        elif step = "confirm":
+        elif step == "confirm":
             return "final_confirm"
 
         return None
