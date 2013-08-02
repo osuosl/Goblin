@@ -2,9 +2,9 @@
 
 <div class="form-actions form-wrapper" id="edit-actions">
 {% if wizard.steps.current == "final_confirm" %}
-    <input class="form-submit" style="margin-top: 0; " type="submit" value="Yes! I want to opt in" />
+    <input class="form-submit" style="margin-top: 0;" id="continue_btn" type="submit" value="Yes! I want to Opt-In" />
 {% else %}
-    <input class="form-submit" style="margin-top: 0; " type="submit" value="Continue" />
+    <input class="form-submit" style="margin-top: 0;" id="continue_btn" type="submit" value="Continue" />
 {% endif %}
 
 {% if wizard.steps.current == "transition" or wizard.steps.current == "confirm_trans" %}

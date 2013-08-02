@@ -8,3 +8,11 @@ ul.errorlist { color:#FF0000; }
 .ui-widget {
     font-size: 0.8em;
 }
+
+#cancel_button {
+    font-size: 18px;
+}
+
+#continue_btn {
+    font-size: 18px;
+}
