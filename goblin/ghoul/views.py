@@ -240,11 +240,30 @@ class MigrationWizard(SessionWizardView):
                    "confirm": {'page_title': "Confirm"},
                    "final_confirm": {'page_title': "Final Confirm"},}
 
+    def dispatch(self, request, *args, **kwargs):
+        """
+        Overriding WizardView dispatch to force a redirect if a user is
+        already opted in.
+        """
+        # Initially we need a PSUSys object to grab all the info
+        # about the user
+        psusys = PSUSys()
+
+        # Using the PSUSys we need:
+        # login
+        login = get_login(request)
+
+        # Check if the user has opt'd in already,
+        # if they have, redirect them to the appropriate page
+        if psusys.opt_in_already(login):
+            return HttpResponseRedirect('/opted_in')
+
+        return super(MigrationWizard, self).dispatch(request, *args, **kwargs)
+
     def get_next_step(self, step=None):
         """
         Hardcoding next step to avoid potential issues with the condition dict
         """
-
 
         # Going along with the original method, if we are given none for the
         # step, we can still retrieve it
