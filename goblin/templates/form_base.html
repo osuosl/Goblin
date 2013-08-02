@@ -11,29 +11,16 @@
     <title>ONID Email Migration - Google Apps for OSU</title>
 
   <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="{% static "css/system.base.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/system.menus.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/system.messages.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/system.theme.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/aggregator.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/book.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/date.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/datepicker.1.7.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/field.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/is_features.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/node.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/osu_top_hat.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/user.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/views.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/ctools.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/webform.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/classic.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/responsive.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/main-responsive.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/goblin.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/fonts.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/smoothness/jquery-ui-1.10.3.custom.min.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/goblin.css" %}" />
 
   <!-- Javascripts -->
 
@@ -56,46 +43,52 @@
   <script type="text/javascript" src="{% static "js/drupal.js" %}"></script>
   <script type="text/javascript" src="{% static "js/jquery.cookie.js" %}"></script>
   <script type="text/javascript" src="{% static "js/jquery.form.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/form.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/ajax.js" %}"></script>
   <script type="text/javascript" src="{% static "js/progress.js" %}"></script>
   <script type="text/javascript" src="{% static "js/base.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/ajax_view.js" %}"></script>
   <script type="text/javascript" src="{% static "js/textarea.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/collapse.js" %}"></script>
   <script type="text/javascript" src="{% static "js/webform.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/timers.js" %}"></script>
-  <script type="text/javascript" src="{% static "js/menus.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/jquery-ui.js" %}"></script>
 
   <script type="text/javascript">
-    function cancel_form() {
-        var answer = confirm("Are you sure you want to cancel the Opt-In process?\n\nYou may return to opt in at any point in the future, through an approximate date of December 20th, 2013");
-        if (answer) {
-            window.location = "https://oregonstate.edu";
-        }
-    }
+   $(document).ready(function() {
+       $( "#cancel_dialog" ).dialog({
+           autoOpen: false,
+           resizable: false,
+           modal: true,
+           width: 500,
+           buttons: {
+               "Yes - Cancel Opt-In": function() {
+                   window.location = "https://oregonstate.edu";
+               },
+               "No - Resume Opt-In": function() {
+                   $(this).dialog("close");
+               }
+           },
+       });
+       $( "#cancel_button" ).click(function() {
+           $( "#cancel_dialog" ).dialog( "open" );
+       });
+   });
   </script>
 </head>
 
 <body class="html not-front not-logged-in one-sidebar sidebar-first page-node page-node- page-node-339 node-type-webform" >
-  <div id="skip-link">
-    <a href="#main-content" class="element-invisible element-focusable">Skip to main content</a>
-  </div>
-<!-- OSU Top Hat -->
 
+<!-- OSU Top Hat -->
 <!-- Top-Hat -->
 <div id='osu-top-hat'><div class='container'><a href='http://oregonstate.edu' class='tag'><img src="{% static "images/osu-tag.png" %}" class='logo' alt='Oregon State University' /><span class='mobile-header'>OREGON STATE UNIVERSITY</span></a></div></div><div id="bg-holder"></div>
 <div id='page-wrapper' class='container'>
 
   <!-- Site Name -->
   <div id='header' class='row-fluid'>
-    <h1><a href='/is/'>Google Apps for OSU - ONID Email Migration</a></h1>
+    <h1><a href='/'>Google Apps for OSU - ONID Email Migration</a></h1>
   </div>
 
 
     <!-- Messages and breadcrumbs -->
     <div id="messages" style="margin-top:7px;">
-      <h2 class="element-invisible">You are here</h2><div class="breadcrumb"><a href="#">Email Migration Tool</a> » <a href="#">{{ page_title }}</a></div>    </div> <!-- messages -->
+      <div class="breadcrumb"><a href="#">Email Migration Tool</a> » <a href="#">{{ page_title }}</a></div>    </div> <!-- messages -->
 
 
     <!-- Full width top region -->

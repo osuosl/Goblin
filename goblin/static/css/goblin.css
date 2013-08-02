@@ -1,1 +1,10 @@
 ul.errorlist { color:#FF0000; }
+
+.ui-widget-header {
+    background: #c36200;
+    color: #ffffff;
+}
+
+.ui-widget {
+    font-size: 0.8em;
+}
