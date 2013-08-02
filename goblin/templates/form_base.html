@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "css/main-responsive.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/goblin.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/fonts.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui.css" %}" />
 
   <!-- Javascripts -->
 
@@ -52,6 +53,7 @@
     })();
   </script>
   <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/jquery-ui.js" %}"></script>
   <script type="text/javascript" src="{% static "js/jquery.once.js" %}"></script>
   <script type="text/javascript" src="{% static "js/drupal.js" %}"></script>
   <script type="text/javascript" src="{% static "js/jquery.cookie.js" %}"></script>
@@ -66,14 +68,28 @@
   <script type="text/javascript" src="{% static "js/webform.js" %}"></script>
   <script type="text/javascript" src="{% static "js/timers.js" %}"></script>
   <script type="text/javascript" src="{% static "js/menus.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
 
   <script type="text/javascript">
-    function cancel_form() {
-        var answer = confirm("Are you sure you want to cancel the Opt-In process?\n\nYou may return to opt in at any point in the future, through an approximate date of December 20th, 2013");
-        if (answer) {
-            window.location = "https://oregonstate.edu";
-        }
-    }
+   $(document).ready(function() {
+       $( "#cancel_dialog" ).dialog({
+           autoOpen: false,
+           resizable: false,
+           height: 140,
+           modal: true,
+           buttons: {
+               "Yes - Cancel Opt-In": function() {
+                   window.location = "https://oregonstate.edu";
+               },
+               "No - Resume Opt-In": function() {
+                   $(this).dialog("close");
+               }
+           },
+       });
+       $( "#cancel_button" ).click(function() {
+           $( "#cancel_dialog" ).dialog( "open" );
+       });
+   });
   </script>
 </head>
 

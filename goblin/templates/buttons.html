@@ -8,14 +8,21 @@
 {% endif %}
 
 {% if wizard.steps.current == "transition" or wizard.steps.current == "confirm_trans" %}
-    <input type="button" class="btn btn-large" onclick="cancel_form()" style="text-decoration: none;" value="Cancel ONID Email Transition" />
+    <button type="button" class="btn btn-large" id="cancel_button">Cancel ONID Email Transition</button>
 {% elif wizard.steps.current == "forward_notice" or wizard.steps.current == "prohibit" %}
-    <input type="button" class="btn btn-large" onclick="cancel_form()" style="text-decoration: none;" value="Cancel Opt-In" />
+     <button type="button" class="btn btn-large" id="cancel_button">Cancel Opt-In</button>
 {% else %}
-    <input type="button" class="btn btn-large" onclick="cancel_form()" style="text-decoration: none;" value="Cancel Opt-In Migration" />
+    <button type="button" class="btn btn-large" id="cancel_button">Cancel Opt-In Migration</button>
 {% endif %}
 </div>
 
 <!-- Next Step: {{ wizard.steps.next }} -->
+
+<!-- Cancel Dialog -->                                                      
+<div id="cancel_dialog" title="Cancel Opt-In">                              
+    <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+Are you sure you want to cancel the Opt-In process?<br><br>You may return to opt in at any point in the future, through an approximate date of December 20th, 2013
+    </p>                                                                       
+</div>
 
 {% endblock %}
