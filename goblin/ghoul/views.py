@@ -142,7 +142,8 @@ def presync_cache(login, psusys=False):
         # Cache presync
         cache.set(login + "_presync", presync)
 
-    return cache.get(login + "_presync")
+    # LDAP returns "0" or "1", we need ints, not strings
+    return int(cache.get(login + "_presync"))
 
 def forward_cache(login, psusys=False):
     if psusys is False:
@@ -160,7 +161,8 @@ def forward_cache(login, psusys=False):
             cache.set(login + "_fwd", False)
             cache.set(login + "_fwd_email", False)
 
-    return (cache.get(login + "_fwd"), cache.get(login + "_fwd_email"))
+    # LDAP retruns only strings. The _fwd should be an integer
+    return (int(cache.get(login + "_fwd")), cache.get(login + "_fwd_email"))
 
 def bounce(request):
     """
@@ -183,6 +185,7 @@ def bounce(request):
     if psusys.opt_in_already(login):
         return HttpResponseRedirect("/opted_in")
 
+    # Cache data initially, may not be necessary
     # Forward
     forward_cache(login, psusys)
 
@@ -274,7 +277,7 @@ class MigrationWizard(SessionWizardView):
 
         if step == "migrate":
             login = get_login(self.request)
-            if int(forward_cache(login)[0]):
+            if forward_cache(login)[0]:
                 return "forward_notice"
             else:
                 return "prohibit"
@@ -282,7 +285,7 @@ class MigrationWizard(SessionWizardView):
             return "confirm_trans"
         elif step == "confirm_trans":
             login = get_login(self.request)
-            if int(forward_cache(login)[0]):
+            if forward_cache(login)[0]:
                 return "forward_notice"
             else:
                 return "prohibit"
