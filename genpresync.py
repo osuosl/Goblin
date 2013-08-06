@@ -25,11 +25,11 @@ class PreSync():
                     sys.exit()
 
                 for o,a in opts:
-                if o in ("-p", "--password"):
-                    self.password = a
-                else:
-                    print 'Missing password!'
-                    sys.exit()
+                    if o in ("-p", "--password"):
+                        self.password = a
+                    else:
+                        print 'Missing password!'
+                        sys.exit()
 	
 	def gen_presync_test(self):
 		self.fac_to_presync = ['pittsh', ]
