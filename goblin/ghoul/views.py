@@ -239,7 +239,7 @@ class MigrationWizard(SessionWizardView):
                    "forward_notice": {'page_title': "Notice to Reset Your \
                                                     Forward"},
                    "prohibit": {'page_title': "Prohibited Data Notice"},
-                   "mobile": {'page_title': "Mobile Access Notice"},
+                   "mobile": {'page_title': "Reconfigure Email Access"},
                    "confirm": {'page_title': "Confirm"},
                    "final_confirm": {'page_title': "Final Confirm"},}
 
