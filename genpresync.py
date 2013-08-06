@@ -18,10 +18,9 @@ class PreSync():
 		self.prop = Property(key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 		self.deny = self.prop['deny.users']
                 try:
-                    opts, args = getopt.getopt(sys.argv[1:], 'x:y:')
+                    opts, args = getopt.getopt(sys.argv[1:], 'p:')
                 except getopt.GetoptError as err:
                     print(err)
-                    usage()
                     sys.exit()
 
                 for o,a in opts:
