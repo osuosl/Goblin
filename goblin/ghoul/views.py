@@ -212,7 +212,7 @@ def progress(request):
         del request.session[seskey]
 
     return render_to_response('ghoul/form_wizard/step5done.html', {
-        'page_title': "Migration in Progress",
+        'page_title': "Opt-In Now Processing",
     })
 
 def missing_google_account(request):
