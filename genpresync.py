@@ -1,5 +1,6 @@
 import subprocess
 import sys
+import getopt
 import shlex
 from time import sleep
 import re
@@ -16,13 +17,27 @@ class PreSync():
 		self.fac_to_presync = []
 		self.prop = Property(key_file = 'opt-in.key', properties_file = 'opt-in.properties')
 		self.deny = self.prop['deny.users']
+                try:
+                    opts, args = getopt.getopt(sys.argv[1:], 'xy:')
+                except getopt.GetoptError as err:
+                    print(err)
+                    usage()
+                    sys.exit()
+
+                for o,a in opts:
+                if o in ("-p", "--password"):
+                    self.password = a
+                else:
+                    print 'Missing password!'
+                    sys.exit()
 	
 	def gen_presync_test(self):
 		self.fac_to_presync = ['pittsh', ]
 
 	def gen_presync(self):
 		tmp_file = '/tmp/presync'
-		command = 'ldapsearch -W -x -LLL -h ldap.onid.orst.edu -D uid=onid_googlesync,ou=specials,o=orst.edu -b ou=people,o=orst.edu "(&!(googleMailEnabled=1)(googlePreSync=1))" uid osuUID sn givenName osuPrimaryAffiliation'
+                
+		command = 'ldapsearch -w ' + self.password +' -x -LLL -h ldap.onid.orst.edu -D uid=onid_googlesync,ou=specials,o=orst.edu -b ou=people,o=orst.edu "(&!(googleMailEnabled=1)(googlePreSync=1))" uid osuUID sn givenName osuPrimaryAffiliation'
 		syncprocess = subprocess.Popen(shlex.split(command), stdout=open(tmp_file, 'w'))
 		while (syncprocess.poll() == None):
 			sleep(30)
