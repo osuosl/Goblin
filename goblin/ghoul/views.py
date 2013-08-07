@@ -140,7 +140,7 @@ def presync_cache(login, psusys=False):
         # Presync
         presync = psusys.presync_enabled(login)
         # Cache presync
-        cache.set(login + "_presync", presync)
+        cache.set(login + "_presync", presync, 3600)
 
     # LDAP returns "0" or "1", we need ints, not strings
     return int(cache.get(login + "_presync"))
@@ -155,11 +155,11 @@ def forward_cache(login, psusys=False):
 
         # Set fwd cache
         if fwd[0]:
-            cache.set(login + "_fwd", True)
-            cache.set(login + "_fwd_email", fwd[1])
+            cache.set(login + "_fwd", True, 3600)
+            cache.set(login + "_fwd_email", fwd[1], 3600)
         elif not fwd[0]:
-            cache.set(login + "_fwd", False)
-            cache.set(login + "_fwd_email", False)
+            cache.set(login + "_fwd", False, 3600)
+            cache.set(login + "_fwd_email", False, 3600)
 
     # LDAP retruns only strings. The _fwd should be an integer
     return (int(cache.get(login + "_fwd")), cache.get(login + "_fwd_email"))
