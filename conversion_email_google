@@ -3,7 +3,7 @@
 msg(){
 cat << EOS
 
-Congratulations, and welcome to Google Mail! Now that you have migrated, all messages sent to your ${1}@onid.orst.edu email address and ${1}@onid.oregonstate.edu email address will arrive here and will no longer be delivered to ONID Webmail. Email clients such as Thunderbird, Mac Mail, or Outlook may still be used, but they must be reconfigured (see #1 below).
+Congratulations, and welcome to Google Mail! Now that you have successfully opted in, all messages sent to your ${1}@onid.orst.edu email address and ${1}@onid.oregonstate.edu email address will arrive here and will no longer be delivered to ONID Webmail. Email clients such as Thunderbird, Mac Mail, or Outlook may still be used, but they must be reconfigured (see #1 below).
 
 For more information on how to use Google Mail, we encourage you to visit the Google learning center at http://learn.googleapps.com/gmail .
 
@@ -22,4 +22,4 @@ General Tips
 EOS
 }
 
-msg | bin/sendEmail -q -o reply-to=no-reply@oregonstate.edu -f no-reply@oregonstate.edu -u 'ONID email now migrated to Google Mail!' -f no-reply@oregonstate.edu -t ${1}@onid.oregonstate.edu -s smtp.oregonstate.edu
+msg | bin/sendEmail -q -o reply-to=no-reply@oregonstate.edu -f no-reply@oregonstate.edu -u 'ONID Email Opt-In Complete' -f no-reply@oregonstate.edu -t ${1}@onid.oregonstate.edu -s smtp.oregonstate.edu
