@@ -148,7 +148,7 @@ def presync_cache(login, psusys=False):
 def forward_cache(login, psusys=False):
     if psusys is False:
         psusys = PSUSys()
-
+    """
     if cache.get(login + "_fwd", None) is None:
         # Forward
         fwd = get_forward(login, psusys)
@@ -160,6 +160,9 @@ def forward_cache(login, psusys=False):
         elif not fwd[0]:
             cache.set(login + "_fwd", False, 3600)
             cache.set(login + "_fwd_email", False, 3600)
+    """
+    fwd = get_forward(login, psusys)
+    return (fwd[0], fwd[1])
 
     # LDAP retruns only strings. The _fwd should be an integer
     return (int(cache.get(login + "_fwd")), cache.get(login + "_fwd_email"))
