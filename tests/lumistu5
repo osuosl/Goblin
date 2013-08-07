@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://test-migfe.onid.oregonstate.edu" />
+<title>lumistu5</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">lumistu3</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>http://test-migfe.onid.oregonstate.edu</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForLocation</td>
+	<td>https://login.oregonstate.edu/cas/login?service=http%3a%2f%2ftest-migfe.onid.oregonstate.edu%2f</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>lumistu5</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=password</td>
+	<td>Bulldog55Sunroof</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>http://test-migfe.onid.oregonstate.edu/migrate</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Are You Ready to Transition Your ONID Mailbox to Google</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=continue_btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Current Email Will Not Be Migrated</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=id_confirm_trans-transition</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=id_confirm_trans-migration</td>
+    <td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=continue_btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Notice to Reset Your Forward</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>lumistu5@</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=continue_btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Prohibited Data Notice</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=id_prohibit-accept</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=continue_btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Reconfigure Email Access</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=id_mobile-reconfig</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=id_mobile-narcissism</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=continue_btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Final Confirm</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Please confirm you wish to opt in to Google Mail</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=id_final_confirm-i_accept</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=continue_btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyLocation</td>
+	<td>http://test-migfe.onid.oregonstate.edu/progress</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>5000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>http://test-migfe.onid.oregonstate.edu</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForLocation</td>
+	<td>http://test-migfe.onid.oregonstate.edu/opted_in</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
