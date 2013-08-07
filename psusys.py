@@ -946,6 +946,9 @@ googleMailEnabled: 1
         mc = memcache.Client([memcache_url], debug=0)
         psu_sys = PSUSys()
 
+        # update LDAP to reflect the newly created account
+        psu_sys.set_googleMailEnabled(login)
+
         log.info("copy_email_task(): processing user: " + login)
         key = 'email_copy_progress.' + login
 
@@ -1067,8 +1070,6 @@ googleMailEnabled: 1
             psu_sys.disable_google_account(login)
             mc.set(key, 90)
 
-        # update LDAP to reflect the newly created account
-        psu_sys.set_googleMailEnabled(login)
         mc.set(key, 100)
 
         return(True)
