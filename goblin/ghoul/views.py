@@ -160,12 +160,15 @@ def forward_cache(login, psusys=False):
         elif not fwd[0]:
             cache.set(login + "_fwd", False, 3600)
             cache.set(login + "_fwd_email", False, 3600)
-    """
-    fwd = get_forward(login, psusys)
-    return (fwd[0], fwd[1])
 
     # LDAP retruns only strings. The _fwd should be an integer
     return (int(cache.get(login + "_fwd")), cache.get(login + "_fwd_email"))
+    """
+    fwd = get_forward(login, psusys)
+    if fwd[0]:
+        return (fwd[0], fwd[1])
+    else:
+        return (fwd[0],)
 
 def bounce(request):
     """
