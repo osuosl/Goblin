@@ -6,14 +6,7 @@
 {% else %}
     <input class="form-submit" style="margin-top: 0;" id="continue_btn" type="submit" value="Continue" />
 {% endif %}
-
-{% if wizard.steps.current == "transition" or wizard.steps.current == "confirm_trans" %}
-    <button type="button" class="btn btn-large" id="cancel_button">Cancel ONID Email Transition</button>
-{% elif wizard.steps.current == "forward_notice" or wizard.steps.current == "prohibit" %}
-     <button type="button" class="btn btn-large" id="cancel_button">Cancel Opt-In</button>
-{% else %}
-    <button type="button" class="btn btn-large" id="cancel_button">Cancel Opt-In Migration</button>
-{% endif %}
+    <button type="button" class="btn btn-large" id="cancel_button">Cancel Opt-In</button>
 </div>
 
 <!-- Next Step: {{ wizard.steps.next }} -->
