@@ -168,7 +168,7 @@ def forward_cache(login, psusys=False):
     if fwd[0]:
         return (fwd[0], fwd[1])
     else:
-        return (fwd[0],)
+        return (fwd[0], "")
 
 def bounce(request):
     """
