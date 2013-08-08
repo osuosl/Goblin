@@ -2,12 +2,14 @@
 
 msg(){
 cat << EOS
-You have successfully migrated to Google Mail! New mail will NOT be delivered to this location. Please discontinue using this mailbox for sending or receiving messages. All messages sent to your ONID email address will now be delivered to Google Mail.
+You have successfully opted-in to Google Mail! New mail will NOT be delivered to this location. Please discontinue using this mailbox for sending or receiving messages. All messages sent to your ONID email address will now be delivered to Google Mail.
 
 Your next steps...
-    Login to your Google Mail account at http://oregonstate.edu/google to verify your email is working properly.
-    Read the welcome email delivered to your new Google Mail inbox for important information and next steps.
+
+ - Login to your Google Mail account at http://oregonstate.edu/google to verify your email is working properly.
+ 
+ - Read the welcome email delivered to your new Google Mail inbox for important information and next steps.
 EOS
 }
 
-msg | bin/sendEmail -q -o reply-to=no-reply@oregonstate.edu -f no-reply@oregonstate.edu -u 'Email Migration Complete!  Use Google Apps for OSU at http://oregonstate.edu/google/' -f no-reply@oregonstate.edu -t ${1}@onid.oregonstate.edu -s smtp.oregonstate.edu
+msg | bin/sendEmail -q -o reply-to=no-reply@oregonstate.edu -f no-reply@oregonstate.edu -u 'ONID Email Opt-In Complete' -f no-reply@oregonstate.edu -t ${1}@onid.oregonstate.edu -s smtp.oregonstate.edu
