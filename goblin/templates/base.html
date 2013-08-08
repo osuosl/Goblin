@@ -51,7 +51,7 @@
   <script type="text/javascript" src="{% static "js/jquery-ui.js" %}"></script>
 
   <script type="text/javascrit">
-    $(function() {
+    $(document).ready(function() {
       function getCopyProgress() {
         $.get({
           url: "/copy_progress",
@@ -61,7 +61,7 @@
               clearInterval(repeater);
             }
           }
-        }
+        });
       }
       // Get the copy pregress each second. Interval is in milliseconds
       var repeater = setInterval('getCopyProgress()', 1000);
