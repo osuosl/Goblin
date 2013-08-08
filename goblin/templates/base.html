@@ -50,6 +50,21 @@
   <script type="text/javascript" src="{% static "js/jquery.js" %}"></script>
   <script type="text/javascript" src="{% static "js/jquery-ui.js" %}"></script>
 
+  <script type="text/javascrit">
+    function getCopyProgress() {
+      $.get({
+        url: "/copy_progress",
+        success: function(percent) {
+          $("pregressbar").pregressbar(percent);
+          if (value == 100) {
+            clearInterval(repeater);
+          }
+        }
+      }
+    }
+    // Get the copy pregress each second. Interval is in milliseconds
+    var repeater = setInterval('getCopyProgress()', 1000);
+  </script>
 </head>
 
 <body class="html not-front not-logged-in one-sidebar sidebar-first page-node page-node- page-node-339 node-type-webform" >
