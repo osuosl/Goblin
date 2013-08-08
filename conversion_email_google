@@ -3,22 +3,11 @@
 msg(){
 cat << EOS
 
-Congratulations, and welcome to Google Mail! Now that you have successfully opted in, all messages sent to your ${1}@onid.orst.edu email address and ${1}@onid.oregonstate.edu email address will arrive here and will no longer be delivered to ONID Webmail. Email clients such as Thunderbird, Mac Mail, or Outlook may still be used, but they must be reconfigured (see #1 below).
+Congratulations, and welcome to Google Mail! Now that you have successfully opted in, all messages sent to your ${1}@onid.orst.edu email address and ${1}@onid.oregonstate.edu email address will arrive here and will no longer be delivered to ONID Webmail. Email clients such as Thunderbird, Mac Mail, or Outlook may still be used, but they must be reconfigured.
 
-For more information on how to use Google Mail, we encourage you to visit the Google learning center at http://learn.googleapps.com/gmail .
+For help using Google Mail, go to:
 
-Your next steps and where to go for help
-
-The following OSU Helpdocs give you more tips and tricks for using Google Mail.
-
-Configurations
-    Configure Email Forwarding in Google Mail
-    Configure Your Mobile Apps
-    Configure Desktop Mail Clients
-
-General Tips
-    Directory and Contacts - What’s the difference?
-    Google Mail Trash (automatically purges data after 30 days)
+  http://oregonstate.edu/helpdocs/software/google-apps-osu/google-mail
 EOS
 }
 
