@@ -48,7 +48,6 @@ class Lumistu4(unittest.TestCase):
         # Warning: verifyTextPresent may require manual changes
         try: self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"^[\s\S]*Once you confirm that your account is ready to migrate, you will click[\s\S]*$")
         except AssertionError as e: self.verificationErrors.append(str(e))
-        driver.find_element_by_id("id_confirm-prepared").click()
         driver.find_element_by_id("id_confirm-no_access").click()
         driver.find_element_by_id("id_confirm-no_delete").click()
         driver.find_element_by_id("id_confirm-confirm_email").click()

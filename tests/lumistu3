@@ -113,11 +113,6 @@
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=id_confirm-prepared</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
 	<td>id=id_confirm-no_access</td>
 	<td></td>
 </tr>
