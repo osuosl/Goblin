@@ -6,12 +6,8 @@
 
 <p><b>IMPORTANT: Before opting in to Google Mail, indicate that you understand the items below.</b> You may cancel the opt-in migration if you’re not certain you wish to continue, and you may return to opt in at any point in the future, through an approximate date of December 20th, 2013.</p>
 
-<p>{{ form.prepared }}
-Please make sure you have <a href="http://oregonstate.edu/main/online-services/google-apps-for-osu/pre-sync" target="_blank">prepared your ONID mailbox</a> prior to migration.</p>
-<p>{{ form.prepared.errors }}</p>
-
 <p>{{ form.no_access }}
-<b>Important:</b> During migration, DO NOT try to access mail through Google.</p>
+<b>Messages with attachments larger than 25MB cannot be migrated to Google Mail.</p>
 <p>{{ form.no_access.errors }}</p>
 
 
@@ -20,7 +16,7 @@ During migration, you may still access your ONID mailbox to send and receive ema
 <p>{{ form.no_delete.errors }}</p>
 
 <p>{{ form.confirm_email }}
-You will receive a final email in your (old) ONID mailbox when the migration has finished. After that, then you may access your ONID email via Google.  We will also email you the next steps, plus tips and tricks for using Gmail.</p>
+You will receive a final email in your (old) ONID mailbox when the migration has finished. </p>
 <p>{{ form.confirm_email.errors }}</p>
 
 {% include "buttons.html" %}
