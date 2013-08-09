@@ -18,9 +18,9 @@
     <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/responsive.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/main-responsive.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "css/goblin.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/fonts.css" %}" />
     <link rel="stylesheet" type="text/css" href="{% static "css/jquery-ui.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/goblin.css" %}" />
 
   <!-- Javascripts -->
 
@@ -55,7 +55,7 @@
         $.ajax({
            url: "/copy_progress",
            success: function(percent) {
-               $("#progressbar").progressbar("option", "value", 33);
+               $("#progressbar").progressbar("option", "value", percent);
                if (percent == 100) {
                    clearInterval(repeater);
                }
