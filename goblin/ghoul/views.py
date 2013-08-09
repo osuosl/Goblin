@@ -416,9 +416,7 @@ def select(request):
 
 
 def copy_progress(request):
-    psu_sys = PSUSys()
-    login = request.GET.get('login', '')
-    login = login.encode('latin-1')
+    login = get_login(request)
     if not login:
         log.info('views.copy_progress() login name not found')
         login = 'dennis'
