@@ -40,7 +40,6 @@ class ConfirmForm(Form):
     Step4 Yes
     """
 
-    prepared = BooleanField(required=True)
     no_access = BooleanField(required=True)
     no_delete = BooleanField(required=True)
     confirm_email = BooleanField(required=True)
