@@ -9,6 +9,10 @@ ul.errorlist { color:#FF0000; }
     font-size: 0.8em;
 }
 
+.ui-progressbar-value {
+    background: #c36200;
+}
+
 #cancel_button {
     font-size: 18px;
 }
