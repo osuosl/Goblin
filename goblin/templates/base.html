@@ -51,21 +51,32 @@
   <script type="text/javascript" src="{% static "js/jquery-ui.js" %}"></script>
 
   <script type="text/javascrit">
-    $(document).ready(function() {
-      function getCopyProgress() {
-        $.get({
-          url: "/copy_progress",
-          success: function(percent) {
-            $("#progressbar").pregressbar(percent);
-            if (value == 100) {
-              clearInterval(repeater);
-            }
+    function getCopyProgress() {
+        $.ajax({
+           url: "/copy_progress",
+           success: function(percent) {
+               $("#progressbar").progressbar("option", "value", 33);
+               if (percent == 100) {
+                   clearInterval(repeater);
+               }
+           },
+       });
+   }
+
+   $(document).ready(function() {
+     // Get the copy pregress each second. Interval is in milliseconds
+     $("#progressbar").progressbar({
+          disabled: false,
+          max: 100,
+          change: function() {
+              progressLabel.text( progressbar.progressbar( "value" ) + "%" );
+          },
+          complete: function() {
+              progressLabel.text( "Complete!" );
           }
-        });
-      }
-      // Get the copy pregress each second. Interval is in milliseconds
+      });
       var repeater = setInterval('getCopyProgress()', 1000);
-    });
+    })
   </script>
 </head>
 
