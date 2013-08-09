@@ -35,7 +35,6 @@ class Lumistu7(unittest.TestCase):
         try: self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"^[\s\S]*Current Email Will Not Be Migrated[\s\S]*$")
         except AssertionError as e: self.verificationErrors.append(str(e))
         driver.find_element_by_id("id_confirm_trans-transition").click()
-        driver.find_element_by_id("id_confirm_trans-migration").click()
         driver.find_element_by_id("continue_btn").click()
         # Warning: verifyTextPresent may require manual changes
         try: self.assertRegexpMatches(driver.find_element_by_css_selector("BODY").text, r"^[\s\S]*Prohibited Data Notice[\s\S]*$")

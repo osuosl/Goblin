@@ -62,11 +62,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>click</td>
-	<td>id=id_confirm_trans-migration</td>
-	<td></td>
-</tr>
-<tr>
 	<td>clickAndWait</td>
 	<td>id=continue_btn</td>
 	<td></td>
