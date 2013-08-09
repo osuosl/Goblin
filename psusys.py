@@ -585,7 +585,7 @@ mailRoutingAddress: %s@%s
                     return {"exists": False, "enabled": False}
 
             except(CaptchaRequired):
-                self.log.error('google_account_status(): \
+                self.log.error('google_account_status(' + login + '): \
                                Captcha being requested')
 
             except(BadAuthentication):
