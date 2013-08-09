@@ -15,7 +15,6 @@ class TransitionForm(Form):
     """
 
     transition = BooleanField(required=True)
-    migration = BooleanField(required=True)
 
 
 class ProhibatedDataForm(Form):
