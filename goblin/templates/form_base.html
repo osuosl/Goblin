@@ -109,11 +109,6 @@
             <!-- Main Content -->
             <h2 class="title" id="page-title">{{ page_title }}</h2>
 
-    {% if form.errors %}
-    <div class="row">
-        <div class="span12" id="form_errors_occurred">Please check all fields before continuing</div>
-    </div>
-    {% endif %}
 
               <div id='content' >
                 <a name="main-content"></a>
@@ -129,6 +124,12 @@
 
   <div class="content">
 <form class="webform-client-form" enctype="multipart/form-data" action="#" method="post" id="X" accept-charset="UTF-8">
+
+{% if form.errors %}
+<div class="row">
+    <div class="span12" id="form_errors_occurred">Please check all fields before continuing</div>
+</div>
+{% endif %}
 
 {% csrf_token %}
 
