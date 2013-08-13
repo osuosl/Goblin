@@ -100,11 +100,6 @@
 
         <!-- Features -->
 
-    {% if form.errors %}
-    <div class="row">
-        <div class="span12" id="form_errors_occurred">Please check all fields before continuing</div>
-    </div>
-    {% endif %}
                 <div class='row'>
         <!-- Main content and middle sidebar -->
           <div class='span12'>
@@ -114,6 +109,11 @@
             <!-- Main Content -->
             <h2 class="title" id="page-title">{{ page_title }}</h2>
 
+    {% if form.errors %}
+    <div class="row">
+        <div class="span12" id="form_errors_occurred">Please check all fields before continuing</div>
+    </div>
+    {% endif %}
 
               <div id='content' >
                 <a name="main-content"></a>
