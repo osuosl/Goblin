@@ -243,7 +243,7 @@ class MigrationWizard(SessionWizardView):
     page_titles = {"migrate": {'page_title': "Are You Ready to Move Your ONID \
                                              Mailbox to Google?"},
                    "transition":  {'page_title': "Are You Ready to Transition \
-                                                 Your ONID Mailbox \
+                                                 Your ONID email address \
                                                  to Google?"},
                    "confirm_trans": {'page_title': "Current Email Will \
                                                         Not Be Migrated"},
