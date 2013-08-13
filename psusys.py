@@ -951,7 +951,8 @@ mailRoutingAddress: %s@%s
                                 'has osuUID ' + str(result['osuUID'][0]))
                  return str(result['osuUID'][0])
 
-    def set_googleMailEnabled(self, login, value):
+    def set_googleMailEnabled(self, login, v):
+        value = str(v)
         osuuid = self.get_osuUID(login)
         if osuuid is None:
             return
@@ -988,7 +989,7 @@ googleMailEnabled: %s
             self.log.info('set_googleMailEnabled(): success for user: ' + login)
             return True
         else:
-            self.log.info('set_googleMailEnabled(): failed for user: ' + login + "\n" + sync_out[1])
+            self.log.info('set_googleMailEnabled(): failed for user: ' + login + "\n" + str(sync_out[1]))
             return False
 
     def copy_email_task(self, login, sync, forward, fwd_email):
