@@ -191,6 +191,11 @@ def bounce(request):
     if psusys.opt_in_already(login):
         return HttpResponseRedirect("/opted_in")
 
+    # We need to check if the user is in progress as well, and if so, don't let
+    # them go through the process again
+    if psusys.opt_in_status(login) == "progress":
+        return HttpResponseRedirect("/opted_in")
+
     # Cache data initially, may not be necessary
     # Forward
     forward_cache(login, psusys)

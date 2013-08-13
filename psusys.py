@@ -99,7 +99,68 @@ class PSUSys:
                     return True
         return False
 
+    def opt_in_status(self, login):
+        """
+        Report the current status of the user's googleMailEnabled property
+
+        If the prop is:
+            disabled: 0 (or non-existant)
+            progress: 2
+            enabled : 1
+        """
+
+        ldap = psuldap('/vol/certs')
+        ldap_host = self.prop.get('ldap.read.host')
+        ldap_login = self.prop.get('ldap.login')
+        ldap_password = self.prop.get('ldap.password')
+        self.log.info('opt_in_alread(): connecting to LDAP: ' + ldap_host)
+
+        ldap.connect(ldap_host, ldap_login, ldap_password)
+        res = ldap.search(searchfilter='uid=' + login,
+                          attrlist=['googleMailEnabled'])
+
+        for (dn, result) in res:
+            if "googleMailEnabled" in result:
+                self.log.info('opt_in_alread() user: ' + login +
+                              ' has a googleMailEnabled ' +
+                              str(result['googleMailEnabled']))
+
+                status = result["googleMailEnabled"]
+
+                if "1" in status:
+                    self.log.info('opt_in_already() user: ' + login +
+                                   ' is enabled')
+                    return "enabled"
+                elif "2" in status:
+                    self.log.info('opt_in_already() user: ' + login +
+                                   ' is in progress')
+                    return "progress"
+                elif "0" in status:
+                    self.log.info('opt_in_already() user: ' + login +
+                                   ' is disabled')
+                    return "disabled"
+            else:
+                # If googleMailEnabled is not a property on the user,
+                # return a dne
+                return "dne"
+
     def opt_in_already(self, login):
+        """
+        So because of some amazing thought process, this-googleMailEnabled-is
+        now a tri state (quad state?) ldap property.
+
+        Non-existant: lulwat
+        0: Disabled
+        1: Enabled
+        2: In progress
+
+        Initially a user is either non-existant or 0. Then, once the
+        copy_email_task begins that property becomes a 2. When the prop is a 2
+        the user will recieve the opted_in page, but on the backend they are
+        still being processed. Once the sync and all the behind the scenes
+        magic occurs, the property is thusly set to 1.
+        """
+
         ldap = psuldap('/vol/certs')
         ldap_host = self.prop.get('ldap.read.host')
         ldap_login = self.prop.get('ldap.login')
@@ -896,7 +957,29 @@ mailRoutingAddress: %s@%s
                                 'has osuUID ' + str(result['osuUID'][0]))
                  return str(result['osuUID'][0])
 
-    def set_googleMailEnabled(self, login):
+    def ldap_GME_check(self, login):
+        """
+        Checks ldap for the attribute 'googleMailEnabled' exists
+        """
+
+        ldap = psuldap('/vol/certs')
+        ldap_host = self.prop.get('ldap.read.host')
+        ldap_login = self.prop.get('ldap.login')
+        ldap_password = self.prop.get('ldap.password')
+        self.log.info('get_osuUID(): connecting to LDAP: ' + ldap_host)
+
+        ldap.connect(ldap_host, ldap_login, ldap_password)
+        res = ldap.search(searchfilter='uid=' + login,
+                          attrlist=['googleMailEnabled'])
+
+        for (dn, result) in res:
+             if "googleMailEnabled" in result:
+                 return True
+
+        return False
+
+    def ldap_GME(self, login, v, whatdo):
+        value = str(v)
         osuuid = self.get_osuUID(login)
         if osuuid is None:
             return
@@ -916,9 +999,9 @@ mailRoutingAddress: %s@%s
         input = '''
 dn: osuUID=%s, ou=people, o=orst.edu
 changetype: modify
-add: googleMailEnabled
-googleMailEnabled: 1
-''' % osuuid
+%s: googleMailEnabled
+googleMailEnabled: %s
+''' % (osuuid, whatdo, str(value))
 
         syncprocess = subprocess.Popen(shlex.split(cmd), stdin=subprocess.PIPE)
 
@@ -933,8 +1016,16 @@ googleMailEnabled: 1
             self.log.info('set_googleMailEnabled(): success for user: ' + login)
             return True
         else:
-            self.log.info('set_googleMailEnabled(): failed for user: ' + login + "\n" + sync_out[1])
+            self.log.info('set_googleMailEnabled(): failed for user: ' + login + "\n" + str(sync_out[1]))
             return False
+
+    def set_googleMailEnabled(self, login, v):
+        value = str(v)
+
+        if self.ldap_GME_check(login):
+            self.ldap_GME(login, v, "replace")
+        else:
+            self.ldap_GME(login, v, "add")
 
     def copy_email_task(self, login, sync, forward, fwd_email):
         prop = Property(key_file='opt-in.key',
@@ -947,7 +1038,8 @@ googleMailEnabled: 1
         psu_sys = PSUSys()
 
         # update LDAP to reflect the newly created account
-        psu_sys.set_googleMailEnabled(login)
+        # Magic # 2 is in progress
+        psu_sys.set_googleMailEnabled(login, 2)
 
         log.info("copy_email_task(): processing user: " + login)
         key = 'email_copy_progress.' + login
@@ -962,7 +1054,6 @@ googleMailEnabled: 1
 
         # Check for LDAP mail forwarding already (double checking), if
         # already opt'd-in, then immediately return and mark as complete.
-
         if psu_sys.opt_in_already(login):
             log.info("copy_email_task(): has already completed opt-in: " +
                      login)
@@ -1010,7 +1101,6 @@ googleMailEnabled: 1
 
         mc.set(key, 60)
 
-
         # Final email sync
         if psu_sys.presync_enabled(login):
             log.info("copy_email_task(): second pass syncing email: " + login)
@@ -1056,7 +1146,6 @@ googleMailEnabled: 1
                  + login)
         psu_sys.send_conversion_email_google(login)
 
-
         # Send forward email info if a forward is set
         if forward:
             log.info("copy_email_task(): sending forward information email")
@@ -1070,6 +1159,8 @@ googleMailEnabled: 1
             psu_sys.disable_google_account(login)
             mc.set(key, 90)
 
+        # Magic # 1 is enabled
+        psu_sys.set_googleMailEnabled(login, 1)
         mc.set(key, 100)
 
         return(True)
