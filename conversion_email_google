@@ -5,7 +5,9 @@ email=${1}
 msg(){
 cat << EOS
 
-Congratulations, and welcome to Google Mail! Now that you have successfully opted in, all messages sent to your $email@onid.orst.edu email address and $email@onid.oregonstate.edu email address will arrive here and will no longer be delivered to ONID Webmail. Email clients such as Thunderbird, Mac Mail, or Outlook may still be used, but they must be reconfigured.
+Congratulations, and welcome to Google Mail.
+
+Now that you have successfully opted in, all messages sent to your $email@onid.orst.edu email address and $email@onid.oregonstate.edu email address will arrive here and will no longer be delivered to ONID Webmail. Email clients such as Thunderbird, Mac Mail, or Outlook may still be used, but they must be reconfigured.
 
 For help using Google Mail, go to:
 
