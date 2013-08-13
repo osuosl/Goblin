@@ -127,14 +127,14 @@ class PSUSys:
 
                 status = result["googleMailEnabled"]
 
-                 if "1" in status:
-                     self.log.info('opt_in_already() user: ' + login +
+                if "1" in status:
+                    self.log.info('opt_in_already() user: ' + login +
                                    ' is enabled')
-                     return "enabled"
-                 elif "2" in status:
-                     self.log.info('opt_in_already() user: ' + login +
+                    return "enabled"
+                elif "2" in status:
+                    self.log.info('opt_in_already() user: ' + login +
                                    ' is in progress')
-                     return "progress"
+                    return "progress"
 
         return "disabled"
 
