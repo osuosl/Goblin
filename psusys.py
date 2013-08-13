@@ -1023,9 +1023,9 @@ googleMailEnabled: %s
         value = str(v)
 
         if self.ldap_GME_check(login):
-            ldap_GME(self, login, v, "replace")
+            self.ldap_GME(login, v, "replace")
         else:
-            ldap_GME(self, login, v, "add")
+            self.ldap_GME(login, v, "add")
 
     def copy_email_task(self, login, sync, forward, fwd_email):
         prop = Property(key_file='opt-in.key',
