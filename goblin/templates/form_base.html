@@ -93,11 +93,6 @@
 
 
     <!-- Full width top region -->
-    {% if form.errors %}
-    <div class="row">
-        <div class="span12">Please check all fields before continuing</div>
-    </div>
-    {% endif %}
 
     <!-- Now divide into main column and right sidebar -->
     <div class='row'>
@@ -105,6 +100,11 @@
 
         <!-- Features -->
 
+    {% if form.errors %}
+    <div class="row">
+        <div class="span12">Please check all fields before continuing</div>
+    </div>
+    {% endif %}
                 <div class='row'>
         <!-- Main content and middle sidebar -->
           <div class='span12'>
