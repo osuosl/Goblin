@@ -973,7 +973,7 @@ dn: osuUID=%s, ou=people, o=orst.edu
 changetype: modify
 add: googleMailEnabled
 googleMailEnabled: %s
-''' % (osuuid, value)
+''' % (osuuid, str(value))
 
         syncprocess = subprocess.Popen(shlex.split(cmd), stdin=subprocess.PIPE)
 
