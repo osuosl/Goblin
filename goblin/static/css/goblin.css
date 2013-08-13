@@ -16,3 +16,7 @@ ul.errorlist { color:#FF0000; }
 #continue_btn {
     font-size: 18px;
 }
+
+#form_errors_occurred {
+    color: red;
+}
