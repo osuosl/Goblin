@@ -4,10 +4,12 @@
 
 <p>Please confirm you wish to opt in to Google Mail.</p>
 
+<fieldset>
 <p>{{ form.i_accept }}
 <label for="id_i_accept">This process can not be reversed. After you click “Yes! I want to opt in,” your ONID mailbox will be on Google Mail permanently.</label>
 </p>
 <p>{{ form.i_accept.errors }}</p>
+</fieldset>
 
 {% include "buttons.html" %}
 
