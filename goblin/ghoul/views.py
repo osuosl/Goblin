@@ -252,7 +252,7 @@ class MigrationWizard(SessionWizardView):
                    "prohibit": {'page_title': "Prohibited Data Notice"},
                    "mobile": {'page_title': "Reconfigure Email Access"},
                    "confirm": {'page_title': "Confirm"},
-                   "final_confirm": {'page_title': "Final Confirm"},}
+                   "final_confirm": {'page_title': "Confirm"},}
 
     def dispatch(self, request, *args, **kwargs):
         """
