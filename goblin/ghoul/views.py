@@ -310,8 +310,6 @@ class MigrationWizard(SessionWizardView):
                 return "confirm"
             else:
                 return "final_confirm"
-        elif step == "confirm":
-            return "final_confirm"
 
         return None
 
