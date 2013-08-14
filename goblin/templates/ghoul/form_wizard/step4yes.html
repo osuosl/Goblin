@@ -7,18 +7,24 @@
 <p><b>IMPORTANT:</b> Before opting in to Google Mail, indicate that you understand the items below.</b> You may cancel the opt-in migration if you’re not certain you wish to continue, and you may return to opt in at any point in the future, through an approximate date of December 20th, 2013.</p>
 
 <fieldset>
-<p>{{ form.no_access }}
-<label for="id_no_access">Messages with attachments larger than 25MB cannot be migrated to Google Mail.</label>
+<p>
+<label for="id_no_access">Messages with attachments larger than 25MB cannot be migrated to Google Mail.
+{{ form.no_access }}
+</label>
 </p>
 <p>{{ form.no_access.errors }}</p>
 
-<p>{{ form.no_delete }}
-<label for="id_no_delete">During migration, you may still access your ONID mailbox to send and receive email, but DO NOT purge messages or restructure your folders, as this can delay or fail your migration.</label>
+<p>
+<label for="id_no_delete">During migration, you may still access your ONID mailbox to send and receive email, but DO NOT purge messages or restructure your folders, as this can delay or fail your migration.
+{{ form.no_delete }}
+</label>
 </p>
 <p>{{ form.no_delete.errors }}</p>
 
-<p>{{ form.confirm_email }}
-<label for="id_confirm_email">You will receive a final email in your (old) ONID mailbox when the migration has finished.</label>
+<p>
+<label for="id_confirm_email">You will receive a final email in your (old) ONID mailbox when the migration has finished.
+{{ form.confirm_email }}
+</label>
 </p>
 <p>{{ form.confirm_email.errors }}</p>
 </fieldset>
