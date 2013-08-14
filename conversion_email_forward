@@ -1,8 +1,10 @@
 #!/bin/sh
 
+email=${2}
+
 msg(){
 cat << EOS
-During the Opt-in to Google Mail process which was just completed for you, we discovered that you had your ONID email forwarded to: ${2}
+During the Opt-in to Google Mail process which was just completed for you, we discovered that you had your ONID email forwarded to: $email
 
 If you would like to continue to have your email forwarded you must reset the forward here in Google Mail. Instructions for forwarding email are provided at: https://support.google.com/mail/answer/10957?hl=en
 EOS
