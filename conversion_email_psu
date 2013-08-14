@@ -2,7 +2,7 @@
 
 msg(){
 cat << EOS
-You have successfully opted in to Google Mail! New mail will NOT be delivered to this location. Please discontinue using this mailbox for sending or receiving messages. All messages sent to your ONID email address will now be delivered to Google Mail.
+You have successfully opted in to Google Mail! All messages sent to your ONID email address will now be delivered to Google Mail.
 
 Your next steps...
 
