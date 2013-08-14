@@ -18,7 +18,7 @@ Messages with attachments larger than 25MB cannot be migrated to Google Mail.
 <p>
 <label for="id_no_delete">
 {{ form.no_delete }}
-During migration, you may still access your ONID mailbox to send and receive email, but DO NOT purge messages or restructure your folders, as this can delay or fail your migration.
+During migration, you may still access your ONID mailbox to send and receive email, but DO NOT purge messages or restructure your folders, as this can delay or cause your migration to fail.
 </label>
 </p>
 <p>{{ form.no_delete.errors }}</p>
@@ -26,9 +26,10 @@ During migration, you may still access your ONID mailbox to send and receive ema
 <p>
 <label for="id_confirm_email">
 {{ form.confirm_email }}
-You will receive a final email in your (old) ONID mailbox when the migration has finished.
+You will receive a final email in your (old) ONID mailbox when the migration has finished. This may take up to 1 hour.
 </label>
 </p>
+
 <p>{{ form.confirm_email.errors }}</p>
 </fieldset>
 
