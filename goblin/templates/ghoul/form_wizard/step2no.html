@@ -24,10 +24,15 @@
 
 <p>If any of the above types of data are stored in your ONID mailbox, and if you are unable to clear your mailbox of any such data, you must cancel opt-in migration.</p>
 
-<p>{{ form.accept }}
-<label for="id_prohibit-accept">I understand that the above data elements are prohibited from being stored or transmitted on Google.</label>
+<fieldset>
+<p>
+<label for="id_prohibit-accept">
+{{ form.accept }}
+I understand that the above data elements are prohibited from being stored or transmitted on Google.
+</label>
 </p>
 <p> {{ form.accept.errors }}</p>
+</fieldset>
 
 {% include "buttons.html" %}
 

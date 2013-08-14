@@ -9,11 +9,15 @@
     <li>You will need to access your new ONID mailbox on Google to access new messages</li>
 </ul>
 
-
-<p>{{ form.transition }}
-<label for="d_confirm_trans-transition">I understand any email currently stored in my ONID mailbox will not be migrated to Google.</label>
+<fieldset>
+<p>
+<label for="d_confirm_trans-transition">
+{{ form.transition }}
+I understand any email currently stored in my ONID mailbox will not be migrated to Google.
+</label>
 </p>
 <p>{{ form.transition.errors }}</p>
+</fieldset>
 
 {% include "buttons.html" %}
 
