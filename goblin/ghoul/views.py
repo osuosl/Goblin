@@ -43,19 +43,13 @@ def get_forward(login, psusys):
     location_str = "Could not connect to mail server %s, please try again." %\
                    location
 
-    # If wizard.form is not set or the perl script returns the location
-    # string, return False
-    if forward in [None, location_str]:
-        return (False,)
-
-    # If the word none is found within the output of the perl script,
-    # return False
-    if 'none' in forward:
+    if "@" not in forward:
         return (False,)
 
     # If we are given any other response by the perl script,
     # return True
     return (True, forward)
+
 
 def get_login(request):
     """
