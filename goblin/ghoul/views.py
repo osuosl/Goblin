@@ -340,7 +340,7 @@ class MigrationWizard(SessionWizardView):
         Return the correct form if the step is confirm,
         else let the super method handle it
         """
-        if self.steps.current == "confirm":
+        if self.steps.next == "confirm":
             login = get_login(self.request)
             if presync_cache(login):
                 return FORMS.ConfirmForm(**kwargs)
