@@ -13,7 +13,7 @@ from string import lower
 
 import os
 
-from goblin.ghoul.forms import FORMS
+from goblin.ghoul.forms import FORMS, ConfirmForm, FinalConfirmForm
 
 import celeryconfig
 
@@ -343,9 +343,9 @@ class MigrationWizard(SessionWizardView):
         if self.steps.next == "confirm":
             login = get_login(self.request)
             if presync_cache(login):
-                return FORMS.ConfirmForm(**kwargs)
+                return ConfirmForm(**kwargs)
             else:
-                return FORMS.FinalConfirmForm(**kwargs)
+                return FinalConfirmForm(**kwargs)
 
         # Since we are not on the confirm step, let the super method
         # handle this
