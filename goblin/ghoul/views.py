@@ -343,9 +343,9 @@ class MigrationWizard(SessionWizardView):
         if self.steps.next == "confirm":
             login = get_login(self.request)
             if presync_cache(login):
-                return ConfirmForm(**kwargs)
+                return ConfirmForm(step=step, data=data, form=form)
             else:
-                return FinalConfirmForm(**kwargs)
+                return FinalConfirmForm(step=step, data=data, form=form)
 
         # Since we are not on the confirm step, let the super method
         # handle this
