@@ -20,7 +20,6 @@ import celeryconfig
 log = logging.getLogger('ghoul.views')
 
 TEMPLATES = {"migrate": "ghoul/form_wizard/step1yes.html",
-             "transition": "ghoul/form_wizard/step1no.html",
              "confirm_trans": "ghoul/form_wizard/step1noB.html",
              "forward_notice": "ghoul/form_wizard/step2yes.html",
              "prohibit": "ghoul/form_wizard/step2no.html",
@@ -233,12 +232,7 @@ class MigrationWizard(SessionWizardView):
     SessionWizardView for the onid->gmail migration
     """
 
-    page_titles = {"migrate": {'page_title': "Are You Ready to Move Your ONID \
-                                             Mailbox to Google?"},
-                   "transition":  {'page_title': "Are You Ready to Transition \
-                                                 Your ONID email address \
-                                                 to Google?"},
-                   "confirm_trans": {'page_title': "Current Email Will \
+    page_titles = {"migrate": "confirm_trans": {'page_title': "Current Email Will \
                                                         Not Be Migrated"},
                    "forward_notice": {'page_title': "Notice to Reset Your \
                                                     Forward"},
@@ -280,12 +274,12 @@ class MigrationWizard(SessionWizardView):
 
         if step == "migrate":
             login = get_login(self.request)
-            if forward_cache(login)[0]:
+            if not presync_cache(login):
+                return "confirm_trans"
+            elif forward_cache(login)[0]:
                 return "forward_notice"
             else:
                 return "prohibit"
-        elif step == "transition":
-            return "confirm_trans"
         elif step == "confirm_trans":
             login = get_login(self.request)
             if forward_cache(login)[0]:
@@ -297,7 +291,7 @@ class MigrationWizard(SessionWizardView):
         elif step == "prohibit":
             return "mobile"
         elif step == "mobile":
-                return "confirm"
+            return "confirm"
 
         return None
 
@@ -308,6 +302,14 @@ class MigrationWizard(SessionWizardView):
         # Update the page title
         context.update(self.page_titles.get(self.steps.current))
 
+        if self.steps.current == "migrate":
+            login = get_login(self.request)
+            if presync_cache(login):
+                context.update({"page_title": "Are You Ready to Move Your ONID \
+                                               Mailbox to Google?"})
+            else:
+                centext.update({"page_title": "Are You Ready to Transition Your \
+                                               ONID email address to Google"})
         # Return the email forward if we have one
         if self.steps.current == "forward_notice":
             # Get login, needed for the forward_cache
@@ -318,7 +320,13 @@ class MigrationWizard(SessionWizardView):
 
     def get_template_names(self):
         # Given the step is confirm, get the proper template based on user type
-        if self.steps.current == "confirm":
+        if self.steps.current == "migrate":
+            login = get_login(self.rquest)
+            if presync_cache(login):
+                return "ghoul/form_wizard/step1yes.html"
+            else:
+                return "ghoul/form_wizard/step1no.html"
+        elif self.steps.current == "confirm":
             login = get_login(self.request)
             if presync_cache(login):
                 return "ghoul/form_wizard/step4yes.html"
@@ -333,7 +341,6 @@ class MigrationWizard(SessionWizardView):
         Return the correct form if the step is confirm,
         else let the super method handle it
         """
-
         if self.steps.current == "confirm":
             login = get_login(self.request)
             if presync_cache(login):
