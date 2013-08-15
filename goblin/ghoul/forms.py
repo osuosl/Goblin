@@ -57,5 +57,4 @@ FORMS = [("migrate", StandInForm),
          ("forward_notice", StandInForm),
          ("prohibit", ProhibatedDataForm),
          ("mobile", MobileAccessForm),
-         ("confirm", ConfirmForm),
-         ("final_confirm", FinalConfirmForm)]
+         ("confirm", StandInForm)]

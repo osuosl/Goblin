@@ -25,8 +25,7 @@ TEMPLATES = {"migrate": "ghoul/form_wizard/step1yes.html",
              "forward_notice": "ghoul/form_wizard/step2yes.html",
              "prohibit": "ghoul/form_wizard/step2no.html",
              "mobile": "ghoul/form_wizard/step3.html",
-             "confirm": "ghoul/form_wizard/step4yes.html",
-             "final_confirm": "ghoul/form_wizard/step4no.html"}
+             "confirm": "ghoul/form_wizard/step4no.html"}
 
 def get_forward(login, psusys):
     """
@@ -245,8 +244,7 @@ class MigrationWizard(SessionWizardView):
                                                     Forward"},
                    "prohibit": {'page_title': "Prohibited Data Notice"},
                    "mobile": {'page_title': "Reconfigure Email Access"},
-                   "confirm": {'page_title': "Confirm"},
-                   "final_confirm": {'page_title': "Confirm"},}
+                   "confirm": {'page_title': "Confirm"},}
 
     def dispatch(self, request, *args, **kwargs):
         """
@@ -299,7 +297,6 @@ class MigrationWizard(SessionWizardView):
         elif step == "prohibit":
             return "mobile"
         elif step == "mobile":
-            login = get_login(self.request)
             if presync_cache(login):
                 return "confirm"
             else:
@@ -323,7 +320,33 @@ class MigrationWizard(SessionWizardView):
         return context
 
     def get_template_names(self):
+        # Given the step is confirm, get the proper template based on user type
+        if self.steps.current == "confirm":
+            login = get_login(self.request)
+            if presync_cache(login)[0]:
+                return "ghoul/form_wizard/step4yes.html"
+            else:
+                return "ghoul/form_wizard/step4no.html"
+
+        # Return the proper template otherwise
         return [TEMPLATES[self.steps.current]]
+
+    def get_form(self, form=None, **kwargs):
+        """
+        Return the correct form if the step is confirm,
+        else let the super method handle it
+        """
+
+        if self.steps.current == "confirm":
+            login = get_login(self.request)
+            if presync_cache(login):
+                return FORMS.ConfirmForm
+            else:
+                return FORMS.FinalConfirmForm
+
+        # Since we are not on the confirm step, let the super method
+        # handle this
+        return super(MigrationWizard, self).get_form(form, **kwargs)
 
     def done(self, form_list, **kwargs):
         """
