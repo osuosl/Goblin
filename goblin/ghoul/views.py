@@ -297,10 +297,7 @@ class MigrationWizard(SessionWizardView):
         elif step == "prohibit":
             return "mobile"
         elif step == "mobile":
-            if presync_cache(login):
                 return "confirm"
-            else:
-                return "final_confirm"
 
         return None
 
