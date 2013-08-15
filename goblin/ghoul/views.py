@@ -336,18 +336,37 @@ class MigrationWizard(SessionWizardView):
         # Return the proper template otherwise
         return [TEMPLATES[self.steps.current]]
 
+    def render_done(self, form, **kwargs):
+        log.info("render_done(): form = %s" % form)
+        done_response = self.done([], **kwargs)
+        self.storage.reset()
+        return done_response
+
     def get_form(self, step=None, data=None, files=None):
         """
         Return the correct form if the step is confirm,
         else let the super method handle it
         """
-        if self.steps.next == "confirm":
+
+        # Since we are not on the confirm step, let the super method
+        # handle this
+        form = super(MigrationWizard, self).get_form(step, data, files)
+        log.info("get_form(): super get_form = %s" % form)
+
+        # Do all the things that super does to setup kwargs
+        if step is None:
+            step = self.steps.current
+
+        login = get_login(self.request)
+
+        log.info("get_form(): current step = " + str(step))
+        log.info("get_form(): last step = " + str(self.steps.last))
+        log.info("get_form(): presync = " + str(presync_cache(login)))
+
+        if step == self.steps.last:
             # Get the username to check for presync
-            login = get_login(self.request)
-            # Do all the things that super does to setup kwargs
-            if step is None:
-                step = self.steps.current
             # prepare the kwargs for the form instance.
+            log.info("get_form(): aonsetuhsaoetnuhas")
             kwargs = self.get_form_kwargs(step)
             kwargs.update({
                 'data': data,
@@ -355,24 +374,15 @@ class MigrationWizard(SessionWizardView):
                 'prefix': self.get_form_prefix(step, self.form_list[step]),
                 'initial': self.get_form_initial(step),
             })
-            if issubclass(self.form_list[step], f.ModelForm):
-                # If the form is based on ModelForm, add instance if available
-                # and not previously set.
-                kwargs.setdefault('instance', self.get_form_instance(step))
-            elif issubclass(self.form_list[step], f.models.BaseModelFormSet):
-                # If the form is based on ModelFormSet, add queryset if available
-                # and not previous set.
-                kwargs.setdefault('queryset', self.get_form_instance(step))
-
-            # Now based on presync, return the correct form
             if presync_cache(login):
-                return ConfirmForm(**kwargs)
+                log.info("get_form(): confirm form")
+                form = ConfirmForm(**kwargs)
             else:
-                return FinalConfirmForm(**kwargs)
+                log.info("get_form(): final confirm form")
+                form = FinalConfirmForm(**kwargs)
 
-        # Since we are not on the confirm step, let the super method
-        # handle this
-        return super(MigrationWizard, self).get_form(step, data, files)
+        log.info("get_form(): form = %s" % form)
+        return form
 
     def done(self, form_list, **kwargs):
         """
