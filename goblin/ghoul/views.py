@@ -1,32 +1,31 @@
 from subprocess import PIPE, Popen
-
-from django.conf import settings
-from django.core.cache import cache
-from django.shortcuts import render_to_response
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template import RequestContext
-from django.contrib.formtools.wizard.views import SessionWizardView
-from tasks import *
-from psusys import PSUSys
 import logging
-from string import lower
-
 import os
 
-from goblin.ghoul.forms import FORMS
+from django import forms as f
+from django.conf import settings
+from django.contrib.formtools.wizard.views import SessionWizardView
+from django.core.cache import cache
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
+from psusys import PSUSys
+from string import lower
+from tasks import *
+
+from goblin.ghoul.forms import FORMS, ConfirmForm, FinalConfirmForm
 
 import celeryconfig
 
 log = logging.getLogger('ghoul.views')
 
 TEMPLATES = {"migrate": "ghoul/form_wizard/step1yes.html",
-             "transition": "ghoul/form_wizard/step1no.html",
              "confirm_trans": "ghoul/form_wizard/step1noB.html",
              "forward_notice": "ghoul/form_wizard/step2yes.html",
              "prohibit": "ghoul/form_wizard/step2no.html",
              "mobile": "ghoul/form_wizard/step3.html",
-             "confirm": "ghoul/form_wizard/step4yes.html",
-             "final_confirm": "ghoul/form_wizard/step4no.html"}
+             "confirm": "ghoul/form_wizard/step4no.html"}
 
 def get_forward(login, psusys):
     """
@@ -234,19 +233,13 @@ class MigrationWizard(SessionWizardView):
     SessionWizardView for the onid->gmail migration
     """
 
-    page_titles = {"migrate": {'page_title': "Are You Ready to Move Your ONID \
-                                             Mailbox to Google?"},
-                   "transition":  {'page_title': "Are You Ready to Transition \
-                                                 Your ONID email address \
-                                                 to Google?"},
-                   "confirm_trans": {'page_title': "Current Email Will \
+    page_titles = {"confirm_trans": {'page_title': "Current Email Will \
                                                         Not Be Migrated"},
                    "forward_notice": {'page_title': "Notice to Reset Your \
                                                     Forward"},
                    "prohibit": {'page_title': "Prohibited Data Notice"},
                    "mobile": {'page_title': "Reconfigure Email Access"},
-                   "confirm": {'page_title': "Confirm"},
-                   "final_confirm": {'page_title': "Confirm"},}
+                   "confirm": {'page_title': "Confirm"},}
 
     def dispatch(self, request, *args, **kwargs):
         """
@@ -278,16 +271,14 @@ class MigrationWizard(SessionWizardView):
         if step is None:
             step = self.steps.current
 
-        log.info("get_next_step(): current step: " + step)
-
         if step == "migrate":
             login = get_login(self.request)
-            if forward_cache(login)[0]:
+            if not presync_cache(login):
+                return "confirm_trans"
+            elif forward_cache(login)[0]:
                 return "forward_notice"
             else:
                 return "prohibit"
-        elif step == "transition":
-            return "confirm_trans"
         elif step == "confirm_trans":
             login = get_login(self.request)
             if forward_cache(login)[0]:
@@ -299,13 +290,7 @@ class MigrationWizard(SessionWizardView):
         elif step == "prohibit":
             return "mobile"
         elif step == "mobile":
-            login = get_login(self.request)
-            if presync_cache(login):
-                return "confirm"
-            else:
-                return "final_confirm"
-        elif step == "confirm":
-            return "final_confirm"
+            return "confirm"
 
         return None
 
@@ -313,8 +298,17 @@ class MigrationWizard(SessionWizardView):
         context = super(MigrationWizard, self)\
                   .get_context_data(form=form, **kwargs)
 
-        # Update the page title
-        context.update(self.page_titles.get(self.steps.current))
+        if self.steps.current == "migrate":
+            login = get_login(self.request)
+            if presync_cache(login):
+                context.update({"page_title": "Are You Ready to Move Your ONID \
+                                               Mailbox to Google?"})
+            else:
+                context.update({"page_title": "Are You Ready to Transition Your \
+                                               ONID email address to Google"})
+        else:
+            # Update the page title
+            context.update(self.page_titles.get(self.steps.current))
 
         # Return the email forward if we have one
         if self.steps.current == "forward_notice":
@@ -325,7 +319,70 @@ class MigrationWizard(SessionWizardView):
         return context
 
     def get_template_names(self):
+        # Given the step is confirm, get the proper template based on user type
+        if self.steps.current == "migrate":
+            login = get_login(self.request)
+            if presync_cache(login):
+                return "ghoul/form_wizard/step1yes.html"
+            else:
+                return "ghoul/form_wizard/step1no.html"
+        elif self.steps.current == "confirm":
+            login = get_login(self.request)
+            if presync_cache(login):
+                return "ghoul/form_wizard/step4yes.html"
+            else:
+                return "ghoul/form_wizard/step4no.html"
+
+        # Return the proper template otherwise
         return [TEMPLATES[self.steps.current]]
+
+    def render_done(self, form, **kwargs):
+        log.info("render_done(): form = %s" % form)
+        done_response = self.done([], **kwargs)
+        self.storage.reset()
+        return done_response
+
+    def get_form(self, step=None, data=None, files=None):
+        """
+        Return the correct form if the step is confirm,
+        else let the super method handle it
+        """
+
+        # Since we are not on the confirm step, let the super method
+        # handle this
+        form = super(MigrationWizard, self).get_form(step, data, files)
+        log.info("get_form(): super get_form = %s" % form)
+
+        # Do all the things that super does to setup kwargs
+        if step is None:
+            step = self.steps.current
+
+        login = get_login(self.request)
+
+        log.info("get_form(): current step = " + str(step))
+        log.info("get_form(): last step = " + str(self.steps.last))
+        log.info("get_form(): presync = " + str(presync_cache(login)))
+
+        if step == self.steps.last:
+            # Get the username to check for presync
+            # prepare the kwargs for the form instance.
+            log.info("get_form(): aonsetuhsaoetnuhas")
+            kwargs = self.get_form_kwargs(step)
+            kwargs.update({
+                'data': data,
+                'files': files,
+                'prefix': self.get_form_prefix(step, self.form_list[step]),
+                'initial': self.get_form_initial(step),
+            })
+            if presync_cache(login):
+                log.info("get_form(): confirm form")
+                form = ConfirmForm(**kwargs)
+            else:
+                log.info("get_form(): final confirm form")
+                form = FinalConfirmForm(**kwargs)
+
+        log.info("get_form(): form = %s" % form)
+        return form
 
     def done(self, form_list, **kwargs):
         """
