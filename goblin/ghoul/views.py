@@ -232,7 +232,7 @@ class MigrationWizard(SessionWizardView):
     SessionWizardView for the onid->gmail migration
     """
 
-    page_titles = {"migrate": "confirm_trans": {'page_title': "Current Email Will \
+    page_titles = {"confirm_trans": {'page_title': "Current Email Will \
                                                         Not Be Migrated"},
                    "forward_notice": {'page_title': "Notice to Reset Your \
                                                     Forward"},
@@ -270,8 +270,6 @@ class MigrationWizard(SessionWizardView):
         if step is None:
             step = self.steps.current
 
-        log.info("get_next_step(): current step: " + step)
-
         if step == "migrate":
             login = get_login(self.request)
             if not presync_cache(login):
@@ -299,17 +297,18 @@ class MigrationWizard(SessionWizardView):
         context = super(MigrationWizard, self)\
                   .get_context_data(form=form, **kwargs)
 
-        # Update the page title
-        context.update(self.page_titles.get(self.steps.current))
-
         if self.steps.current == "migrate":
             login = get_login(self.request)
             if presync_cache(login):
                 context.update({"page_title": "Are You Ready to Move Your ONID \
                                                Mailbox to Google?"})
             else:
-                centext.update({"page_title": "Are You Ready to Transition Your \
+                context.update({"page_title": "Are You Ready to Transition Your \
                                                ONID email address to Google"})
+        else:
+            # Update the page title
+            context.update(self.page_titles.get(self.steps.current))
+
         # Return the email forward if we have one
         if self.steps.current == "forward_notice":
             # Get login, needed for the forward_cache
@@ -321,7 +320,7 @@ class MigrationWizard(SessionWizardView):
     def get_template_names(self):
         # Given the step is confirm, get the proper template based on user type
         if self.steps.current == "migrate":
-            login = get_login(self.rquest)
+            login = get_login(self.request)
             if presync_cache(login):
                 return "ghoul/form_wizard/step1yes.html"
             else:
