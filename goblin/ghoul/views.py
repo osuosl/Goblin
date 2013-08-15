@@ -1,17 +1,18 @@
 from subprocess import PIPE, Popen
-
-from django.conf import settings
-from django.core.cache import cache
-from django.shortcuts import render_to_response
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template import RequestContext
-from django.contrib.formtools.wizard.views import SessionWizardView
-from tasks import *
-from psusys import PSUSys
 import logging
-from string import lower
-
 import os
+
+from django import forms as f
+from django.conf import settings
+from django.contrib.formtools.wizard.views import SessionWizardView
+from django.core.cache import cache
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
+from psusys import PSUSys
+from string import lower
+from tasks import *
 
 from goblin.ghoul.forms import FORMS, ConfirmForm, FinalConfirmForm
 
@@ -354,11 +355,11 @@ class MigrationWizard(SessionWizardView):
                 'prefix': self.get_form_prefix(step, self.form_list[step]),
                 'initial': self.get_form_initial(step),
             })
-            if issubclass(self.form_list[step], forms.ModelForm):
+            if issubclass(self.form_list[step], f.ModelForm):
                 # If the form is based on ModelForm, add instance if available
                 # and not previously set.
                 kwargs.setdefault('instance', self.get_form_instance(step))
-            elif issubclass(self.form_list[step], forms.models.BaseModelFormSet):
+            elif issubclass(self.form_list[step], f.models.BaseModelFormSet):
                 # If the form is based on ModelFormSet, add queryset if available
                 # and not previous set.
                 kwargs.setdefault('queryset', self.get_form_instance(step))
