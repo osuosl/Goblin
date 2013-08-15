@@ -320,7 +320,7 @@ class MigrationWizard(SessionWizardView):
         # Given the step is confirm, get the proper template based on user type
         if self.steps.current == "confirm":
             login = get_login(self.request)
-            if presync_cache(login)[0]:
+            if presync_cache(login):
                 return "ghoul/form_wizard/step4yes.html"
             else:
                 return "ghoul/form_wizard/step4no.html"
