@@ -328,7 +328,7 @@ class MigrationWizard(SessionWizardView):
         # Return the proper template otherwise
         return [TEMPLATES[self.steps.current]]
 
-    def get_form(self, form=None, **kwargs):
+    def get_form(self, step=None, data=None, files=None):
         """
         Return the correct form if the step is confirm,
         else let the super method handle it
@@ -343,7 +343,7 @@ class MigrationWizard(SessionWizardView):
 
         # Since we are not on the confirm step, let the super method
         # handle this
-        return super(MigrationWizard, self).get_form(form, **kwargs)
+        return super(MigrationWizard, self).get_form(step, data, files)
 
     def done(self, form_list, **kwargs):
         """
