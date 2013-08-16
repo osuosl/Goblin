@@ -42,6 +42,7 @@ class ConfirmForm(Form):
     no_access = BooleanField(required=True)
     no_delete = BooleanField(required=True)
     confirm_email = BooleanField(required=True)
+    permanent = BooleanField(required=True)
 
 
 class FinalConfirmForm(Form):
