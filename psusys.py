@@ -1168,12 +1168,15 @@ googleMailEnabled: %s
     def presync_email_task(self, login):
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
+        presync_prop = Property(key_file='opt-in.key',
+                        properties_file='presync.properties')
 
         # Logging is occuring within celery worker here
         log = logging.getLogger('')
         memcache_url = prop.get('memcache.url')
         mc = memcache.Client([memcache_url], debug=0)
         psu_sys = PSUSys()
+        task_wait = presync_prop.get('presync.wait')
 
         # Time is in minutes
         max_process_time = 60
@@ -1244,7 +1247,8 @@ googleMailEnabled: %s
             # Enable account if previously disabled
             psu_sys.disable_google_account(login)
 
-        # Call it good.
+        # Take a nap.
+        sleep(task_wait)
 
         return(True)
 
