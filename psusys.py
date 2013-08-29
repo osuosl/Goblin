@@ -1169,7 +1169,7 @@ googleMailEnabled: %s
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
         presync_prop = Property(key_file='opt-in.key',
-                        properties_file='presync.properties')
+                        properties_file='/etc/presync.properties')
 
         # Logging is occuring within celery worker here
         log = logging.getLogger('')
