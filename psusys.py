@@ -1176,7 +1176,7 @@ googleMailEnabled: %s
         memcache_url = prop.get('memcache.url')
         mc = memcache.Client([memcache_url], debug=0)
         psu_sys = PSUSys()
-        task_wait = presync_prop.get('presync.wait')
+        task_wait = float(presync_prop.get('presync.wait'))
 
         # Time is in minutes
         max_process_time = 60
