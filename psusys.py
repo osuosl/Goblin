@@ -17,6 +17,16 @@ from gdata.service import BadAuthentication
 from gdata.service import CaptchaRequired
 from gdata.apps.service import AppsForYourDomainException
 
+# Config File Name/Path
+CONFIG = 'goblin.ini'
+
+def get_delay():
+    with open(os.path.abspath(CONFIG)) as p:
+        line = p.readline()
+    l = line.split(':')
+    seconds = int(l[1].strip())
+    print "Delaying for %d seconds" % seconds
+    return seconds
 
 class PSUSys:
     def __init__(self):
@@ -1121,9 +1131,9 @@ googleMailEnabled: %s
         psu_sys.send_conversion_email_psu(login)
 
         # Wait for conversion mail delivery
-        sleep(30)
-        mc.set(key, 75)
-        sleep(30)
+        delay = get_delay()
+
+        sleep(delay)
 
         # Switch routing of email to flow to Google
         log.info("copy_email_task(): Routing email to Google: " + login)
