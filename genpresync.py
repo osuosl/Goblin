@@ -19,18 +19,18 @@ class PreSync():
         self.fac_to_presync = []
         self.prop = Property(key_file = 'opt-in.key', properties_file = 'opt-in.properties')
         self.deny = self.prop['deny.users']
-                try:
-                    opts, args = getopt.getopt(sys.argv[1:], 'p:')
-                except getopt.GetoptError as err:
-                    print(err)
-                    sys.exit()
+        try:
+            opts, args = getopt.getopt(sys.argv[1:], 'p:')
+        except getopt.GetoptError as err:
+            print(err)
+            sys.exit()
 
-                for o,a in opts:
-                    if o in ("-p", "--password"):
-                        self.password = a
-                    else:
-                        print 'Missing password!'
-                        sys.exit()
+        for o,a in opts:
+            if o in ("-p", "--password"):
+                self.password = a
+            else:
+                print 'Missing password!'
+                sys.exit()
 
     def gen_presync_test(self):
         self.fac_to_presync = ['pittsh', ]
