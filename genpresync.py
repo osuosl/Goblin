@@ -10,6 +10,8 @@ from tasks import *
 import pika
 import logging
 
+import argparse
+
 logging.getLogger('pika').setLevel(logging.WARN)
 
 class PreSync():
@@ -103,6 +105,12 @@ class PreSync():
             presync_email_test_task.apply_async(args=[login], queue='optinpresync')
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Presync tool")
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("-u", "--userlist", type=str, help="Presync users from a list")
+    group.add_argument("-l", "--ldap", type=str, help="Presync users from ldap")
+    group.add_argument("-s", "--stdin", action="store_true")
+    args = parser.parse_args()
     presync = PreSync()
     presync.gen_presync()
     presync.submit_task()
