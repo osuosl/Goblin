@@ -19,9 +19,9 @@ class PreSync(object):
         self.fac_to_presync = []
         self.prop = Property(key_file = 'opt-in.key', properties_file = 'opt-in.properties')
         self.deny = self.prop['deny.users']
+        self.ulist = ulist
         if ldap:
             self.ulist = self.gen_ldap_list()
-        self.ulist = ulist
         self.password = password
 
     def gen_presync_test(self):
@@ -38,8 +38,11 @@ class PreSync(object):
         return tmp_file
 
     def gen_presync(self):
-        fh = open(self.ulist)
-        lines = fh.readlines()
+        if self.ulist is not sys.stdin:
+            fh = open(self.ulist)
+            lines = fh.readlines()
+        else:
+            lines = self.ulist.readlines()
         haveRead = False
         firstName = lastName = loginName = pidm = id = ""
         role = ''
