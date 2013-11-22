@@ -957,6 +957,29 @@ mailRoutingAddress: %s@%s
                                 'has osuUID ' + str(result['osuUID'][0]))
                  return str(result['osuUID'][0])
 
+    def get_googleMailEnabled(self, login):
+        """
+        Checks ldap for the attribute 'googleMailEnabled' exists
+        """
+
+        ldap = psuldap('/vol/certs')
+        ldap_host = self.prop.get('ldap.read.host')
+        ldap_login = self.prop.get('ldap.login')
+        ldap_password = self.prop.get('ldap.password')
+        self.log.info('get_osuUID(): connecting to LDAP: ' + ldap_host)
+
+        ldap.connect(ldap_host, ldap_login, ldap_password)
+        res = ldap.search(searchfilter='uid=' + login,
+                          attrlist=['googleMailEnabled'])
+
+        for (dn, result) in res:
+             if "googleMailEnabled" in result:
+                 try:
+                    a = int(resilt['googleMailEnabled'][0])
+                    return a
+                 except:
+                    return None
+
     def ldap_GME_check(self, login):
         """
         Checks ldap for the attribute 'googleMailEnabled' exists
@@ -1036,6 +1059,11 @@ googleMailEnabled: %s
         memcache_url = prop.get('memcache.url')
         mc = memcache.Client([memcache_url], debug=0)
         psu_sys = PSUSys()
+
+        gme = psu_sys.get_googleMailEnabled(login)
+
+        if gme is not None or gme != 0:
+            return True
 
         # update LDAP to reflect the newly created account
         # Magic # 2 is in progress
