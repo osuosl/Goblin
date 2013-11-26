@@ -20,9 +20,9 @@ class PreSync(object):
         self.prop = Property(key_file = 'opt-in.key', properties_file = 'opt-in.properties')
         self.deny = self.prop['deny.users']
         self.ulist = ulist
+        self.password = password
         if ldap:
             self.ulist = self.gen_ldap_list()
-        self.password = password
 
     def gen_presync_test(self):
         self.fac_to_presync = ['pittsh', ]
