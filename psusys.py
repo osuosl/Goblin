@@ -975,7 +975,7 @@ mailRoutingAddress: %s@%s
         for (dn, result) in res:
              if "googleMailEnabled" in result:
                  try:
-                    a = int(resilt['googleMailEnabled'][0])
+                    a = int(result['googleMailEnabled'][0])
                     return a
                  except:
                     return None
