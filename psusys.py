@@ -20,13 +20,6 @@ from gdata.apps.service import AppsForYourDomainException
 # Config File Name/Path
 CONFIG = 'goblin.ini'
 
-def get_delay():
-    with open(os.path.abspath(CONFIG)) as p:
-        line = p.readline()
-    l = line.split(':')
-    seconds = int(l[1].strip())
-    print "Delaying for %d seconds" % seconds
-    return seconds
 
 class PSUSys:
     def __init__(self):
@@ -45,6 +38,20 @@ class PSUSys:
             self.setLogger(log)
 
         self.META_IDENTITY = 'REMOTE_ADDR'
+
+    def get_delay(self):
+        # Default is 60 seconds as this number was hardcoded previous the config
+        seconds = 60
+        try:
+            with open(os.path.abspath(CONFIG)) as p:
+                line = p.readline()
+            l = line.split(':')
+            seconds = int(l[1].strip())
+            self.log.info("Delaying for %d seconds" % seconds)
+        except:
+            self.log.info("There was an issue reading the config; defaulting to\
+                           60 seconds")
+        return seconds
 
     def setLogger(self, logger):
         self.log = logger
