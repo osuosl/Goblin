@@ -38,11 +38,12 @@ class PreSync(object):
         return tmp_file
 
     def gen_presync(self):
-        if self.ulist is not sys.stdin:
-            fh = open(self.ulist)
-            lines = fh.readlines()
-        else:
+        try:
             lines = self.ulist.readlines()
+        except:
+            fh = opn(self.ulist)
+            lines = fh.readlines()
+
         haveRead = False
         firstName = lastName = loginName = pidm = id = ""
         role = ''
