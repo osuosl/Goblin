@@ -41,7 +41,7 @@ class PreSync(object):
         try:
             lines = self.ulist.readlines()
         except:
-            fh = opn(self.ulist)
+            fh = open(self.ulist)
             lines = fh.readlines()
 
         haveRead = False
