@@ -1,5 +1,8 @@
 import jprops
 def Property(key_file,properties_file):
-   with open("/var/www/goblin/current/etc/" + properties_file) as fp:
-	properties = jprops.load_properties(fp)
-        return properties
+   if not properties_file.startswith("/"):
+      properties_file = "/var/www/goblin/current/etc/" + properties_file
+
+   with open(properties_file) as fp:
+      properties = jprops.load_properties(fp)
+      return properties

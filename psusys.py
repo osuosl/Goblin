@@ -957,6 +957,29 @@ mailRoutingAddress: %s@%s
                                 'has osuUID ' + str(result['osuUID'][0]))
                  return str(result['osuUID'][0])
 
+    def get_googleMailEnabled(self, login):
+        """
+        Checks ldap for the attribute 'googleMailEnabled' exists
+        """
+
+        ldap = psuldap('/vol/certs')
+        ldap_host = self.prop.get('ldap.read.host')
+        ldap_login = self.prop.get('ldap.login')
+        ldap_password = self.prop.get('ldap.password')
+        self.log.info('get_osuUID(): connecting to LDAP: ' + ldap_host)
+
+        ldap.connect(ldap_host, ldap_login, ldap_password)
+        res = ldap.search(searchfilter='uid=' + login,
+                          attrlist=['googleMailEnabled'])
+
+        for (dn, result) in res:
+             if "googleMailEnabled" in result:
+                 try:
+                    a = int(result['googleMailEnabled'][0])
+                    return a
+                 except:
+                    return None
+
     def ldap_GME_check(self, login):
         """
         Checks ldap for the attribute 'googleMailEnabled' exists
@@ -1036,6 +1059,15 @@ googleMailEnabled: %s
         memcache_url = prop.get('memcache.url')
         mc = memcache.Client([memcache_url], debug=0)
         psu_sys = PSUSys()
+        
+        # check to see if a presync is completed or in progress
+        # get_googleMailEnabled will return None, 0, 1, or 2
+        # if 1 (google email enabled) or 2 (in progress), quit 
+        # before doing anything regrettable
+        gme = psu_sys.get_googleMailEnabled(login)
+
+        if gme in [1,2]:
+            return True
 
         # update LDAP to reflect the newly created account
         # Magic # 2 is in progress
@@ -1168,12 +1200,15 @@ googleMailEnabled: %s
     def presync_email_task(self, login):
         prop = Property(key_file='opt-in.key',
                         properties_file='opt-in.properties')
+        presync_prop = Property(key_file='opt-in.key',
+                        properties_file='/etc/presync.properties')
 
         # Logging is occuring within celery worker here
         log = logging.getLogger('')
         memcache_url = prop.get('memcache.url')
         mc = memcache.Client([memcache_url], debug=0)
         psu_sys = PSUSys()
+        task_wait = float(presync_prop.get('presync.wait'))
 
         # Time is in minutes
         max_process_time = 60
@@ -1244,7 +1279,8 @@ googleMailEnabled: %s
             # Enable account if previously disabled
             psu_sys.disable_google_account(login)
 
-        # Call it good.
+        # Take a nap.
+        sleep(task_wait)
 
         return(True)
 
