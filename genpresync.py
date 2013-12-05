@@ -108,9 +108,7 @@ if __name__ == '__main__':
     # Arguments for script use
     parser = argparse.ArgumentParser(description="Presync tool")
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("-u", "--userlist", type=str, help="Presync users from a list")
     group.add_argument("-l", "--ldap", dest='ldap', action='store_true', help="Presync users from ldap")
-    group.add_argument("-s", "--stdin", action="store_true", help="Presync users from standard input")
     parser.add_argument("-p", "--password", type=str, help="LDAP Password")
     args = parser.parse_args()
 
@@ -119,9 +117,8 @@ if __name__ == '__main__':
         print "LDAP requires option -p for a password\n"
         parser.print_help()
         sys.exit()
-    ulist = None
-    if not args.ldap and not args.stdin and not args.userlist:
-        ulist = sys.stdin
+
+    ulist = sys.stdin
 
     # Properly configure PreSync()
     presync = PreSync(ulist=ulist, ldap=args.ldap, password=args.password)
