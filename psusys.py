@@ -1059,10 +1059,10 @@ googleMailEnabled: %s
         memcache_url = prop.get('memcache.url')
         mc = memcache.Client([memcache_url], debug=0)
         psu_sys = PSUSys()
-        
+
         # check to see if a presync is completed or in progress
         # get_googleMailEnabled will return None, 0, 1, or 2
-        # if 1 (google email enabled) or 2 (in progress), quit 
+        # if 1 (google email enabled) or 2 (in progress), quit
         # before doing anything regrettable
         gme = psu_sys.get_googleMailEnabled(login)
 
@@ -1208,6 +1208,16 @@ googleMailEnabled: %s
         memcache_url = prop.get('memcache.url')
         mc = memcache.Client([memcache_url], debug=0)
         psu_sys = PSUSys()
+
+        # check to see if a presync is completed or in progress
+        # get_googleMailEnabled will return None, 0, 1, or 2
+        # if 1 (google email enabled) or 2 (in progress), quit
+        # before doing anything regrettable
+        gme = psu_sys.get_googleMailEnabled(login)
+
+        if gme in [1,2]:
+            return True
+
         task_wait = float(presync_prop.get('presync.wait'))
 
         # Time is in minutes
