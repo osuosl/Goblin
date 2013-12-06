@@ -101,7 +101,7 @@ class PreSync(object):
         for login in self.fac_to_presync:
             if self.migrate:
                 sync = True
-                foward = True
+                forward = True
                 fwd_email = "%s@onid.oregonstate.edu" % login
                 copy_email_task.apply_async(args=[login, sync, forward, fwd_email], queue='optinpresync')
             else:
@@ -117,7 +117,7 @@ if __name__ == '__main__':
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-l", "--ldap", dest='ldap', action='store_true', help="Presync users from ldap")
     parser.add_argument("-p", "--password", type=str, help="LDAP Password")
-    parser.add_argument("-m", "--migrate", dest='migrate', help="copy_email_task instead of presync")
+    parser.add_argument("-m", "--migrate", dest='migrate', action='store_true', help="copy_email_task instead of presync")
     args = parser.parse_args()
 
     # Handle the arguments
