@@ -15,12 +15,13 @@ import argparse
 logging.getLogger('pika').setLevel(logging.WARN)
 
 class PreSync(object):
-    def __init__(self, ulist, ldap=False, password=None):
+    def __init__(self, ulist, ldap=False, password=None, migrate=False):
         self.fac_to_presync = []
         self.prop = Property(key_file = 'opt-in.key', properties_file = 'opt-in.properties')
         self.deny = self.prop['deny.users']
         self.ulist = ulist
         self.password = password
+        self.migrate = migrate
         if ldap:
             self.ulist = self.gen_ldap_list()
 
@@ -98,7 +99,13 @@ class PreSync(object):
 
     def submit_task(self):
         for login in self.fac_to_presync:
-            presync_email_task.apply_async(args=[login], queue='optinpresync')
+            if self.migrate:
+                sync = True
+                foward = True
+                fwd_email = "%s@onid.oregonstate.edu" % login
+                copy_email_task.apply_async(args=[login, sync, forward, fwd_email], queue='optinpresync')
+            else:
+                presync_email_task.apply_async(args=[login], queue='optinpresync')
 
     def submit_test_task(self):
         for login in self.fac_to_presync:
@@ -110,6 +117,7 @@ if __name__ == '__main__':
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-l", "--ldap", dest='ldap', action='store_true', help="Presync users from ldap")
     parser.add_argument("-p", "--password", type=str, help="LDAP Password")
+    parser.add_argument("-m", "--migrate", dest='migrate', help="copy_email_task instead of presync")
     args = parser.parse_args()
 
     # Handle the arguments
@@ -121,6 +129,6 @@ if __name__ == '__main__':
     ulist = sys.stdin
 
     # Properly configure PreSync()
-    presync = PreSync(ulist=ulist, ldap=args.ldap, password=args.password)
+    presync = PreSync(ulist=ulist, ldap=args.ldap, password=args.password, migrate=args.migrate)
     presync.gen_presync()
     presync.submit_task()
