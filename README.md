@@ -14,8 +14,7 @@ their own terms.
 
 **Task generation script.** Python script to generate bulk task sets for presync or final sync.
 
-### LDAP integration
-Queries LDAP for inboxes to sync.
+**LDAP integration.** Queries LDAP for inboxes to sync.
 
 ## Installation
 
