@@ -18,7 +18,7 @@ their own terms.
 
 ## Installation
 
-We rely on Memcached, PostgreSQL, and a celery MQ as backend datastores. To install,
+We rely on Memcached, PostgreSQL, and a Celery MQ as backend datastores. To install,
 git clone this repo, make a new virtualenv and then pip install requirements/requirements.txt
 
 Then set up a WSGI file pointing at the repo, and run celery workers.
