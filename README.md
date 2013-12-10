@@ -29,7 +29,11 @@ git clone this repo, make a new virtualenv and then pip install requirements/req
 Then set up a WSGI file pointing at the repo, and run celery workers.
 
 ## Configuration
-TODO
+* goblin.ini
+
+  > celery delay: 60
+
+number of seconds to delay a celery job
 
 ## Usage
 
