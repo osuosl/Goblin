@@ -44,45 +44,16 @@ class PreSync(object):
             fh = open(self.ulist)
             lines = fh.readlines()
 
-        haveRead = False
-        firstName = lastName = loginName = pidm = id = ""
-        role = ''
-        invalid = False
-        cmd = ''
-
         for line in lines:
-            line = line.rstrip()
-            if (line):
-                try:
-                    (a, v) = re.split(":", line)
-                except:
-                   break
-                if (a == "uid"):
-                    loginName = v.lstrip()
-                    haveRead = True
-                if (a == "sn"):
-                    lastName = v.lstrip()
-                if (a == "givenName"):
-                    firstName = v.lstrip()
+            lsplit = [word.strip() for word in line.split(":")]
+            length = len(lsplit)
 
-                if (a == "osuUID"):
-                    pidm = ""
-                    id = v.lstrip()
-                    if (id[0:1] == "B"):
-                        id = "SPONSORED_" + id
-                    else:
-                        pidm = id[1:]
-            else:
-                if (haveRead == True) and (id):
-                    if loginName not in self.deny:
-                        self.fac_to_presync.append(loginName)
-
-                firstName = lastName = loginName = pidm = id = ""
-                role = ''
-                haveRead = False
-                invalid = False
-
-        random.shuffle(self.fac_to_presync)
+            # If ['uid', user]
+            if length == 2 and lsplit[0] == 'uid':
+                self.fac_to_presync.append(lsplit[1])
+            # If [user]
+            elif length == 1 and lsplit[0] != '':
+                self.fac_to_presync.append(lsplit[0])
 
     def get_presync_list(self):
         return self.fac_to_presync
