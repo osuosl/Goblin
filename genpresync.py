@@ -30,7 +30,7 @@ class PreSync(object):
     def gen_ldap_list(self):
         tmp_file = '/tmp/presync'
 
-        command = 'ldapsearch -w ' + self.password +' -x -LLL -h ldap.onid.orst.edu -D uid=onid_googlesync,ou=specials,o=orst.edu -b ou=people,o=orst.edu "(&(!(googleMailEnabled=1))(googlePreSync=1))" uid osuUID sn givenName osuPrimaryAffiliation'
+        command = 'ldapsearch -w ' + self.password +' -x -LLL -h ldap.onid.orst.edu -D uid=onid_googlesync,ou=specials,o=orst.edu -b ou=people,o=orst.edu "(&(!(googleMailEnabled=1))(googlePreSync=1))" uid'
         syncprocess = subprocess.Popen(shlex.split(command), stdout=open(tmp_file, 'w'))
         while (syncprocess.poll() == None):
             sleep(30)
