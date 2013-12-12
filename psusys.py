@@ -1138,7 +1138,7 @@ googleMailEnabled: %s
         psu_sys.send_conversion_email_psu(login)
 
         # Wait for conversion mail delivery
-        delay = get_delay()
+        delay = psu_sys.get_delay()
 
         sleep(delay)
 
