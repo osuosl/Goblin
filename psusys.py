@@ -564,7 +564,7 @@ mailRoutingAddress: %s@%s
             return True
         else:
             self.log.info('send_conversion_email_psu(): failed for user: ' +
-                          login + ', error code: ' + syncprocess.returncode)
+                          login + ', error code: %i' % syncprocess.returncode)
             return False
 
     def send_conversion_email_google(self, login):
@@ -587,7 +587,7 @@ mailRoutingAddress: %s@%s
             return True
         else:
             self.log.info('send_conversion_email_google(): failed for user: ' +
-                          login + ', error code: ' + syncprocess.returncode)
+                          login + ', error code: %i' % syncprocess.returncode)
             return False
 
     def enable_gmail_null(self, login):
