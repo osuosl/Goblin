@@ -17,6 +17,9 @@ from gdata.service import BadAuthentication
 from gdata.service import CaptchaRequired
 from gdata.apps.service import AppsForYourDomainException
 
+# Config File Name/Path
+CONFIG = 'goblin.ini'
+
 
 class PSUSys:
     def __init__(self):
@@ -35,6 +38,20 @@ class PSUSys:
             self.setLogger(log)
 
         self.META_IDENTITY = 'REMOTE_ADDR'
+
+    def get_delay(self):
+        # Default is 60 seconds as this number was hardcoded previous the config
+        seconds = 60
+        try:
+            with open(os.path.abspath(CONFIG)) as p:
+                line = p.readline()
+            l = line.split(':')
+            seconds = int(l[1].strip())
+            self.log.info("Delaying for %d seconds" % seconds)
+        except:
+            self.log.info("There was an issue reading the config; defaulting to\
+                           60 seconds")
+        return seconds
 
     def setLogger(self, logger):
         self.log = logger
@@ -1153,9 +1170,9 @@ googleMailEnabled: %s
         psu_sys.send_conversion_email_psu(login)
 
         # Wait for conversion mail delivery
-        sleep(30)
-        mc.set(key, 75)
-        sleep(30)
+        delay = psu_sys.get_delay()
+
+        sleep(delay)
 
         # Switch routing of email to flow to Google
         log.info("copy_email_task(): Routing email to Google: " + login)

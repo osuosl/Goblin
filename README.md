@@ -17,14 +17,17 @@ their own terms.
 **LDAP integration.** Queries LDAP for inboxes to sync.
 
 ## Installation
-
-We rely on Memcached, PostgreSQL, and a Celery MQ as backend datastores. To install,
 git clone this repo, make a new virtualenv and then pip install requirements/requirements.txt
 
 Then set up a WSGI file pointing at the repo, and run celery workers.
 
 ## Configuration
-TODO
+
+* goblin.ini
+
+  > celery delay: 60
+
+number of seconds to delay a celery job
 
 ## Usage
 
