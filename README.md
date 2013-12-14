@@ -42,9 +42,6 @@ genpresync.py:
         -l, --ldap   Presync users from ldap
         -p password  LDAP Password
 
-TODO
- - document bulk task generation script
-
 ## Contributing
 Patches welcome!
 
