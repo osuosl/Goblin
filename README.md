@@ -31,6 +31,17 @@ number of seconds to delay a celery job
 
 ## Usage
 
+genpresync.py:
+
+    Presync and force migration tool - With no options given, it reads from standard input
+
+    usage: genpresync [-l -p password] [-h]
+
+    optional arguments:
+        -h, --help   show this help message and exit
+        -l, --ldap   Presync users from ldap
+        -p password  LDAP Password
+
 TODO
  - document bulk task generation script
 
