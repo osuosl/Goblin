@@ -106,10 +106,11 @@ class PreSync(object):
 
 if __name__ == '__main__':
     # Arguments for script use
-    parser = argparse.ArgumentParser(description="Presync tool")
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument("-l", "--ldap", dest='ldap', action='store_true', help="Presync users from ldap")
-    parser.add_argument("-p", "--password", type=str, help="LDAP Password")
+    usage = "usage: genpresync [-l -p password] [-h]"
+    desc = "Presync and force migration tool - With no options given, it reads from standard input"
+    parser = argparse.ArgumentParser(description=desc, usage=usage)
+    parser.add_argument("-l", "--ldap", dest='ldap', action='store_true', help="Presync users from ldap")
+    parser.add_argument("-p", type=str, metavar='password', help="LDAP Password")
     args = parser.parse_args()
 
     # Handle the arguments
