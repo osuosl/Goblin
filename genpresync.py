@@ -88,7 +88,7 @@ if __name__ == '__main__':
     desc = "Presync and force migration tool - With no options given, it reads from standard input"
     parser = argparse.ArgumentParser(description=desc, usage=usage)
     parser.add_argument("-l", "--ldap", dest='ldap', action='store_true', help="Presync users from ldap")
-    parser.add_argument("-p", type=str, metavar='password', help="LDAP Password")
+    parser.add_argument("-p", "--password", type=str, help="LDAP Password")
     parser.add_argument("-m", "--migrate", dest='migrate', action='store_true', help="copy_email_task instead of presync")
     args = parser.parse_args()
 
