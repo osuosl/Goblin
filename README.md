@@ -42,6 +42,10 @@ genpresync.py:
         -l, --ldap   Presync users from ldap
         -p password  LDAP Password
 
+## Reporting Issues
+
+Bug reports are tracked on OSL's chilliproject site:[https://code.osuosl.org/projects/osu-gmail-migration/issues](https://code.osuosl.org/projects/osu-gmail-migration/issues).
+
 ## Contributing
 Patches welcome!
 
