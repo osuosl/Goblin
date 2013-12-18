@@ -1221,9 +1221,11 @@ googleMailEnabled: %s
                         properties_file='/etc/presync.properties')
 
         # Logging is occuring within celery worker here
-        log = logging.getLogger('')
         memcache_url = prop.get('memcache.url')
         mc = memcache.Client([memcache_url], debug=0)
+
+        # What the actual heck is this for?? psu_sys should not exist, self
+        # shuold be used instead
         psu_sys = PSUSys()
 
         # check to see if a presync is completed or in progress
@@ -1240,55 +1242,55 @@ googleMailEnabled: %s
         # Time is in minutes
         max_process_time = 60
 
-        log.info("presync_email_task(): processing user: " + login)
-        optin_key = 'email_copy_progress.' + login
-        key = 'email_presync_progress.' + login
+        self.log.info("presync_email_task(): processing user: %s" % login)
+        optin_key = 'email_copy_progress: %s' % login
+        key = 'email_presync_progress: ' % login
 
         # Check to see if an opt-in task is running--if so, exit
         if mc.get(optin_key) is not None:
-            log.info("presync_email_task(): user currently opting-in: " +
-                     login)
+            self.log.info("presync_email_task(): user currently opting-in: %s"
+                     % login)
             return(True)
 
         account_status = psu_sys.google_account_status(login)
 
         # Check to make sure the user has a Google account
         if account_status.get("exists", False) is False:
-            log.info("presync_email_task(): user does not exist in Google: " +
-                     login)
+            self.log.info("presync_email_task(): user does not exist in Google: %s"
+                     % login)
             return(True)
 
         # Check for LDAP mail forwarding already (double checking), if
         # already opt'd-in, then immediately return and mark as complete.
 
         if (psu_sys.opt_in_already(login)):
-            log.info("presync_email_task(): has already completed opt-in: " +
-                     login)
+            self.log.info("presync_email_task(): has already completed opt-in: %s"
+                     % login)
             return(True)
         else:
-            log.info("presync_email_task(): has not already completed opt-in: "
-                     + login)
+            self.log.info("presync_email_task(): has not already completed opt-in: %s"
+                     % login)
 
         # We temporarily enable suspended accounts for
         # the purposes of synchronization
         if account_status["enabled"] is False:
-            log.info("presync_email_task(): temporarily enabling account: " +
-                     login)
+            self.log.info("presync_email_task(): temporarily enabling account: %s"
+                     % login)
             # Enable account if previously disabled
             psu_sys.enable_google_account(login)
 
         # Enable Google email for the user
-        log.info("presync_email_task(): temporarily enabling Google mail: " +
-                 login)
+        self.log.info("presync_email_task(): temporarily enabling Google mail: %s"
+                 % login)
         old_org = psu_sys.enable_gmail(login)
 
         # Synchronize email to Google (and wait)
-        log.info("presync_email_task(): syncing email: " + login)
+        self.log.info("presync_email_task(): syncing email: %s" % login)
         status = psu_sys.sync_email_delete2(login,
                                             max_process_time=max_process_time)
         retry_count = 0
         while (status is False) and (retry_count < self.MAX_RETRY_COUNT):
-            log.info("presync_email_task(): Retry syncing email: " + login)
+            self.log.info("presync_email_task(): Retry syncing email: %s" % login)
             status = psu_sys\
                      .sync_email_delete2(login,
                                          max_process_time=max_process_time)
@@ -1298,11 +1300,11 @@ googleMailEnabled: %s
         # Synchronization complete
 
         # Disable Google email
-        log.info("presync_email_task(): disabling Google mail: " + login)
+        self.log.info("presync_email_task(): disabling Google mail: %s" % login)
         psu_sys.disable_gmail(login,old_org)
 
         if account_status["enabled"] is False:
-            log.info("presync_email_task(): disabling account: " + login)
+            self.log.info("presync_email_task(): disabling account: %s" % login)
             # Enable account if previously disabled
             psu_sys.disable_google_account(login)
 
