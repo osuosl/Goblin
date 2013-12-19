@@ -1244,7 +1244,7 @@ googleMailEnabled: %s
 
         self.log.info("presync_email_task(): processing user: %s" % login)
         optin_key = 'email_copy_progress: %s' % login
-        key = 'email_presync_progress: ' % login
+        key = 'email_presync_progress: %s' % login
 
         # Check to see if an opt-in task is running--if so, exit
         if mc.get(optin_key) is not None:
