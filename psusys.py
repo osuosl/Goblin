@@ -10,12 +10,17 @@ import shlex
 import subprocess
 import os
 from memcacheq import MemcacheQueue
-import gdata.apps.organization.service
-import gdata.apps.service
-import gdata.apps.multidomain.client
-from gdata.service import BadAuthentication
-from gdata.service import CaptchaRequired
-from gdata.apps.service import AppsForYourDomainException
+
+import httplib2
+import sys
+import json
+import googleapiclient
+import googleapiclient.discovery
+import googleapiclient.errors
+import oauth2client.client
+from apiclient import errors
+
+
 
 # Config File Name/Path
 CONFIG = 'goblin.ini'
@@ -38,6 +43,71 @@ class PSUSys:
             self.setLogger(log)
 
         self.META_IDENTITY = 'REMOTE_ADDR'
+
+        # setup Google auth
+        oauth2servicefile = '/var/www/goblin/shared/oauth2service.json'
+        try:
+            json_string = open(oauth2servicefile).read()
+        except IOError, e:
+            self.log.error("Error loading oauth2servicefile %s" % e)
+            sys.exit
+        json_data = json.loads(json_string)
+        SERVICE_ACCOUNT_EMAIL = json_data[u'client_email']
+        SERVICE_ACCOUNT_CLIENT_ID = json_data[u'client_id']
+        key = json_data[u'private_key']
+        scope = 'https://www.googleapis.com/auth/admin.directory.user'
+        admin_email = self.prop.get('google.email')
+        credentials = oauth2client.client.SignedJwtAssertionCredentials(SERVICE_ACCOUNT_EMAIL, key, scope=scope, sub=admin_email)
+        http = httplib2.Http()
+        http = credentials.authorize(http)
+        self.service = googleapiclient.discovery.build('admin', 'directory_v1', http=http)
+
+    # wrapper for all Google API calls
+    def callGAPI(self, service, function, silent_errors=False, soft_errors=False, throw_reasons=[], retry_reasons=[], **kwargs):
+      method = getattr(service, function)
+      retries = 10
+      for n in range(1, retries+1):
+        try:
+          return method(**kwargs).execute()
+        except googleapiclient.errors.HttpError, e:
+          try:
+            error = json.loads(e.content)
+          except ValueError:
+            if not silent_errors:
+                self.log.error("Error in callGAPI: %s" % e.content)
+            if soft_errors:
+              return
+            else:
+              sys.exit(5)
+          http_status = error[u'error'][u'code']
+          message = error[u'error'][u'errors'][0][u'message']
+          try:
+            reason = error[u'error'][u'errors'][0][u'reason']
+          except KeyError:
+            reason = http_status
+          if reason in throw_reasons:
+            raise e
+          if n != retries and (reason in [u'rateLimitExceeded', u'userRateLimitExceeded', u'backendError', u'internalError'] or reason in retry_reasons):
+            wait_on_fail = (2 ** n) if (2 ** n) < 60 else 60
+            randomness = float(random.randint(1,1000)) / 1000
+            wait_on_fail = wait_on_fail + randomness
+            if n > 3: self.log.error('Temp error %s. Backing off %s seconds...' % (reason, int(wait_on_fail)))
+            time.sleep(wait_on_fail)
+            if n > 3: self.log.error('attempt %s/%s\n' % (n+1, retries))
+            continue
+          self.log.error("Error %s: %s - %s\n\n" % (http_status, message, reason))
+          if soft_errors:
+            if n != 1:
+              self.log.error(" - Giving up.\n")
+            return
+          else:
+            sys.exit(int(http_status))
+        except oauth2client.client.AccessTokenRefreshError, e:
+          self.log.error("Error: Authentication Token Error - %s" % e)
+          sys.exit(403)
+        except TypeError, e:
+          self.log.error("Error: %s" % e)
+          sys.exit(4)
 
     def get_delay(self):
         # Default is 60 seconds as this number was hardcoded previous the config
@@ -598,182 +668,87 @@ mailRoutingAddress: %s@%s
     def is_gmail_enabled(self, login):
         self.log.info('is_gmail_enabled(): \
                       Checking if gmail is enabled for user: ' + login)
-        email = self.prop.get('google.email')
         domain = self.prop.get('google.domain')
-        pw = self.prop.get('google.password')
 
-        client = gdata.apps.organization\
-                            .service.OrganizationService(email=email,
-                                                         domain=domain,
-                                                         password=pw)
-        retry_count = 0
-        status = False
-        result = False
-        while (status is False) and (retry_count < self.MAX_RETRY_COUNT):
-            try:
-                client.ProgrammaticLogin()
-                customerId = client.RetrieveCustomerId()["customerId"]
-                userEmail = login + '@' + domain
-                result = (client
-                          .RetrieveOrgUser(customerId,
-                                           userEmail)['orgUnitPath'] == 'ONID')
-                status = True
-            except CaptchaRequired:
-                self.log.error('is_gmail_enabled(): Captcha being requested')
-                sleep(1)
-            except BadAuthentication:
-                self.log.error('is_gmail_enabled(): Authentication Error')
-                sleep(1)
-            except Exception, e:
-                self.log.error('is_gmail_enabled(): Exception occured: ' +
-                               str(e))
-                sleep(1)
-                # Retry if not an obvious non-retryable error
-            retry_count += 1
+        try:
+            useremail = login + '@' + domain
+            user = self.callGAPI(service=self.service.users(), function='get', userKey=useremail, throw_reasons=['notFound'])
+            if (user['orgUnitPath'] == '/ONID'):
+                return True
+            else:
+                return False
 
-        return result
+        except Exception, e:
+            self.log.error('is_gmail_enabled(): Exception occurred: ' + str(e))
+            sleep(1)
+
+        return False
 
     def google_account_status(self, login):
         self.log.info('google_account_status(): \
                       Querying account status for user: ' + login)
-        email = self.prop.get('google.email')
         domain = self.prop.get('google.domain')
-        pw = self.prop.get('google.password')
         useremail = login + '@' + domain
 
-        client = gdata.apps.multidomain\
-                           .client.MultiDomainProvisioningClient(domain=domain)
-        retry_count = 0
-        status = False
-        while (status is False) and (retry_count < self.MAX_RETRY_COUNT):
-            try:
-                client.ClientLogin(email=email, password=pw, source='apps')
-                userDisabled = client.RetrieveUser(useremail).suspended
-                if userDisabled == 'false':
-                    return {"exists": True, "enabled": True}
-                elif userDisabled == 'true':
-                    return {"exists": True, "enabled": False}
-                else:
-                    return {"exists": False, "enabled": False}
+        try:
+            user = self.callGAPI(service=self.service.users(), function='get', userKey=useremail, throw_reasons=['notFound'])
+        except googleapiclient.errors.HttpError, e:
+            self.log.error('google_account_status(): Exception occurred: ' + str(e))
+            return {"exists": False, "enabled": False}
 
-            except AppsForYourDomainException, e:
-                if e.error_code == 1301:
-                    self.log.error('google_account_status(): \
-                                   User %s does not exist' % login)
-                    return {"exists": False, "enabled": False}
-
-            except(CaptchaRequired):
-                self.log.error('google_account_status(' + login + '): \
-                               Captcha being requested')
-
-            except(BadAuthentication):
-                self.log.error('google_account_status(): \
-                               Authentication Error')
-
-            except Exception, e:
-                self.log.error('google_account_status(): \
-                               Exception occured: ' + str(e))
-                # Retry if not an obvious non-retryable error
-                sleep(1)
-
-            retry_count += 1
+        if (user['suspended'] == False):
+            return {"exists": True, "enabled": True}
+        else:
+            return {"exists": True, "enabled": False}
 
     def enable_google_account(self, login):
         self.log.info('enable_google_account(): \
                       Enabling account for user: ' + login)
-        email = self.prop.get('google.email')
         domain = self.prop.get('google.domain')
-        pw = self.prop.get('google.password')
+        useremail = login + '@' + domain
+        body = dict()
+        body['suspended'] = False
 
-        client = gdata.apps.multidomain\
-                           .client.MultiDomainProvisioningClient(domain=domain)
-        retry_count = 0
-        status = False
-        while (status is False) and (retry_count < self.MAX_RETRY_COUNT):
-            try:
-                client.ClientLogin(email=email, password=pw, source='apps')
-                userDisabled = client.RestoreUser(login).suspended
-                if userDisabled == 'false':
-                    status = True
+        try:
+            result = self.callGAPI(service=self.service.users(), function=u'patch', soft_errors=True, userKey=useremail, body=body)
+        except googleapiclient.errors.HttpError, e:
+            self.log.error('enable_google_account(): Exception occurred: ' + str(e))
+            return False
 
-            except AppsForYourDomainException, e:
-                if e.error_code == 1301:
-                    self.log.error('enable_google_account(): \
-                                   User %s does not exist' % login)
-                    status = True
-
-            except(CaptchaRequired):
-                self.log.error('enable_google_account(): \
-                               Captcha being requested')
-
-            except(BadAuthentication):
-                self.log.error('enable_google_account(): Authentication Error')
-
-            except Exception, e:
-                self.log.error('enable_google_account(): Exception occured: ' +
-                               str(e))
-                # Retry if not an obvious non-retryable error
-                sleep(1)
-
-            retry_count = retry_count + 1
+        return True
 
     def disable_google_account(self, login):
         self.log.info('disable_google_account(): Disabling account for user: '
                       + login)
-        email = self.prop.get('google.email')
         domain = self.prop.get('google.domain')
-        pw = self.prop.get('google.password')
+        useremail = login + '@' + domain
+        body = dict()
+        body['suspended'] = True
 
-        client = gdata.apps.multidomain\
-                           .client.MultiDomainProvisioningClient(domain=domain)
-        retry_count = 0
-        status = False
-        while (status is False) and (retry_count < self.MAX_RETRY_COUNT):
-            try:
-                client.ClientLogin(email=email, password=pw, source='apps')
-                userDisabled = client.SuspendUser(login).suspended
-                if userDisabled == 'true':
-                    status = True
+        try:
+            result = self.callGAPI(service=self.service.users(), function=u'patch', soft_errors=True, userKey=useremail, body=body)
+        except googleapiclient.errors.HttpError, e:
+            self.log.error('disable_google_account(): Exception occurred: ' + str(e))
+            return False
 
-            except AppsForYourDomainException, e:
-                if e.error_code == 1301:
-                    self.log.error('disable_google_account(): \
-                                   User %s does not exist' % login)
-                    status = True
-
-            except(CaptchaRequired):
-                self.log.error('disable_google_account(): \
-                               Captcha being requested')
-
-            except(BadAuthentication):
-                self.log.error('disable_google_account(): \
-                               Authentication Error')
-
-            except Exception, e:
-                self.log.error('disable_google_account(): Exception occured: ' +
-                               str(e))
-                # Retry if not an obvious non-retryable error
-                sleep(1)
-
-            retry_count += 1
+        return True
 
     def retrieve_orgunit(self, login):
-        email = self.prop.get('google.email')
         domain = self.prop.get('google.domain')
-        pw = self.prop.get('google.password')
+        useremail = login + '@' + domain
 
-        client = gdata.apps.organization.service.OrganizationService(email=email, domain=domain, password=pw)
-        client.ProgrammaticLogin()
-        customerId = client.RetrieveCustomerId()["customerId"]
-        userEmail = login + '@' + domain
-        old_org  = client.RetrieveOrgUser( customerId, userEmail)
+        try:
+            user = self.callGAPI(service=self.service.users(), function='get', userKey=useremail, throw_reasons=['notFound'])
+        except googleapiclient.errors.HttpError, e:
+            self.log.error('retrieve_orgunit(): Exception occurred: ' + str(e))
+            return False
 
-        return old_org
+        return user['orgUnitPath']
 
     def enable_gmail(self, login):
         retry_count = 0
         status = False
-        old_orig = self.retrieve_orgunit(login)
+        old_org = self.retrieve_orgunit(login)
 
         while (status is False) and (retry_count < self.MAX_RETRY_COUNT):
             self.gmail_set_active(login)
@@ -781,55 +756,37 @@ mailRoutingAddress: %s@%s
                 status = True
             retry_count += 1
 
-        return old_orig
+        return old_org
 
     def gmail_set_active(self, login):
         self.log.info('gmail_set_active(): Enabling gmail for user: ' + login)
-        email = self.prop.get('google.email')
         domain = self.prop.get('google.domain')
-        pw = self.prop.get('google.password')
+        useremail = login + '@' + domain
+        body = dict()
+        body['orgUnitPath'] = '/ONID'
 
-        client = gdata.apps.organization.service\
-                                        .OrganizationService(email=email,
-                                                             domain=domain,
-                                                             password=pw)
-        retry_count = 0
-        status = False
-        while (status is False) and (retry_count < self.MAX_RETRY_COUNT):
-            try:
-                client.ProgrammaticLogin()
-                customerId = client.RetrieveCustomerId()["customerId"]
-                userEmail = login + '@' + domain
-                client.UpdateOrgUser(customerId, userEmail, 'ONID')
-                status = True
-            except CaptchaRequired:
-                self.log.error('gmail_set_active(): Captcha being requested')
-                sleep(1)
-            except BadAuthentication:
-                self.log.error('gmail_set_active(): Authentication Error')
-                sleep(1)
-            except Exception, e:
-                self.log.error('gmail_set_active(): Exception occured: ' +
-                               str(e))
-                sleep(1)
-                # Retry if not an obvious non-retryable error
-            retry_count += 1
-        return status
+        try:
+            result = self.callGAPI(service=self.service.users(), function=u'patch', soft_errors=True, userKey=useremail, body=body)
+        except googleapiclient.errors.HttpError, e:
+            self.log.error('gmail_set_active(): Exception occurred: ' + str(e))
+            return False
+
+        return True
 
     def disable_gmail(self, login, old_org='NO_SERVICES'):
         self.log.info('disable_gmail(): Disabling gmail for user: ' + login)
-        email = self.prop.get('google.email')
         domain = self.prop.get('google.domain')
-        pw = self.prop.get('google.password')
+        useremail = login + '@' + domain
+        body = dict()
+        body['orgUnitPath'] = old_org
 
-        client = gdata.apps.organization.service\
-                                        .OrganizationService(email=email,
-                                                             domain=domain,
-                                                             password=pw)
-        client.ProgrammaticLogin()
-        customerId = client.RetrieveCustomerId()["customerId"]
-        userEmail = login + '@' + domain
-        client.UpdateOrgUser(customerId, userEmail, old_org['orgUnitPath'])
+        try:
+            result = self.callGAPI(service=self.service.users(), function=u'patch', soft_errors=True, userKey=useremail, body=body)
+        except googleapiclient.errors.HttpError, e:
+            self.log.error('disable_gmail(): Exception occurred: ' + str(e))
+            return False
+
+        return True
 
     def sync_email_null(self, login):
         self.log.info('sync_email_null(): syncing user: ' + login)
@@ -849,7 +806,7 @@ mailRoutingAddress: %s@%s
         exclude_list = "'^Shared Folders|^Other Users|^junk-mail$|^Junk$|^junk$|^JUNK$|^Spam$|^spam$|^SPAM$'"
         whitespace_cleanup = " --regextrans2 's/[ ]+/ /g' --regextrans2 's/\s+$//g' --regextrans2 's/\s+(?=\/)//g' --regextrans2 's/^\s+//g' --regextrans2 's/(?=\/)\s+//g'"
         folder_cases = " --regextrans2 's/^drafts$/[Gmail]\/Drafts/i' --regextrans2 's/^trash$/[Gmail]\/Trash/i' --regextrans2 's/^(sent|sent-mail|Sent Messages)$/[Gmail]\/Sent Mail/i'"
-        command = imapsync_cmd + " --pidfile /tmp/imapsync-" + login + ".pid --host1 " + imap_host + " --port1 993 --user1 " + login + " --authuser1 " + imap_login + " --passfile1 " + cyrus_pf + " --host2 imap.gmail.com --port2 993 --user2 " + login + "@" + google_domain + " --passfile2 " + google_pf + " --ssl1 --ssl2 --maxsize 26214400 --authmech1 PLAIN --authmech2 XOAUTH --sep1 '.' --exclude " + exclude_list + folder_cases + whitespace_cleanup + extra_opts
+        command = imapsync_cmd + " --pidfile /tmp/imapsync-" + login + ".pid --host1 " + imap_host + " --port1 993 --user1 " + login + " --authuser1 " + imap_login + " --passfile1 " + cyrus_pf + " --host2 imap.gmail.com --port2 993 --user2 " + login + "@" + google_domain + " --passfile2 " + google_pf + " --ssl1 --ssl2 --maxsize 26214400 --authmech1 PLAIN --authmech2 XOAUTH2 --sep1 '.' --exclude " + exclude_list + folder_cases + whitespace_cleanup + extra_opts
 
         self.log.info(command)
 
@@ -1138,7 +1095,7 @@ googleMailEnabled: %s
 
         # Synchronize email to Google (and wait)
         if psu_sys.presync_enabled(login):
-	    log.info("copy_email_task(): first pass syncing email: " + login)
+            log.info("copy_email_task(): first pass syncing email: " + login)
             status = psu_sys.sync_email_delete2(login)
             retry_count = 0
             while (status is False) and (retry_count < self.MAX_RETRY_COUNT):
@@ -1221,9 +1178,11 @@ googleMailEnabled: %s
                         properties_file='/etc/presync.properties')
 
         # Logging is occuring within celery worker here
-        log = logging.getLogger('')
         memcache_url = prop.get('memcache.url')
         mc = memcache.Client([memcache_url], debug=0)
+
+        # What the actual heck is this for?? psu_sys should not exist, self
+        # shuold be used instead
         psu_sys = PSUSys()
 
         # check to see if a presync is completed or in progress
@@ -1240,55 +1199,55 @@ googleMailEnabled: %s
         # Time is in minutes
         max_process_time = 60
 
-        log.info("presync_email_task(): processing user: " + login)
-        optin_key = 'email_copy_progress.' + login
-        key = 'email_presync_progress.' + login
+        self.log.info("presync_email_task(): processing user: %s" % login)
+        optin_key = 'email_copy_progress: %s' % login
+        key = 'email_presync_progress: %s' % login
 
         # Check to see if an opt-in task is running--if so, exit
         if mc.get(optin_key) is not None:
-            log.info("presync_email_task(): user currently opting-in: " +
-                     login)
+            self.log.info("presync_email_task(): user currently opting-in: %s"
+                     % login)
             return(True)
 
         account_status = psu_sys.google_account_status(login)
 
         # Check to make sure the user has a Google account
         if account_status.get("exists", False) is False:
-            log.info("presync_email_task(): user does not exist in Google: " +
-                     login)
+            self.log.info("presync_email_task(): user does not exist in Google: %s"
+                     % login)
             return(True)
 
         # Check for LDAP mail forwarding already (double checking), if
         # already opt'd-in, then immediately return and mark as complete.
 
         if (psu_sys.opt_in_already(login)):
-            log.info("presync_email_task(): has already completed opt-in: " +
-                     login)
+            self.log.info("presync_email_task(): has already completed opt-in: %s"
+                     % login)
             return(True)
         else:
-            log.info("presync_email_task(): has not already completed opt-in: "
-                     + login)
+            self.log.info("presync_email_task(): has not already completed opt-in: %s"
+                     % login)
 
         # We temporarily enable suspended accounts for
         # the purposes of synchronization
         if account_status["enabled"] is False:
-            log.info("presync_email_task(): temporarily enabling account: " +
-                     login)
+            self.log.info("presync_email_task(): temporarily enabling account: %s"
+                     % login)
             # Enable account if previously disabled
             psu_sys.enable_google_account(login)
 
         # Enable Google email for the user
-        log.info("presync_email_task(): temporarily enabling Google mail: " +
-                 login)
+        self.log.info("presync_email_task(): temporarily enabling Google mail: %s"
+                 % login)
         old_org = psu_sys.enable_gmail(login)
 
         # Synchronize email to Google (and wait)
-        log.info("presync_email_task(): syncing email: " + login)
+        self.log.info("presync_email_task(): syncing email: %s" % login)
         status = psu_sys.sync_email_delete2(login,
                                             max_process_time=max_process_time)
         retry_count = 0
         while (status is False) and (retry_count < self.MAX_RETRY_COUNT):
-            log.info("presync_email_task(): Retry syncing email: " + login)
+            self.log.info("presync_email_task(): Retry syncing email: %s" % login)
             status = psu_sys\
                      .sync_email_delete2(login,
                                          max_process_time=max_process_time)
@@ -1298,11 +1257,11 @@ googleMailEnabled: %s
         # Synchronization complete
 
         # Disable Google email
-        log.info("presync_email_task(): disabling Google mail: " + login)
+        self.log.info("presync_email_task(): disabling Google mail: %s" % login)
         psu_sys.disable_gmail(login,old_org)
 
         if account_status["enabled"] is False:
-            log.info("presync_email_task(): disabling account: " + login)
+            self.log.info("presync_email_task(): disabling account: %s" % login)
             # Enable account if previously disabled
             psu_sys.disable_google_account(login)
 
